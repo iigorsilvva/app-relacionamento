@@ -2,118 +2,159 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Mulher Inesquecível — App</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1A0A10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Inesquecível">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" id="pwa-manifest">
+<title>Mulher Inesquecível</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --rosa:#C8174A;--rosa-light:#F7D6E0;
-  --vinho:#7B0D2A;--dourado:#C9932A;
+  --rosa:#C8174A;--vinho:#7B0D2A;--dourado:#C9932A;
   --bg:#1A0A10;--card:#2D1020;--card2:#3D1428;
-  --text:#fff;--muted:#CC8099;--border:rgba(200,23,74,0.2);
-  --green:#1D9E75;--blue:#185FA5;--amber:#BA7517;
+  --text:#fff;--muted:#CC8099;--border:rgba(200,23,74,0.22);
 }
-html,body{height:100%;}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;overflow-x:hidden;}
+html{height:100%;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;}
 
-/* SPLASH */
-#splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 28px;text-align:center;}
-.splash-logo{width:90px;height:90px;border-radius:26px;background:var(--rosa);display:flex;align-items:center;justify-content:center;font-size:44px;margin:0 auto 28px;box-shadow:0 16px 50px rgba(200,23,74,0.45);}
-.splash-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1.2;margin-bottom:10px;}
+/* ── UTILS ── */
+.hidden{display:none!important;}
+.screen{min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── SPLASH ── */
+#scr-splash{align-items:center;justify-content:center;padding:40px 28px;text-align:center;}
+.splash-logo{width:96px;height:96px;border-radius:28px;background:var(--rosa);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 28px;box-shadow:0 16px 50px rgba(200,23,74,0.5);}
+.splash-h{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;line-height:1.2;margin-bottom:10px;}
 .splash-h em{color:var(--rosa);font-style:italic;}
 .splash-p{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:44px;}
-.progress-wrap{width:100%;background:rgba(255,255,255,0.08);border-radius:50px;height:6px;margin-bottom:10px;overflow:hidden;}
-.progress-bar{height:100%;background:var(--rosa);border-radius:50px;width:0%;transition:width 0.08s linear;}
-.progress-label{font-size:12px;color:var(--muted);}
+.pbar-wrap{width:100%;background:rgba(255,255,255,0.08);border-radius:50px;height:6px;margin-bottom:10px;overflow:hidden;}
+.pbar{height:100%;background:var(--rosa);border-radius:50px;width:0;transition:width 0.08s linear;}
+.pbar-label{font-size:12px;color:var(--muted);}
 
-/* HEADER */
-#app{display:none;padding-bottom:70px;}
-.app-header{background:var(--card);padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+/* ── ONBOARDING ── */
+#scr-onboard{padding:0;}
+.ob-progress{height:4px;background:rgba(255,255,255,0.08);}
+.ob-progress-fill{height:100%;background:var(--rosa);transition:width 0.3s ease;}
+.ob-body{flex:1;padding:32px 24px 24px;display:flex;flex-direction:column;}
+.ob-step{display:none;flex-direction:column;flex:1;}
+.ob-step.active{display:flex;}
+.ob-emoji{font-size:52px;margin-bottom:20px;}
+.ob-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;line-height:1.3;margin-bottom:10px;}
+.ob-title em{color:var(--rosa);font-style:italic;}
+.ob-sub{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:28px;}
+.ob-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:14px;padding:14px 18px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;color:#fff;outline:none;}
+.ob-input::placeholder{color:rgba(255,255,255,0.25);}
+.ob-input:focus{border-color:var(--rosa);}
+.ob-options{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+.ob-opt{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:14px;padding:14px 16px;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;text-align:left;transition:all 0.15s;display:flex;align-items:center;gap:12px;}
+.ob-opt.selected{background:rgba(200,23,74,0.15);border-color:var(--rosa);color:#fff;}
+.ob-opt-icon{font-size:22px;flex-shrink:0;}
+.ob-opt-texts strong{display:block;font-size:14px;margin-bottom:2px;}
+.ob-opt-texts span{font-size:12px;color:var(--muted);}
+.ob-opt.selected .ob-opt-texts span{color:rgba(255,180,200,0.8);}
+.ob-spacer{flex:1;}
+.ob-next-btn{display:block;width:100%;background:var(--rosa);color:#fff;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;padding:16px;border-radius:50px;border:none;cursor:pointer;text-align:center;margin-top:20px;box-shadow:0 8px 28px rgba(200,23,74,0.4);}
+.ob-next-btn:disabled{opacity:0.35;pointer-events:none;}
+.ob-skip{display:block;text-align:center;font-size:12px;color:var(--muted);margin-top:12px;cursor:pointer;}
+
+/* ── APP PRINCIPAL ── */
+#scr-app{display:none;flex-direction:column;min-height:100vh;}
+.app-header{background:var(--card);padding:13px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;flex-shrink:0;}
 .app-logo-sm{width:34px;height:34px;border-radius:10px;background:var(--rosa);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.header-texts strong{display:block;font-size:14px;font-weight:900;}
-.header-texts span{font-size:10px;color:var(--muted);}
-.streak-pill{margin-left:auto;background:rgba(201,147,42,0.15);border:1px solid rgba(201,147,42,0.3);border-radius:50px;padding:5px 12px;font-size:12px;font-weight:800;color:var(--dourado);white-space:nowrap;}
+.header-name{flex:1;}
+.header-name strong{display:block;font-size:14px;font-weight:900;}
+.header-name span{font-size:10px;color:var(--muted);}
+.streak-pill{background:rgba(201,147,42,0.15);border:1px solid rgba(201,147,42,0.3);border-radius:50px;padding:5px 12px;font-size:12px;font-weight:800;color:var(--dourado);white-space:nowrap;}
 
-/* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:150;}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0 10px;border:none;background:transparent;cursor:pointer;gap:2px;}
-.nav-icon{font-size:19px;}
-.nav-label{font-size:9px;font-weight:800;letter-spacing:0.3px;text-transform:uppercase;color:var(--muted);}
-.nav-btn.active .nav-label{color:var(--rosa);}
-
-/* TABS */
+/* tabs */
+.tab-content{flex:1;overflow-y:auto;padding-bottom:72px;}
 .tab-pane{display:none;}
 .tab-pane.active{display:block;}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:150;flex-shrink:0;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0 10px;border:none;background:transparent;cursor:pointer;gap:2px;}
+.nav-icon{font-size:20px;}
+.nav-lbl{font-size:9px;font-weight:800;letter-spacing:0.3px;text-transform:uppercase;color:var(--muted);}
+.nav-btn.active .nav-lbl{color:var(--rosa);}
 
-/* INÍCIO */
-.home-section{padding:16px 16px 0;}
-.section-label{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
-.daily-card{background:var(--rosa);border-radius:18px;padding:18px 16px;margin-bottom:6px;}
-.daily-cat-tag{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:6px;}
-.daily-msg-text{font-size:14px;font-weight:700;line-height:1.55;color:#fff;margin-bottom:14px;}
-.daily-acts{display:flex;gap:8px;align-items:center;}
-.btn-copy-main{background:rgba(255,255,255,0.22);border:none;border-radius:50px;padding:8px 18px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:#fff;cursor:pointer;}
-.btn-fav-main{background:rgba(255,255,255,0.12);border:none;border-radius:50px;padding:8px 14px;font-size:15px;cursor:pointer;}
+/* ── INÍCIO ── */
+.home-pad{padding:16px;}
+.sec-lbl{font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.greet-card{background:linear-gradient(130deg,var(--vinho),#3D0A1E);border-radius:18px;padding:18px;margin-bottom:12px;}
+.greet-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.avatar{width:46px;height:46px;border-radius:50%;background:var(--rosa);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.greet-texts strong{display:block;font-size:16px;font-weight:900;}
+.greet-texts span{font-size:12px;color:rgba(255,200,220,0.8);}
+.mood-row{display:flex;gap:8px;flex-wrap:wrap;}
+.mood-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:50px;padding:6px 14px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);cursor:pointer;}
+.mood-btn.sel{background:var(--rosa);border-color:var(--rosa);color:#fff;}
 
-.tip-card{background:rgba(201,147,42,0.1);border:1px solid rgba(201,147,42,0.25);border-radius:14px;padding:14px 16px;margin-bottom:6px;}
+.daily-msg-card{background:var(--rosa);border-radius:18px;padding:18px;margin-bottom:10px;position:relative;overflow:hidden;}
+.daily-msg-card::after{content:'✨';position:absolute;right:14px;top:14px;font-size:26px;opacity:0.25;}
+.dm-cat{font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:6px;}
+.dm-text{font-size:15px;font-weight:800;line-height:1.55;color:#fff;margin-bottom:14px;}
+.dm-actions{display:flex;gap:8px;}
+.btn-copy-r{background:rgba(255,255,255,0.2);border:none;border-radius:50px;padding:8px 18px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:#fff;cursor:pointer;}
+.btn-fav-r{background:rgba(255,255,255,0.12);border:none;border-radius:50px;padding:8px 14px;font-size:15px;cursor:pointer;}
+
+.tip-card{background:rgba(201,147,42,0.1);border:1px solid rgba(201,147,42,0.25);border-radius:14px;padding:14px;margin-bottom:10px;}
 .tip-tag{font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--dourado);margin-bottom:6px;}
 .tip-text{font-size:13px;color:#FFE4A0;line-height:1.6;}
 
-.prog-card{background:var(--card2);border-radius:16px;padding:16px;margin-bottom:6px;}
-.prog-title-sm{font-size:12px;font-weight:800;margin-bottom:12px;}
-.day-circles{display:flex;gap:6px;justify-content:space-between;margin-bottom:10px;}
-.dc{flex:1;text-align:center;}
-.dc-circle{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin:0 auto 3px;color:var(--muted);}
-.dc-circle.done{background:var(--rosa);border-color:var(--rosa);color:#fff;}
-.dc-circle.today{border-color:var(--dourado);color:var(--dourado);}
-.dc-label{font-size:9px;color:var(--muted);font-weight:700;}
-.prog-bar-wrap{background:rgba(255,255,255,0.08);border-radius:50px;height:5px;margin-bottom:6px;}
-.prog-bar-fill{height:100%;background:var(--rosa);border-radius:50px;}
+.prog-card{background:var(--card2);border-radius:16px;padding:14px;margin-bottom:10px;}
+.prog-t{font-size:12px;font-weight:800;margin-bottom:10px;}
+.day-dots{display:flex;gap:5px;justify-content:space-between;margin-bottom:8px;}
+.dd{flex:1;text-align:center;}
+.dd-c{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;margin:0 auto 3px;color:var(--muted);}
+.dd-c.done{background:var(--rosa);border-color:var(--rosa);color:#fff;}
+.dd-c.today{border-color:var(--dourado);color:var(--dourado);}
+.dd-l{font-size:9px;color:var(--muted);font-weight:700;}
+.prog-bar-w{background:rgba(255,255,255,0.07);border-radius:50px;height:5px;margin-bottom:6px;}
+.prog-bar-f{height:100%;background:var(--rosa);border-radius:50px;}
 .prog-stats{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);}
 .prog-stats strong{color:#fff;}
+.prog-link{background:none;border:none;color:var(--rosa);font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;}
 
-/* MENSAGENS */
-.msgs-cats{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 6px;scrollbar-width:none;}
-.msgs-cats::-webkit-scrollbar{display:none;}
+/* ── MENSAGENS ── */
+.cats-scroll{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 6px;scrollbar-width:none;}
+.cats-scroll::-webkit-scrollbar{display:none;}
 .cat-pill{flex-shrink:0;padding:7px 14px;border-radius:50px;border:1px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;background:transparent;white-space:nowrap;}
 .cat-pill.active{background:var(--rosa);border-color:var(--rosa);color:#fff;}
-
-.msgs-list{padding:6px 16px 20px;}
+.msgs-list{padding:4px 16px 16px;}
 .msg-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;}
 .msg-card:active{border-color:var(--rosa);}
-.msg-sit{font-size:10px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:var(--dourado);margin-bottom:6px;}
+.msg-sit{font-size:10px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:var(--dourado);margin-bottom:5px;}
 .msg-body{font-size:13px;color:#FFBFD0;line-height:1.55;margin-bottom:10px;}
-.msg-footer{display:flex;justify-content:space-between;align-items:center;}
-.msg-hint{font-size:11px;color:rgba(255,255,255,0.2);}
+.msg-foot{display:flex;justify-content:space-between;align-items:center;}
+.msg-hint{font-size:11px;color:rgba(255,255,255,0.18);}
 .msg-btns{display:flex;gap:6px;}
 .btn-fav-sm{background:none;border:none;font-size:16px;cursor:pointer;padding:3px;}
 .btn-copy-sm{background:rgba(200,23,74,0.15);border:1px solid rgba(200,23,74,0.3);border-radius:50px;padding:5px 14px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:var(--rosa);cursor:pointer;}
 
-/* DICAS */
-.dicas-cats{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 6px;scrollbar-width:none;}
-.dicas-cats::-webkit-scrollbar{display:none;}
-.dicas-list{padding:6px 16px 20px;}
-
-.dica-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0;margin-bottom:10px;overflow:hidden;cursor:pointer;}
-.dica-header{display:flex;align-items:center;gap:12px;padding:14px;}
-.dica-icon-wrap{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+/* ── DICAS ── */
+.dicas-list{padding:4px 16px 16px;}
+.dica-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+.dica-hdr{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;}
+.dica-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .dica-info{flex:1;}
 .dica-info strong{display:block;font-size:13px;font-weight:800;color:#fff;margin-bottom:2px;}
 .dica-info span{font-size:11px;color:var(--muted);}
-.dica-arrow{font-size:16px;color:var(--muted);}
+.dica-arr{font-size:16px;color:var(--muted);transition:transform 0.2s;}
+.dica-card.open .dica-arr{transform:rotate(90deg);}
 .dica-body{display:none;padding:0 14px 14px;}
 .dica-card.open .dica-body{display:block;}
-.dica-card.open .dica-arrow{transform:rotate(90deg);}
-.dica-step{font-size:13px;color:#FFBFD0;line-height:1.6;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+.dica-step{font-size:13px;color:#FFBFD0;line-height:1.6;padding:8px 0 8px 26px;border-bottom:1px solid rgba(255,255,255,0.05);position:relative;}
 .dica-step:last-child{border-bottom:none;}
-.dica-step-num{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--rosa);font-size:10px;font-weight:900;text-align:center;line-height:20px;color:#fff;margin-right:8px;flex-shrink:0;}
+.dica-num{position:absolute;left:0;top:10px;width:20px;height:20px;border-radius:50%;background:var(--rosa);font-size:10px;font-weight:900;text-align:center;line-height:20px;color:#fff;}
 
-/* 7 DIAS */
-.plano-list{padding:14px 16px 20px;}
-.plano-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0;margin-bottom:10px;overflow:hidden;}
+/* ── PLANO ── */
+.plano-list{padding:14px 16px 16px;}
+.plano-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
 .plano-card.done{border-color:var(--rosa);}
-.plano-card-header{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;}
+.plano-hdr{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;}
 .plano-num{width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0;color:var(--muted);}
 .plano-card.done .plano-num{background:var(--rosa);border-color:var(--rosa);color:#fff;}
 .plano-card.active-day .plano-num{border-color:var(--dourado);color:var(--dourado);}
@@ -124,26 +165,56 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);max-
 .plano-step{font-size:12px;color:#FFBFD0;line-height:1.6;padding:7px 0 7px 20px;position:relative;border-bottom:1px solid rgba(255,255,255,0.05);}
 .plano-step:last-of-type{border-bottom:none;}
 .plano-step::before{content:'→';position:absolute;left:0;color:var(--rosa);}
-.plano-mark-btn{display:block;width:100%;background:rgba(200,23,74,0.15);border:1px solid rgba(200,23,74,0.3);border-radius:50px;padding:10px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;color:var(--rosa);cursor:pointer;text-align:center;margin-top:12px;}
-.plano-card.done .plano-mark-btn{background:rgba(200,23,74,0.3);color:#fff;}
+.plano-mark{display:block;width:100%;background:rgba(200,23,74,0.15);border:1px solid rgba(200,23,74,0.3);border-radius:50px;padding:10px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;color:var(--rosa);cursor:pointer;text-align:center;margin-top:12px;}
+.plano-card.done .plano-mark{background:rgba(200,23,74,0.3);color:#fff;}
 
-/* FAVORITOS */
+/* ── FAVORITOS ── */
 .fav-empty{padding:60px 24px;text-align:center;}
-.fav-empty-icon{font-size:48px;margin-bottom:16px;}
+.fav-empty .fei{font-size:48px;margin-bottom:16px;}
 .fav-empty p{font-size:14px;color:var(--muted);line-height:1.6;}
 
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:300;align-items:flex-end;justify-content:center;}
-.modal-overlay.open{display:flex;}
-.modal-sheet{background:#2D1020;border-radius:24px 24px 0 0;padding:20px 20px 36px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;}
+/* ── CHAT ── */
+#tab-chat{display:flex;flex-direction:column;height:calc(100vh - 130px);}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px;}
+.chat-bubble{max-width:80%;margin-bottom:12px;}
+.chat-bubble.ai{align-self:flex-start;}
+.chat-bubble.user{align-self:flex-end;margin-left:auto;}
+.bubble-inner{padding:12px 14px;border-radius:18px;font-size:14px;line-height:1.55;}
+.ai .bubble-inner{background:var(--card2);border:1px solid var(--border);color:#FFBFD0;border-bottom-left-radius:4px;}
+.user .bubble-inner{background:var(--rosa);color:#fff;border-bottom-right-radius:4px;}
+.bubble-time{font-size:10px;color:var(--muted);margin-top:4px;padding:0 4px;}
+.user .bubble-time{text-align:right;}
+.chat-typing{display:flex;gap:4px;padding:12px 14px;background:var(--card2);border-radius:18px;border-bottom-left-radius:4px;width:60px;margin-bottom:12px;}
+.typing-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes blink{0%,100%{opacity:0.3;}50%{opacity:1;}}
+.chat-input-area{padding:10px 14px;border-top:1px solid var(--border);background:var(--card);display:flex;gap:8px;align-items:flex-end;}
+.chat-input{flex:1;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:20px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:14px;color:#fff;outline:none;resize:none;max-height:100px;min-height:40px;}
+.chat-input::placeholder{color:rgba(255,255,255,0.25);}
+.chat-input:focus{border-color:var(--rosa);}
+.chat-send{width:42px;height:42px;border-radius:50%;background:var(--rosa);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.chat-send:disabled{opacity:0.4;pointer-events:none;}
+
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:300;align-items:flex-end;justify-content:center;}
+.modal-ov.open{display:flex;}
+.modal-sh{background:#2D1020;border-radius:24px 24px 0 0;padding:20px 20px 36px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;}
 .modal-handle{width:36px;height:4px;background:rgba(255,255,255,0.12);border-radius:2px;margin:0 auto 18px;}
 .modal-sit{font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--dourado);margin-bottom:8px;}
-.modal-msg-block{font-size:15px;font-weight:700;color:#fff;line-height:1.6;padding:16px;background:rgba(200,23,74,0.12);border-radius:12px;border-left:3px solid var(--rosa);margin-bottom:18px;}
-.modal-section-title{font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-.modal-dica-text{font-size:13px;color:#FFBFD0;line-height:1.65;margin-bottom:20px;}
+.modal-msg-b{font-size:15px;font-weight:700;color:#fff;line-height:1.6;padding:16px;background:rgba(200,23,74,0.12);border-radius:12px;border-left:3px solid var(--rosa);margin-bottom:18px;}
+.modal-sec{font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.modal-dica{font-size:13px;color:#FFBFD0;line-height:1.65;margin-bottom:18px;}
 .modal-when{background:rgba(201,147,42,0.1);border:1px solid rgba(201,147,42,0.2);border-radius:10px;padding:12px;font-size:12px;color:#FFE4A0;line-height:1.6;margin-bottom:20px;}
 .modal-copy-btn{display:block;width:100%;background:var(--rosa);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;padding:15px;border-radius:50px;border:none;cursor:pointer;text-align:center;}
 .modal-close-btn{display:block;width:100%;background:transparent;color:var(--muted);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:12px;border-radius:50px;border:1px solid var(--border);cursor:pointer;text-align:center;margin-top:8px;}
+
+/* INSTALL BANNER */
+.install-banner{background:rgba(201,147,42,0.1);border:1px solid rgba(201,147,42,0.3);border-radius:14px;padding:14px;margin:12px 16px 0;display:flex;align-items:center;gap:12px;}
+.install-banner p{font-size:12px;color:#FFE4A0;flex:1;line-height:1.5;}
+.install-banner strong{display:block;font-size:13px;color:var(--dourado);margin-bottom:2px;}
+.install-btn{background:var(--dourado);border:none;border-radius:50px;padding:8px 16px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;color:#1A0A10;cursor:pointer;white-space:nowrap;}
+.install-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;}
 
 /* TOAST */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:#fff;color:#1A0A10;font-size:13px;font-weight:900;padding:10px 24px;border-radius:50px;opacity:0;pointer-events:none;transition:opacity 0.2s,transform 0.2s;z-index:999;white-space:nowrap;}
@@ -153,102 +224,192 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);max-
 <body>
 
 <!-- SPLASH -->
-<div id="splash">
+<div id="scr-splash" class="screen">
   <div class="splash-logo">💌</div>
-  <h1 class="splash-h">Mensagens<br><em>Inesquecíveis</em></h1>
-  <p class="splash-p">Mensagens prontas, dicas de estilo, primeiro encontro e muito mais para você se tornar inesquecível.</p>
+  <h1 class="splash-h">Mulher<br><em>Inesquecível</em></h1>
+  <p class="splash-p">Mensagens prontas, dicas personalizadas e uma IA pronta para te ouvir — tudo para você se tornar inesquecível.</p>
   <div style="width:100%">
-    <div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
-    <p class="progress-label" id="loadLabel">Preparando seu app...</p>
+    <div class="pbar-wrap"><div class="pbar" id="pbar"></div></div>
+    <p class="pbar-label" id="plabel">Carregando...</p>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app">
+<!-- ONBOARDING -->
+<div id="scr-onboard" class="screen hidden">
+  <div class="ob-progress"><div class="ob-progress-fill" id="ob-prog" style="width:20%"></div></div>
+  <div class="ob-body">
+
+    <!-- step 1: nome -->
+    <div class="ob-step active" id="ob1">
+      <div class="ob-emoji">👋</div>
+      <h2 class="ob-title">Olá! Como você<br>quer ser <em>chamada?</em></h2>
+      <p class="ob-sub">Vou personalizar tudo para você — dicas, mensagens e conversas.</p>
+      <input class="ob-input" type="text" id="inp-nome" placeholder="Seu nome..." maxlength="30" oninput="checkOb1()">
+      <div class="ob-spacer"></div>
+      <button class="ob-next-btn" id="btn-ob1" disabled onclick="goOb(2)">Continuar →</button>
+    </div>
+
+    <!-- step 2: idade -->
+    <div class="ob-step" id="ob2">
+      <div class="ob-emoji">🌸</div>
+      <h2 class="ob-title">Quantos anos<br>você <em>tem?</em></h2>
+      <p class="ob-sub">Suas dicas serão ajustadas para o seu momento de vida.</p>
+      <div class="ob-options" id="age-opts">
+        <button class="ob-opt" onclick="selectOb('age','18-24',this)"><span class="ob-opt-icon">🌱</span><div class="ob-opt-texts"><strong>18 – 24 anos</strong><span>Início da jornada amorosa</span></div></button>
+        <button class="ob-opt" onclick="selectOb('age','25-32',this)"><span class="ob-opt-icon">🌺</span><div class="ob-opt-texts"><strong>25 – 32 anos</strong><span>Relações mais sérias</span></div></button>
+        <button class="ob-opt" onclick="selectOb('age','33-40',this)"><span class="ob-opt-icon">🌹</span><div class="ob-opt-texts"><strong>33 – 40 anos</strong><span>Sabe o que quer</span></div></button>
+        <button class="ob-opt" onclick="selectOb('age','40+',this)"><span class="ob-opt-icon">👑</span><div class="ob-opt-texts"><strong>40+ anos</strong><span>Mulher experiente e poderosa</span></div></button>
+      </div>
+      <div class="ob-spacer"></div>
+      <button class="ob-next-btn" id="btn-ob2" disabled onclick="goOb(3)">Continuar →</button>
+    </div>
+
+    <!-- step 3: situação -->
+    <div class="ob-step" id="ob3">
+      <div class="ob-emoji">💔</div>
+      <h2 class="ob-title">Qual é sua<br><em>situação</em> agora?</h2>
+      <p class="ob-sub">Assim posso focar no que você mais precisa hoje.</p>
+      <div class="ob-options">
+        <button class="ob-opt" onclick="selectOb('sit','reconquista',this)"><span class="ob-opt-icon">💔</span><div class="ob-opt-texts"><strong>Quero reconquistar ele</strong><span>Término ou afastamento</span></div></button>
+        <button class="ob-opt" onclick="selectOb('sit','atrair',this)"><span class="ob-opt-icon">✨</span><div class="ob-opt-texts"><strong>Quero atrair alguém novo</strong><span>Crush ou início de relação</span></div></button>
+        <button class="ob-opt" onclick="selectOb('sit','manter',this)"><span class="ob-opt-icon">💑</span><div class="ob-opt-texts"><strong>Quero melhorar meu relacionamento</strong><span>Estou em um relacionamento</span></div></button>
+        <button class="ob-opt" onclick="selectOb('sit','eu',this)"><span class="ob-opt-icon">👑</span><div class="ob-opt-texts"><strong>Quero me fortalecer</strong><span>Foco em mim mesma</span></div></button>
+      </div>
+      <div class="ob-spacer"></div>
+      <button class="ob-next-btn" id="btn-ob3" disabled onclick="goOb(4)">Continuar →</button>
+    </div>
+
+    <!-- step 4: personalidade -->
+    <div class="ob-step" id="ob4">
+      <div class="ob-emoji">🦋</div>
+      <h2 class="ob-title">Como você se<br><em>descreve?</em></h2>
+      <p class="ob-sub">Suas mensagens e dicas serão no seu estilo.</p>
+      <div class="ob-options">
+        <button class="ob-opt" onclick="selectOb('tipo','romantica',this)"><span class="ob-opt-icon">🌹</span><div class="ob-opt-texts"><strong>Romântica e apaixonada</strong><span>Sinto tudo muito intensamente</span></div></button>
+        <button class="ob-opt" onclick="selectOb('tipo','pratica',this)"><span class="ob-opt-icon">⚡</span><div class="ob-opt-texts"><strong>Prática e direta</strong><span>Gosto de clareza e objetividade</span></div></button>
+        <button class="ob-opt" onclick="selectOb('tipo','timida',this)"><span class="ob-opt-icon">🌸</span><div class="ob-opt-texts"><strong>Reservada e sensível</strong><span>Preciso de segurança pra me abrir</span></div></button>
+        <button class="ob-opt" onclick="selectOb('tipo','independente',this)"><span class="ob-opt-icon">🦋</span><div class="ob-opt-texts"><strong>Independente e segura</strong><span>Me valorizo, mas quero mais</span></div></button>
+      </div>
+      <div class="ob-spacer"></div>
+      <button class="ob-next-btn" id="btn-ob4" disabled onclick="finishOnboard()">Entrar no app ✨</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- APP PRINCIPAL -->
+<div id="scr-app" class="screen">
   <div class="app-header">
     <div class="app-logo-sm">💌</div>
-    <div class="header-texts"><strong>Mulher Inesquecível</strong><span>Seu guia completo</span></div>
-    <div class="streak-pill" id="streakPill">🔥 1 dia</div>
+    <div class="header-name"><strong id="hdr-name">Olá!</strong><span id="hdr-sub">Bom te ver aqui</span></div>
+    <div class="streak-pill" id="streak-pill">🔥 1 dia</div>
   </div>
 
-  <!-- TAB INÍCIO -->
-  <div class="tab-pane active" id="tab-inicio">
-    <div class="home-section">
-      <div class="section-label">Mensagem do dia</div>
-      <div class="daily-card">
-        <div class="daily-cat-tag" id="dailyCat">Categoria</div>
-        <div class="daily-msg-text" id="dailyMsg">...</div>
-        <div class="daily-acts">
-          <button class="btn-copy-main" id="btnCopyDaily">📋 Copiar</button>
-          <button class="btn-fav-main" id="btnFavDaily">🤍</button>
+  <div class="tab-content">
+
+    <!-- INÍCIO -->
+    <div class="tab-pane active" id="tab-inicio">
+      <div id="install-banner" class="install-banner hidden">
+        <div style="font-size:24px">📲</div>
+        <p><strong>Instalar no celular</strong>Adicione à tela inicial para acesso rápido sem abrir o navegador.</p>
+        <button class="install-btn" id="install-btn">Instalar</button>
+        <button class="install-close" onclick="document.getElementById('install-banner').classList.add('hidden')">×</button>
+      </div>
+      <div class="home-pad" style="padding-top:14px;">
+        <div class="sec-lbl">Como você está hoje?</div>
+        <div class="greet-card">
+          <div class="greet-top">
+            <div class="avatar" id="home-avatar">🌸</div>
+            <div class="greet-texts"><strong id="home-greet">Olá!</strong><span id="home-moment">Selecione seu humor do dia</span></div>
+          </div>
+          <div class="mood-row" id="mood-row">
+            <button class="mood-btn" onclick="setMood('triste','😢','Dia difícil',this)">😢 Triste</button>
+            <button class="mood-btn" onclick="setMood('ansiosa','😰','Com ansiedade',this)">😰 Ansiosa</button>
+            <button class="mood-btn" onclick="setMood('bem','😊','Me sentindo bem',this)">😊 Bem</button>
+            <button class="mood-btn" onclick="setMood('forte','💪','Me sentindo forte',this)">💪 Forte</button>
+          </div>
+        </div>
+
+        <div class="sec-lbl" style="margin-top:4px;">Mensagem do dia para você</div>
+        <div class="daily-msg-card">
+          <div class="dm-cat" id="dm-cat">Carregando...</div>
+          <div class="dm-text" id="dm-text">Preparando sua mensagem personalizada...</div>
+          <div class="dm-actions">
+            <button class="btn-copy-r" id="dm-copy">📋 Copiar</button>
+            <button class="btn-fav-r" id="dm-fav">🤍</button>
+          </div>
+        </div>
+
+        <div class="sec-lbl">Dica do dia</div>
+        <div class="tip-card">
+          <div class="tip-tag" id="tip-tag">Dica</div>
+          <div class="tip-text" id="tip-text">Carregando...</div>
+        </div>
+
+        <div class="sec-lbl">Plano de 7 dias</div>
+        <div class="prog-card">
+          <div class="prog-t" id="prog-t">Dia 1 — Silêncio poderoso</div>
+          <div class="day-dots" id="day-dots"></div>
+          <div class="prog-bar-w"><div class="prog-bar-f" id="prog-f" style="width:14%"></div></div>
+          <div class="prog-stats"><span>Progresso: <strong id="prog-pct">14%</strong></span><button class="prog-link" onclick="showTab('plano',null)">Ver plano →</button></div>
         </div>
       </div>
     </div>
-    <div class="home-section" style="margin-top:10px;">
-      <div class="section-label">Dica do dia</div>
-      <div class="tip-card">
-        <div class="tip-tag" id="tipTag">Dica</div>
-        <div class="tip-text" id="tipText">...</div>
+
+    <!-- MENSAGENS -->
+    <div class="tab-pane" id="tab-msgs">
+      <div class="cats-scroll" id="msg-cats"></div>
+      <div class="msgs-list" id="msgs-list"></div>
+    </div>
+
+    <!-- DICAS -->
+    <div class="tab-pane" id="tab-dicas">
+      <div class="cats-scroll" id="dica-cats"></div>
+      <div class="dicas-list" id="dicas-list"></div>
+    </div>
+
+    <!-- 7 DIAS -->
+    <div class="tab-pane" id="tab-plano">
+      <div class="plano-list" id="plano-list"></div>
+    </div>
+
+    <!-- FAVORITOS -->
+    <div class="tab-pane" id="tab-favs">
+      <div class="msgs-list" id="favs-list"></div>
+      <div class="fav-empty hidden" id="fav-empty"><div class="fei">🤍</div><p>Suas mensagens favoritas aparecem aqui.<br><br>Toque no coração para salvar.</p></div>
+    </div>
+
+    <!-- CHAT IA -->
+    <div class="tab-pane" id="tab-chat" style="display:none;flex-direction:column;height:calc(100vh - 130px);">
+      <div class="chat-msgs" id="chat-msgs"></div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" id="chat-input" placeholder="Desabafe, pergunte, conte o que aconteceu..." rows="1" oninput="autoResize(this)"></textarea>
+        <button class="chat-send" id="chat-send" onclick="sendChat()">➤</button>
       </div>
     </div>
-    <div class="home-section" style="margin-top:10px;padding-bottom:10px;">
-      <div class="section-label">Plano de 7 dias</div>
-      <div class="prog-card">
-        <div class="prog-title-sm" id="progTitle">Dia 1 de 7 — Silêncio poderoso</div>
-        <div class="day-circles" id="dayCircles"></div>
-        <div class="prog-bar-wrap"><div class="prog-bar-fill" id="progFill" style="width:14%"></div></div>
-        <div class="prog-stats"><span>Progresso: <strong id="progPct">14%</strong></span><button onclick="showTab('plano',null)" style="background:none;border:none;color:var(--rosa);font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;">Ver plano →</button></div>
-      </div>
-    </div>
+
   </div>
 
-  <!-- TAB MENSAGENS -->
-  <div class="tab-pane" id="tab-msgs">
-    <div class="msgs-cats" id="msgsCats"></div>
-    <div class="msgs-list" id="msgsList"></div>
-  </div>
-
-  <!-- TAB DICAS -->
-  <div class="tab-pane" id="tab-dicas">
-    <div class="dicas-cats" id="dicasCats"></div>
-    <div class="dicas-list" id="dicasList"></div>
-  </div>
-
-  <!-- TAB 7 DIAS -->
-  <div class="tab-pane" id="tab-plano">
-    <div class="plano-list" id="planoList"></div>
-  </div>
-
-  <!-- TAB FAVORITOS -->
-  <div class="tab-pane" id="tab-favs">
-    <div class="msgs-list" id="favsList"></div>
-    <div class="fav-empty" id="favEmpty">
-      <div class="fav-empty-icon">🤍</div>
-      <p>Suas mensagens favoritas aparecem aqui.<br><br>Toque no coração em qualquer<br>mensagem para salvar.</p>
-    </div>
-  </div>
-
-  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
-    <button class="nav-btn active" id="nav-inicio" onclick="showTab('inicio',this)"><span class="nav-icon">🏠</span><span class="nav-label">Início</span></button>
-    <button class="nav-btn" id="nav-msgs" onclick="showTab('msgs',this)"><span class="nav-icon">💬</span><span class="nav-label">Mensagens</span></button>
-    <button class="nav-btn" id="nav-dicas" onclick="showTab('dicas',this)"><span class="nav-icon">✨</span><span class="nav-label">Dicas</span></button>
-    <button class="nav-btn" id="nav-plano" onclick="showTab('plano',this)"><span class="nav-icon">📅</span><span class="nav-label">7 Dias</span></button>
-    <button class="nav-btn" id="nav-favs" onclick="showTab('favs',this)"><span class="nav-icon">🤍</span><span class="nav-label">Salvos</span></button>
+    <button class="nav-btn active" onclick="showTab('inicio',this)"><span class="nav-icon">🏠</span><span class="nav-lbl">Início</span></button>
+    <button class="nav-btn" onclick="showTab('msgs',this)"><span class="nav-icon">💬</span><span class="nav-lbl">Mensagens</span></button>
+    <button class="nav-btn" onclick="showTab('dicas',this)"><span class="nav-icon">✨</span><span class="nav-lbl">Dicas</span></button>
+    <button class="nav-btn" onclick="showTab('plano',this)"><span class="nav-icon">📅</span><span class="nav-lbl">7 Dias</span></button>
+    <button class="nav-btn" onclick="showTab('chat',this)"><span class="nav-icon">🤖</span><span class="nav-lbl">IA</span></button>
   </div>
 </div>
 
 <!-- MODAL MENSAGEM -->
-<div class="modal-overlay" id="modal">
-  <div class="modal-sheet" id="modalSheet">
+<div class="modal-ov" id="modal">
+  <div class="modal-sh">
     <div class="modal-handle"></div>
-    <div class="modal-sit" id="mSit"></div>
-    <div class="modal-msg-block" id="mMsg"></div>
-    <div class="modal-section-title">💡 Por que funciona</div>
-    <div class="modal-dica-text" id="mDica"></div>
-    <div class="modal-section-title">⏰ Quando usar</div>
-    <div class="modal-when" id="mWhen"></div>
-    <button class="modal-copy-btn" id="mCopyBtn">📋 Copiar mensagem</button>
+    <div class="modal-sit" id="m-sit"></div>
+    <div class="modal-msg-b" id="m-msg"></div>
+    <div class="modal-sec">💡 Por que funciona</div>
+    <div class="modal-dica" id="m-dica"></div>
+    <div class="modal-sec">⏰ Quando usar</div>
+    <div class="modal-when" id="m-when"></div>
+    <button class="modal-copy-btn" id="m-copy">📋 Copiar mensagem</button>
     <button class="modal-close-btn" onclick="closeModal()">Fechar</button>
   </div>
 </div>
@@ -256,74 +417,86 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);max-
 <div class="toast" id="toast"></div>
 
 <script>
+/* ═══════════════════════════════════════
+   DADOS
+═══════════════════════════════════════ */
 const MSGS = [
-  {id:1,cat:'reconquista',sit:'Após silêncio longo',msg:'Não vou fingir que não pensei em você. Mas aprendi que algumas coisas a gente sente e guarda.',dica:'Demonstra sentimento sem implorar. O controle emocional aqui é o que seduz — não a confissão.',quando:'Use quando fez pelo menos 7 dias de silêncio e quer reabrir contato de forma madura.'},
-  {id:2,cat:'reconquista',sit:'Depois de uma briga',msg:'Não estou bem desde aquilo. Não pra cobrar — só pra ser honesta com você.',dica:'Honestidade sem agressividade é rara. Isso gera culpa saudável e vontade de resolver.',quando:'Use 2 a 3 dias após a briga, nunca no calor do momento.'},
-  {id:3,cat:'reconquista',sit:'Quando ele some',msg:'Tudo bem por aí? Percebi que a gente está sumida e não quero fingir que está normal.',dica:'Nomeia o problema sem atacar. Demonstra maturidade que a maioria não tem.',quando:'Use quando o silêncio dele já passou 5+ dias sem motivo claro.'},
-  {id:4,cat:'reconquista',sit:'Quando ele volta depois de sumir',msg:'Oi. Fico feliz que voltou. Mas agora as coisas vão ser diferentes da última vez.',dica:'Recebe sem punir, mas posiciona que você cresceu. Isso prende e respeita ao mesmo tempo.',quando:'Use assim que ele entrar em contato depois de sumir. Não espere dias para responder isso.'},
-  {id:5,cat:'reconquista',sit:'Sentindo saudade mas sem querer parecer carente',msg:'Tive um sonho com você essa semana. Acordei rindo à toa. Achei que ia ficar esquisito não contar.',dica:'Sonhos são íntimos e neutros ao mesmo tempo. Ele vai pensar em você o dia todo.',quando:'Use quando sente saudade genuína e quer criar reaproximação leve.'},
-  {id:6,cat:'atração',sit:'Para despertar curiosidade',msg:'Acabei de passar por um lugar que me fez lembrar muito de você. Curioso, né?',dica:'Ativa o instinto de curiosidade. Ele vai querer saber qual lugar é esse.',quando:'Use para iniciar contato depois de dias sem falar, sem parecer desesperada.'},
-  {id:7,cat:'atração',sit:'Para criar mistério',msg:'Tive um dia que me ensinou bastante coisa. Queria muito te contar, mas talvez não seja o momento ainda.',dica:'O "ainda" cria antecipação. Ele fica querendo saber mais — e é você quem controla quando contar.',quando:'Use quando quer manter a conversa interessante e deixar ele querendo mais.'},
-  {id:8,cat:'atração',sit:'Para virar assunto na cabeça dele',msg:'Você aparece em várias músicas que ouço ultimamente. Pelo jeito minha playlist sabe mais de mim do que eu.',dica:'Leve, verdadeira e com humor. Faz ele se sentir presente na sua vida sem você dizer isso diretamente.',quando:'Use quando estão conversando com boa energia e você quer elevar o clima.'},
-  {id:9,cat:'atração',sit:'Para ele sentir sua falta',msg:'Hoje foi um dia que eu teria adorado dividir com você. Ainda não encontrei ninguém que ouvisse igual.',dica:'Específico + exclusivo. Você diz que ele tem algo único que ninguém mais tem — isso é poderoso.',quando:'Use após um bom acontecimento no seu dia — viagem, conquista, momento especial.'},
-  {id:10,cat:'atração',sit:'Após primeiro contato com crush',msg:'Você tem uma energia diferente. Fiquei curiosa pra saber quem você é de verdade.',dica:'Ninguém resiste a saber que foi percebido de forma especial. Convida à abertura emocional imediata.',quando:'Use nas primeiras trocas de mensagens com alguém que te interessa.'},
-  {id:11,cat:'reacao',sit:'Ele enviou "oi" seco',msg:'Oi! Tô no meio de uma coisa, te falo mais tarde 😊',dica:'Nunca responda "oi" com "oi". Mostrar que tem vida e que vai falar depois eleva seu valor percebido.',quando:'Use sempre que receber mensagens monossilábicas. Nunca fique disponível 100%.'},
-  {id:12,cat:'reacao',sit:'Ele demorou horas pra responder',msg:'Haha tudo bem, estava atarefada aqui também. O que rolou?',dica:'Nunca demonstre que percebeu o delay. Ela mostra que você também tem vida e retoma com leveza.',quando:'Use quando ele demorar mais de 3 horas sem motivo aparente.'},
-  {id:13,cat:'reacao',sit:'Ele mandou uma foto',msg:'Uau, que lugar/que visual — conta mais!',dica:'Elogio + curiosidade. Demonstra interesse sem exagerar. Ele fica querendo contar mais.',quando:'Use quando ele compartilha algo do dia dele. Demonstra que você está presente e interessada.'},
-  {id:14,cat:'reacao',sit:'Ele mandou áudio longo',msg:'Ouvi tudo, rs. Você me faz rir com essa história.',dica:'Confirmar que ouviu + humor. Valida ele sem ser bajuladora.',quando:'Use quando receber áudios — sempre confirme que ouviu, ele se sente valorizado.'},
-  {id:15,cat:'reacao',sit:'Ele elogiou você',msg:'Que bom que você percebeu isso. Não sou sempre assim, mas hoje tava me sentindo bem.',dica:'Aceita o elogio sem rejeitar e sem exagerar. A dose certa de confiança sem arrogância.',quando:'Use quando receber elogios. Nunca diga "que nada" ou "não acredito".'},
-  {id:16,cat:'reacao',sit:'Ele sumiu e voltou como se nada fosse',msg:'Olha quem apareceu! Estava sumido... tudo bem?',dica:'Nomeia o sumiço com leveza e humor. Não ataca, mas também não ignora.',quando:'Use quando ele voltar depois de sumir. Não finja que não percebeu.'},
-  {id:17,cat:'reacao',sit:'Ele mandou mensagem de madrugada',msg:'Que horas são essas pra aparecer? 😂 O que foi?',dica:'Humor + posicionamento. Ela responde mas deixa claro que não está disponível 24h.',quando:'Use quando receber mensagens após meia-noite sem combinação prévia.'},
-  {id:18,cat:'reacao',sit:'Ele ficou frio de repente',msg:'Tô sentindo você diferente hoje. Tá tudo bem?',dica:'Nomeia a mudança sem drama ou acusação. Abre espaço para ele falar — ou confirma sua percepção.',quando:'Use quando sentir a conversa esfriando sem motivo aparente.'},
-  {id:19,cat:'valorização',sit:'Quando ele testa seus limites',msg:'Eu me importo com você, mas não a ponto de me perder por isso.',dica:'Amor com limite. A mulher que demonstra isso é aquela que ele nunca vai querer perder.',quando:'Use quando sentir que está cedendo mais do que deveria em qualquer situação.'},
-  {id:20,cat:'valorização',sit:'Quando ele tenta te ignorar',msg:'Tudo bem. Tenho coisas demais acontecendo pra ficar esperando o que não está disponível pra mim.',dica:'Não ataca — mas posiciona você como alguém que tem valor e escolha.',quando:'Use quando perceber que está sendo deixada em segundo plano repetidamente.'},
-  {id:21,cat:'vacuo',sit:'Para encerrar a conversa no pique certo',msg:'Bom, vou te deixar — tenho coisas pra resolver. Continuamos depois? 😊',dica:'Encerrar quando a conversa está boa faz ele querer mais. Nunca encerre quando estiver monótona.',quando:'Use sempre que a conversa atingir um pico de energia — nunca espere ela cair para sair.'},
-  {id:22,cat:'vacuo',sit:'Resposta estratégica após demora',msg:'Nossa, me perdi hoje completamente. Como foi seu dia?',dica:'Demora natural + interesse real. Cria o ciclo perfeito de atração: você tem vida + se importa.',quando:'Use quando quiser responder com atraso proposital mas voltar com qualidade.'},
-  {id:23,cat:'primeiro',sit:'Retomar contato depois de semanas',msg:'Ei, apareceu uma coisa que eu sei que você ia adorar. Ainda tenho esse costume de pensar em você 😅',dica:'O "ainda" é muito poderoso — indica continuidade de sentimento sem dependência.',quando:'Use para reabrir contato depois de 15+ dias de silêncio.'},
-  {id:24,cat:'primeiro',sit:'Retomar após término',msg:'Não sei se é o momento certo, mas não consegui ficar sem dizer que sinto sua falta.',dica:'Vulnerabilidade no timing certo não é fraqueza — é coragem que magnetiza.',quando:'Use após pelo menos 21 dias de zero contato após término.'},
+  {id:1,cat:'reconquista',sit:'Após silêncio longo',msg:'Não vou fingir que não pensei em você. Mas aprendi que algumas coisas a gente sente e guarda.',dica:'Demonstra sentimento sem implorar. O controle emocional aqui é o que seduz.',quando:'Use após pelo menos 7 dias de silêncio para reabrir contato com maturidade.'},
+  {id:2,cat:'reconquista',sit:'Depois de uma briga',msg:'Não estou bem desde aquilo. Não pra cobrar — só pra ser honesta com você.',dica:'Honestidade sem agressividade é rara e gera culpa saudável nele.',quando:'Use 2 a 3 dias após a briga, nunca no calor do momento.'},
+  {id:3,cat:'reconquista',sit:'Quando ele some',msg:'Tudo bem por aí? Percebi que a gente está sumida e não quero fingir que está normal.',dica:'Nomeia o problema sem atacar. Demonstra maturidade emocional que a maioria não tem.',quando:'Quando o silêncio dele já passou 5+ dias sem motivo claro.'},
+  {id:4,cat:'reconquista',sit:'Quando ele volta depois de sumir',msg:'Oi. Fico feliz que voltou. Mas agora as coisas vão ser diferentes da última vez.',dica:'Recebe sem punir, mas posiciona que você cresceu. Isso prende e respeita.',quando:'Assim que ele entrar em contato depois de ter sumido. Não espere dias.'},
+  {id:5,cat:'reconquista',sit:'Sentindo saudade sem parecer carente',msg:'Tive um sonho com você essa semana. Acordei rindo à toa. Achei que ia ficar esquisito não contar.',dica:'Sonhos são íntimos e neutros. Ele vai pensar em você o dia todo.',quando:'Quando sentir saudade genuína e quiser reaproximação leve.'},
+  {id:6,cat:'atração',sit:'Para despertar curiosidade',msg:'Acabei de passar por um lugar que me fez lembrar muito de você. Curioso, né?',dica:'Ativa o instinto de curiosidade. Ele vai querer saber qual lugar.',quando:'Para iniciar contato sem parecer desesperada.'},
+  {id:7,cat:'atração',sit:'Para criar mistério',msg:'Tive um dia que me ensinou bastante coisa. Queria muito te contar, mas talvez não seja o momento ainda.',dica:'O "ainda" cria antecipação. Você controla quando contar.',quando:'Para manter conversa interessante e deixar ele querendo mais.'},
+  {id:8,cat:'atração',sit:'Para virar assunto na cabeça dele',msg:'Você aparece em várias músicas que ouço ultimamente. Pelo jeito minha playlist sabe mais de mim do que eu.',dica:'Leve, verdadeira e com humor. Faz ele se sentir presente sem você dizer isso diretamente.',quando:'Quando estão conversando com boa energia e você quer elevar o clima.'},
+  {id:9,cat:'atração',sit:'Para ele sentir sua falta',msg:'Hoje foi um dia que eu teria adorado dividir com você. Ainda não encontrei ninguém que ouvisse igual.',dica:'Específico + exclusivo. Diz que ele tem algo único que ninguém mais tem.',quando:'Após um bom acontecimento no seu dia.'},
+  {id:10,cat:'atração',sit:'Primeiro contato com crush',msg:'Você tem uma energia diferente. Fiquei curiosa pra saber quem você é de verdade.',dica:'Ninguém resiste a saber que foi percebido de forma especial.',quando:'Nas primeiras trocas de mensagens com quem te interessa.'},
+  {id:11,cat:'reacao',sit:'Ele enviou "oi" seco',msg:'Oi! Tô no meio de uma coisa, te falo mais tarde 😊',dica:'Nunca responda "oi" com "oi". Mostrar que tem vida eleva seu valor percebido.',quando:'Sempre que receber mensagens monossilábicas.'},
+  {id:12,cat:'reacao',sit:'Ele demorou horas pra responder',msg:'Haha tudo bem, estava atarefada aqui também. O que rolou?',dica:'Nunca demonstre que percebeu o delay. Mostra que você também tem vida.',quando:'Quando ele demorar mais de 3 horas sem motivo aparente.'},
+  {id:13,cat:'reacao',sit:'Ele elogiou você',msg:'Que bom que você percebeu isso. Não sou sempre assim, mas hoje tava me sentindo bem.',dica:'Aceita o elogio sem rejeitar e sem exagerar. A dose certa de confiança.',quando:'Ao receber elogios. Nunca diga "que nada" ou "não acredito".'},
+  {id:14,cat:'reacao',sit:'Ele sumiu e voltou como se nada fosse',msg:'Olha quem apareceu! Estava sumido... tudo bem?',dica:'Nomeia o sumiço com leveza e humor. Não ataca, mas não ignora.',quando:'Quando ele voltar depois de sumir. Não finja que não percebeu.'},
+  {id:15,cat:'reacao',sit:'Ele ficou frio de repente',msg:'Tô sentindo você diferente hoje. Tá tudo bem?',dica:'Nomeia a mudança sem drama. Abre espaço para ele falar.',quando:'Quando sentir a conversa esfriando sem motivo aparente.'},
+  {id:16,cat:'reacao',sit:'Mensagem de madrugada inesperada',msg:'Que horas são essas pra aparecer? 😂 O que foi?',dica:'Humor + posicionamento. Responde mas deixa claro que não está disponível 24h.',quando:'Ao receber mensagens após meia-noite sem combinação prévia.'},
+  {id:17,cat:'valorização',sit:'Quando ele testa seus limites',msg:'Eu me importo com você, mas não a ponto de me perder por isso.',dica:'Amor com limite. A mulher que demonstra isso é aquela que ele nunca quer perder.',quando:'Quando sentir que está cedendo mais do que deveria.'},
+  {id:18,cat:'valorização',sit:'Quando ele tenta te ignorar',msg:'Tudo bem. Tenho coisas demais acontecendo pra ficar esperando o que não está disponível pra mim.',dica:'Posiciona você como alguém que tem valor e escolha. Não ataca.',quando:'Quando perceber que está sendo deixada em segundo plano repetidamente.'},
+  {id:19,cat:'valorização',sit:'Quando ele testa sua paciência',msg:'Posso esperar muita coisa, mas não sou opção.',dica:'Curta, direta e poderosa. Uma das frases mais impactantes do método.',quando:'Em qualquer momento que se sentir sendo tratada como segunda opção.'},
+  {id:20,cat:'vacuo',sit:'Para encerrar conversa no pique certo',msg:'Bom, vou te deixar — tenho coisas pra resolver. Continuamos depois? 😊',dica:'Encerrar quando está bom faz ele querer mais. Nunca espere a conversa cair.',quando:'Sempre que a conversa atingir um pico de energia.'},
+  {id:21,cat:'vacuo',sit:'Resposta estratégica após demora',msg:'Nossa, me perdi hoje completamente. Como foi seu dia?',dica:'Demora natural + interesse real. Ciclo perfeito de atração.',quando:'Para responder com atraso proposital mas voltar com qualidade.'},
+  {id:22,cat:'primeiro',sit:'Retomar contato depois de semanas',msg:'Ei, apareceu uma coisa que eu sei que você ia adorar. Ainda tenho esse costume de pensar em você 😅',dica:'O "ainda" indica continuidade de sentimento sem dependência.',quando:'Para reabrir contato após 15+ dias de silêncio.'},
+  {id:23,cat:'primeiro',sit:'Retomar após término',msg:'Não sei se é o momento certo, mas não consegui ficar sem dizer que sinto sua falta.',dica:'Vulnerabilidade no timing certo magnetiza.',quando:'Após pelo menos 21 dias de zero contato após término.'},
 ];
 
 const DICAS = {
-  beleza: [
-    {titulo:'Pele que fala por você',icone:'✨',cor:'#C8174A',passos:['Hidrate o rosto toda manhã e noite — pele hidratada ilumina qualquer rosto mesmo sem maquiagem.','Protetor solar diário é anti-idade, anti-manchas e dá aquele brilho saudável que todo mundo percebe.','Esfolie a pele uma vez por semana para renovar as células e deixar a textura uniforme.','Beba pelo menos 2 litros de água por dia — nenhum produto faz o que a hidratação interna faz.','Durma bem: olheiras e inchaço comunicam cansaço antes mesmo de você abrir a boca.']},
-    {titulo:'Cabelo que atrai olhares',icone:'💇',cor:'#C9932A',passos:['Cabelo limpo e com bom cheiro é o detalhe mais notado nas primeiras impressões.','Hidratação semanal (máscara ou óleo) faz mais diferença do que qualquer produto caro do dia a dia.','Defina seu estilo: solto com movimento, preso com elegância ou trançado com personalidade. Consistência atrai.','Franja e corte que valorizam o rosto valem mais do que km de comprimento mal cuidado.','Soro/sérum leave-in finaliza e protege — especialmente se você usa calor com frequência.']},
-    {titulo:'Maquiagem que valoriza',icone:'💄',cor:'#7B0D2A',passos:['Base com SPF ou BB cream dá cobertura leve e cuida da pele ao mesmo tempo.','Máscara de cílios é o único produto que, sozinho, transforma qualquer rosto em segundos.','Blush aplicado no maçã da maçã para cima deixa o rosto com aspecto jovem e saudável.','Sobrancelha bem definida (não necessariamente grossa) estrutura o olhar e o rosto inteiro.','Batom nude no tom certo da sua pele é o look mais elegante e atemporal que existe.']},
-    {titulo:'Perfume: seu cartão de visita',icone:'🌸',cor:'#5B0F5E',passos:['Aplique o perfume nos pontos de pulso, pescoço e atrás dos joelhos — onde o calor ativa a fragrância.','Não esfregue os pulsos após aplicar — isso quebra as moléculas e altera o aroma.','Tenha um perfume do dia a dia e um para noite/encontros especiais — eles criam memória olfativa.','Fragâncias florais e frutadas tendem a ser mais leves; amadeiradas e orientais, mais marcantes e sensuais.','Quem sente seu cheiro lembra de você — invista nisso como parte da sua identidade.']},
+  beleza:[
+    {titulo:'Pele que fala por você',icone:'✨',cor:'#C8174A',passos:['Hidrate o rosto toda manhã e noite — pele hidratada ilumina qualquer rosto mesmo sem maquiagem.','Protetor solar diário é anti-idade, anti-manchas e dá aquele brilho saudável que todo mundo percebe.','Esfolie a pele uma vez por semana para renovar as células e deixar a textura uniforme.','Beba pelo menos 2 litros de água por dia — nenhum produto faz o que a hidratação interna faz.','Durma bem: olheiras comunicam cansaço antes mesmo de você falar.']},
+    {titulo:'Cabelo que atrai olhares',icone:'💇',cor:'#C9932A',passos:['Cabelo limpo e com bom cheiro é o detalhe mais notado nas primeiras impressões.','Hidratação semanal faz mais diferença do que qualquer produto caro do dia a dia.','Defina seu estilo: solto com movimento, preso com elegância ou trançado com personalidade.','Soro leave-in finaliza e protege — especialmente se você usa calor.','Franja e corte que valorizam o rosto valem mais do que km de comprimento mal cuidado.']},
+    {titulo:'Maquiagem que valoriza',icone:'💄',cor:'#7B0D2A',passos:['Base com SPF ou BB cream dá cobertura leve e cuida da pele ao mesmo tempo.','Máscara de cílios é o único produto que, sozinho, transforma qualquer rosto em segundos.','Blush na maçã para cima deixa o rosto jovem e saudável.','Sobrancelha bem definida estrutura o olhar e o rosto inteiro.','Batom nude no tom certo é o look mais elegante e atemporal que existe.']},
+    {titulo:'Perfume: seu cartão de visita',icone:'🌸',cor:'#5B0F5E',passos:['Aplique nos pulsos, pescoço e atrás dos joelhos — onde o calor ativa a fragrância.','Não esfregue os pulsos após aplicar — isso quebra as moléculas.','Tenha um perfume do dia a dia e um para noite — eles criam memória olfativa.','Florais são mais leves; amadeiradas e orientais, mais marcantes e sensuais.','Quem sente seu cheiro lembra de você — invista nisso como parte da sua identidade.']},
   ],
-  estilo: [
-    {titulo:'Roupas que comunicam poder',icone:'👗',cor:'#C8174A',passos:['Vista o que faz você se sentir bem — confiança é o acessório mais visível que existe.','Roupas bem passadas e limpas valem mais do que qualquer peça cara amassada.','Aprenda as cores que valorizam seu tom de pele — elas iluminam o rosto sem esforço.','Menos é mais: um look simples bem combinado supera qualquer excesso de peças.','Invista em peças básicas de qualidade — calça bem cortada, camiseta boa, blazer versátil.']},
-    {titulo:'Postura e linguagem corporal',icone:'🦋',cor:'#1D9E75',passos:['Ombros para trás e queixo levemente levantado comunicam segurança antes de você falar qualquer coisa.','Sorrir com os olhos (não só a boca) cria conexão imediata e genuína com qualquer pessoa.','Contato visual por 3 a 5 segundos é o tempo ideal — mais que isso é intimidador, menos é esquivo.','Gestos lentos e controlados comunicam calma e segurança — o oposto de quem está nervoso.','Quando sentar, não cruze os braços — postura aberta sinaliza que você está presente e confiante.']},
+  estilo:[
+    {titulo:'Roupas que comunicam poder',icone:'👗',cor:'#C8174A',passos:['Vista o que faz você se sentir bem — confiança é o acessório mais visível.','Roupas bem passadas e limpas valem mais do que qualquer peça cara amassada.','Aprenda as cores que valorizam seu tom de pele — elas iluminam sem esforço.','Menos é mais: um look simples bem combinado supera excesso de peças.','Invista em básicos de qualidade: calça bem cortada, camiseta boa, blazer versátil.']},
+    {titulo:'Postura e linguagem corporal',icone:'🦋',cor:'#1D9E75',passos:['Ombros para trás e queixo levemente levantado comunicam segurança sem você falar nada.','Sorrir com os olhos cria conexão imediata e genuína.','Contato visual por 3 a 5 segundos — mais é intimidador, menos é esquivo.','Gestos lentos e controlados comunicam calma e segurança.','Postura aberta (sem cruzar os braços) sinaliza que você está presente e confiante.']},
   ],
-  encontro: [
-    {titulo:'Antes do encontro',icone:'📋',cor:'#C9932A',passos:['Confirme o encontro no dia anterior com naturalidade — não deixe para a última hora.','Vista algo que te deixe confortável E atraente. Desconforto na roupa aparece no humor.','Chegue no máximo 5 minutos atrasada — nunca adiantada demais, nunca muito tarde.','Evite comer alimentos pesados antes — leveza no corpo reflete no humor e na energia.','Deixe o celular no silencioso. Ele merece sua atenção total — e você merece a dele.']},
-    {titulo:'Durante o encontro',icone:'💫',cor:'#C8174A',passos:['Faça perguntas sobre ele com genuíno interesse — pessoas adoram quem as faz falar de si mesmas.','Ria das coisas que achar graça de verdade. Riso falso é percebido e repele.','Compartilhe algo seu também — não seja só ouvinte. Vulnerabilidade leve cria conexão.','Não mencione exes, dívidas, problemas ou dramas logo no primeiro encontro.','Encerre o encontro deixando ele querendo mais — não estime a duração, se estiver bom, saia no pico.']},
-    {titulo:'Depois do primeiro encontro',icone:'📲',cor:'#7B0D2A',passos:['Espere ele entrar em contato primeiro ou espere pelo menos 4 horas antes de mandar mensagem.','Se ele entrar em contato, responda com energia positiva mas sem exagero.','Nunca pergunte "gostou?" ou "vai querer se ver de novo?" — deixe a situação fluir naturalmente.','Mencione algo específico e positivo do encontro — mostra que você estava presente e atenta.','Não fique analisando cada detalhe com amigas imediatamente. Viva o momento antes de interpretá-lo.']},
-    {titulo:'O que nunca fazer no encontro',icone:'🚫',cor:'#3D0A1E',passos:['Não fique no celular — mesmo que ele fique. Demonstre que você valoriza o momento.','Não beba demais — o álcool desinibe mas também apaga a sua melhor versão.','Não critique o restaurante, o lugar ou o plano dele na frente dele — se não gostou, expresse de forma gentil.','Não fale mal de outras mulheres — isso rebaixa você, não ela.','Não force beijar ou forçar intimidade — deixe o ritmo natural acontecer.']},
+  encontro:[
+    {titulo:'Antes do encontro',icone:'📋',cor:'#C9932A',passos:['Confirme o encontro no dia anterior com naturalidade.','Vista algo que te deixe confortável E atraente. Desconforto na roupa aparece no humor.','Chegue no máximo 5 minutos atrasada — nunca adiantada demais.','Evite alimentos pesados antes — leveza no corpo reflete no humor.','Deixe o celular no silencioso. Ele merece sua atenção total.']},
+    {titulo:'Durante o encontro',icone:'💫',cor:'#C8174A',passos:['Faça perguntas com genuíno interesse — pessoas adoram quem as faz falar de si mesmas.','Ria das coisas que achar graça de verdade. Riso falso é percebido e repele.','Compartilhe algo seu também — vulnerabilidade leve cria conexão.','Não mencione exes, problemas ou dramas no primeiro encontro.','Encerre deixando ele querendo mais — saia no pico, não quando esfriou.']},
+    {titulo:'Depois do primeiro encontro',icone:'📲',cor:'#7B0D2A',passos:['Espere ele entrar em contato primeiro ou espere 4h antes de mandar mensagem.','Responda com energia positiva mas sem exagero.','Nunca pergunte "gostou?" ou "vai querer se ver de novo?"','Mencione algo específico e positivo do encontro.','Não fique analisando cada detalhe — viva o momento antes de interpretá-lo.']},
+    {titulo:'O que nunca fazer',icone:'🚫',cor:'#3D0A1E',passos:['Não fique no celular — mesmo que ele fique. Valorize o momento.','Não beba demais — o álcool apaga sua melhor versão.','Não critique o lugar ou plano dele na frente dele.','Não fale mal de outras mulheres — isso rebaixa você, não ela.','Não force intimidade — deixe o ritmo natural acontecer.']},
   ],
-  psicologia: [
-    {titulo:'O gatilho da escassez',icone:'🔑',cor:'#C8174A',passos:['Quanto mais disponível você parece, menos atraente você se torna. Escassez gera desejo.','"Não posso hoje" dito com boa energia vale mais do que 10 encontros cedidos por obrigação.','Nunca cancele seus planos por alguém que mal está investindo em você.','Ter vida própria não é joguinho — é a realidade que você deveria viver de qualquer forma.','O paradoxo: quanto menos você precisa dele, mais ele tende a querer estar com você.']},
-    {titulo:'A psicologia do silêncio',icone:'🔇',cor:'#185FA5',passos:['Silêncio após conflito não é punição — é espaço para os dois respirarem.','Responder de forma reflexiva (e não impulsiva) sempre produz melhores resultados nas conversas.','Não responder imediatamente toda mensagem comunica que você tem prioridades.','"Ler e não responder" tem poder. Use com consciência, não como arma.','O silêncio da mulher segura assusta mais do que qualquer briga — porque não precisa de validação.']},
+  psicologia:[
+    {titulo:'O gatilho da escassez',icone:'🔑',cor:'#C8174A',passos:['Quanto mais disponível você parece, menos atraente você se torna.','Ter vida própria não é joguinho — é a realidade que você deve viver de qualquer forma.','O paradoxo: quanto menos você precisa dele, mais ele tende a querer estar com você.','Cancele planos seus por alguém que mal está investindo em você? Nunca mais.','Escassez gera desejo — isso é psicologia básica, não crueldade.']},
+    {titulo:'A psicologia do silêncio',icone:'🔇',cor:'#185FA5',passos:['Silêncio após conflito não é punição — é espaço para os dois respirarem.','Responder de forma reflexiva sempre produz melhores resultados.','Não responder imediatamente toda mensagem comunica que você tem prioridades.','O silêncio da mulher segura assusta mais do que qualquer briga.','Ler e não responder tem poder. Use com consciência, não como arma.']},
   ],
 };
 
 const PLANO = [
-  {dia:1,titulo:'Silêncio poderoso',sub:'As primeiras 24h de reconstrução',passos:['Não envie nenhuma mensagem. Zero. Esse silêncio comunica mais do que qualquer palavra.','Cuide da sua aparência hoje como se fosse sair com alguém especial — mesmo que não saia.','Escreva 3 qualidades suas que você mais admira. Releia antes de dormir.','Desative as notificações do WhatsApp por 24h para não ficar verificando.']},
-  {dia:2,titulo:'Presença sem pedir',sub:'Apareça no radar de forma leve',passos:['Atualize seu status ou foto com algo positivo e real da sua vida.','Se ele te ver, ótimo. Se não ver, também — o objetivo é você existir bem.','Saia para algo — café, parque, academia. Registre o momento. A vida continua e é boa.','Não abra as mensagens dele se houver. Deixe o silêncio trabalhar por você.']},
-  {dia:3,titulo:'Primeiro contato estratégico',sub:'Uma mensagem. Só uma.',passos:['Use a mensagem: "Acabei de passar por um lugar que me fez lembrar muito de você. Curioso, né?"','Depois de enviar, pare. Viva seu dia normalmente — não fique verificando a cada minuto.','Se ele responder, espere pelo menos 30 minutos antes de responder de volta.','Se não responder, tudo bem — o silêncio não é derrota, é informação.']},
-  {dia:4,titulo:'Cultivando mistério',sub:'Menos é sempre mais',passos:['Se estiver conversando, mantenha respostas curtas, positivas e curiosas.','Encerre a conversa antes que ela perca energia: "Bom, preciso resolver umas coisas 😊"','Não explique onde você está ou o que está fazendo — você não deve satisfações.','Invista pelo menos 1h do dia em algo que você gosta e que não envolva ele.']},
-  {dia:5,titulo:'Investindo em você',sub:'O dia mais transformador',passos:['Faça algo que te dê prazer: academia, salão, encontrar amigas, curso, passeio.','Se ele não entrou em contato, o processo está funcionando — não entre em pânico.','Anote como você se sente hoje comparado ao dia 1. A diferença já é real e perceptível.','Durma cedo, cuide da alimentação. Seu bem-estar físico impacta diretamente sua energia.']},
-  {dia:6,titulo:'Ativando a saudade',sub:'Uma memória que fica',passos:['Se conversam, use: "Tive um sonho com você essa semana. Acordei rindo à toa."','Se não estão em contato, envie uma memória específica e afetiva sobre algo que viveram.','Depois disso, silêncio. Deixe ele digerir o que sentiu ao ler.','Cuide de você — faça algo bonito hoje, vista algo que te faça se sentir poderosa.']},
-  {dia:7,titulo:'Posicionamento final',sub:'A nova versão de você',passos:['Você chegou no dia 7. Olhe para trás e veja o quanto você cresceu esta semana.','Se ele procurou você: responda com calma, segurança e abertura. Você não é mais a mesma.','Se não procurou: você ganhou algo mais valioso — autoconhecimento e confiança real.','Independente do resultado externo: você provou para si mesma que é capaz de se priorizar.']},
+  {dia:1,titulo:'Silêncio poderoso',sub:'As primeiras 24h',passos:['Não envie nenhuma mensagem. Esse silêncio comunica mais do que qualquer palavra.','Cuide da sua aparência hoje como se fosse sair com alguém especial.','Escreva 3 qualidades suas. Releia antes de dormir.','Desative notificações do WhatsApp por 24h.']},
+  {dia:2,titulo:'Presença sem pedir',sub:'Apareça no radar levemente',passos:['Atualize status ou foto com algo positivo da sua vida.','Saia para algo — café, parque, academia. A vida continua.','Não abra as mensagens dele se houver. Deixe o silêncio trabalhar.','Foque 100% em você hoje.']},
+  {dia:3,titulo:'Primeiro contato estratégico',sub:'Uma mensagem. Só uma.',passos:['Use: "Acabei de passar por um lugar que me fez lembrar muito de você. Curioso, né?"','Depois de enviar, pare. Viva seu dia normalmente.','Se ele responder, espere 30 min antes de responder de volta.','Se não responder, tudo bem — silêncio é informação.']},
+  {dia:4,titulo:'Cultivando mistério',sub:'Menos é sempre mais',passos:['Respostas curtas, positivas e curiosas se estiver conversando.','Encerre a conversa antes que perca energia.','Não explique onde está ou o que está fazendo.','Invista 1h do dia em algo que você gosta.']},
+  {dia:5,titulo:'Investindo em você',sub:'O dia mais transformador',passos:['Faça algo que te dê prazer: academia, salão, amigas, curso.','Se ele não entrou em contato, o processo está funcionando.','Compare como se sente hoje vs. dia 1 — a diferença já é real.','Cuide da alimentação e durma cedo.']},
+  {dia:6,titulo:'Ativando a saudade',sub:'Uma memória que fica',passos:['Use: "Tive um sonho com você essa semana. Acordei rindo à toa."','Depois disso, silêncio. Deixe ele digerir.','Cuide de você — faça algo bonito hoje.','Vista algo que te faça se sentir poderosa.']},
+  {dia:7,titulo:'Posicionamento final',sub:'A nova versão de você',passos:['Você chegou no dia 7. Olhe para trás e veja o quanto cresceu.','Se ele procurou: responda com calma e segurança. Você não é mais a mesma.','Se não procurou: você ganhou autoconhecimento e confiança real.','De qualquer forma: você provou que consegue se priorizar.']},
 ];
 
-const TIPS_HOME = [
-  {tag:'Psicologia da atração',txt:'Nunca responda no mesmo segundo. Uma pequena pausa antes de responder comunica que você tem vida própria — e isso é irresistível.'},
-  {tag:'Linguagem corporal',txt:'Sorrir com os olhos — não só a boca — cria uma conexão genuína que vai muito além do que qualquer palavra poderia comunicar.'},
-  {tag:'Gestão emocional',txt:'Encerre toda conversa boa antes que ela perca energia. Ele vai querer continuar no próximo contato.'},
-  {tag:'Autoestima',txt:'Fale menos sobre seus sentimentos e mais sobre o que você está vivendo. Mostre uma vida interessante, não um coração carente.'},
-  {tag:'Poder do silêncio',txt:'O silêncio estratégico não é punição — é você investindo em si mesma. Ele sente a diferença mesmo que você não perceba.'},
-  {tag:'Autenticidade',txt:'Uma mulher que ri de si mesma com leveza é infinitamente mais atraente do que uma que precisa ser perfeita o tempo todo.'},
-  {tag:'Posicionamento',txt:'Demonstrar que você tem escolhas — mesmo sem dizer isso diretamente — é o maior gatilho de atração que existe.'},
+const DAILY_MSGS = [
+  {cat:'Reconquista',msg:'Não vou fingir que não pensei em você. Mas aprendi que algumas coisas a gente sente e guarda.'},
+  {cat:'Atração',msg:'Você tem uma energia diferente. Fiquei curiosa pra saber quem você é de verdade.'},
+  {cat:'Valorização',msg:'Eu me importo com você, mas não a ponto de me perder por isso.'},
+  {cat:'Mistério',msg:'Tive um dia que me ensinou bastante coisa. Queria muito te contar, mas talvez não seja o momento ainda.'},
+  {cat:'Saudade',msg:'Tive um sonho com você essa semana. Acordei rindo à toa. Achei que ia ficar esquisito não contar.'},
+  {cat:'Autoestima',msg:'Posso esperar muita coisa, mas não sou opção.'},
+  {cat:'Atração',msg:'Você aparece em várias músicas que ouço ultimamente. Minha playlist sabe mais de mim do que eu.'},
+];
+
+const HOME_TIPS = [
+  {tag:'Psicologia da atração',txt:'Nunca responda no mesmo segundo. Uma pausa antes de responder comunica que você tem vida própria — e isso é irresistível.'},
+  {tag:'Linguagem corporal',txt:'Sorrir com os olhos — não só a boca — cria uma conexão genuína que nenhuma palavra cria.'},
+  {tag:'Gestão emocional',txt:'Encerre toda conversa boa antes que ela perca energia. Ele vai querer continuar.'},
+  {tag:'Autoestima',txt:'Fale menos sobre seus sentimentos e mais sobre o que está vivendo. Uma vida interessante atrai mais do que um coração carente.'},
+  {tag:'Poder do silêncio',txt:'O silêncio estratégico não é punição — é você investindo em si mesma. Ele sente a diferença.'},
+  {tag:'Autenticidade',txt:'Uma mulher que ri de si mesma com leveza é mais atraente do que uma que precisa ser perfeita.'},
+  {tag:'Posicionamento',txt:'Demonstrar que você tem escolhas — mesmo sem dizer diretamente — é o maior gatilho de atração.'},
 ];
 
 const MSG_CATS = [
@@ -335,207 +508,363 @@ const MSG_CATS = [
   {id:'vacuo',label:'🔇 Silêncio'},
   {id:'primeiro',label:'📩 Retomar contato'},
 ];
-
 const DICA_CATS = [
   {id:'beleza',label:'💄 Beleza'},
   {id:'estilo',label:'👗 Estilo'},
-  {id:'encontro',label:'💫 Primeiro encontro'},
+  {id:'encontro',label:'💫 1º Encontro'},
   {id:'psicologia',label:'🧠 Psicologia'},
 ];
 
-let favs = JSON.parse(localStorage.getItem('mi_favs')||'[]');
-let days = JSON.parse(localStorage.getItem('mi_days')||'[false,false,false,false,false,false,false]');
-let streak = parseInt(localStorage.getItem('mi_streak')||'1');
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let profile = null;
+let favs = [];
+let days = [false,false,false,false,false,false,false];
+let streak = 1;
 let currentMsgCat = 'all';
 let currentDicaCat = 'beleza';
 let currentModalMsg = null;
+let chatHistory = [];
+let deferredInstall = null;
 
-function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-function showToast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
+function LS(k,v){ if(v===undefined){ try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;} } try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+function showToast(t){ const el=document.getElementById('toast'); el.textContent=t; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2200); }
+function copyText(txt){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).catch(()=>fbCopy(txt)); }else{ fbCopy(txt); } showToast('✅ Copiado!'); }
+function fbCopy(txt){ const ta=document.createElement('textarea'); ta.value=txt; ta.style.cssText='position:fixed;opacity:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); }
 
-function copyText(txt){
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(txt).catch(()=>fallbackCopy(txt));
-  } else { fallbackCopy(txt); }
-  showToast('✅ Copiado!');
+/* ═══════════════════════════════════════
+   PWA
+═══════════════════════════════════════ */
+(function setupPWA(){
+  const mfData = {name:'Mulher Inesquecível',short_name:'Inesquecível',start_url:'.',display:'standalone',background_color:'#1A0A10',theme_color:'#1A0A10',icons:[{src:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" rx="22" fill="%23C8174A"/><text y="72" x="48" text-anchor="middle" font-size="60">💌</text></svg>',sizes:'any',type:'image/svg+xml'}]};
+  const blob = new Blob([JSON.stringify(mfData)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  document.getElementById('pwa-manifest').href = url;
+  if('serviceWorker' in navigator){
+    const sw=`self.addEventListener('fetch',e=>{});`;
+    const swBlob=new Blob([sw],{type:'application/javascript'});
+    const swUrl=URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+  }
+  window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferredInstall=e; document.getElementById('install-banner').classList.remove('hidden'); });
+  document.getElementById('install-btn').onclick=()=>{ if(deferredInstall){ deferredInstall.prompt(); deferredInstall.userChoice.then(()=>{ deferredInstall=null; document.getElementById('install-banner').classList.add('hidden'); }); } };
+})();
+
+/* ═══════════════════════════════════════
+   ONBOARDING
+═══════════════════════════════════════ */
+let obData = {};
+function checkOb1(){ document.getElementById('btn-ob1').disabled = document.getElementById('inp-nome').value.trim().length < 2; }
+function selectOb(key,val,el){
+  obData[key]=val;
+  el.closest('.ob-options').querySelectorAll('.ob-opt').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  const steps={age:'btn-ob2',sit:'btn-ob3',tipo:'btn-ob4'};
+  if(steps[key]) document.getElementById(steps[key]).disabled=false;
 }
-function fallbackCopy(txt){
-  const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
-  document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);
+const OB_PROG=[20,40,70,100];
+function goOb(step){
+  document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('ob'+step).classList.add('active');
+  document.getElementById('ob-prog').style.width=OB_PROG[step-1]+'%';
+  if(step===1){ obData.nome=document.getElementById('inp-nome').value.trim(); }
+}
+function finishOnboard(){
+  obData.nome=document.getElementById('inp-nome').value.trim()||'Você';
+  LS('mi_profile',obData);
+  LS('mi_favs',[]);
+  LS('mi_days',[false,false,false,false,false,false,false]);
+  LS('mi_streak',1);
+  startApp();
 }
 
+/* ═══════════════════════════════════════
+   APP BOOT
+═══════════════════════════════════════ */
+function startApp(){
+  profile = LS('mi_profile');
+  favs = LS('mi_favs')||[];
+  days = LS('mi_days')||[false,false,false,false,false,false,false];
+  streak = LS('mi_streak')||1;
+
+  document.getElementById('scr-onboard').classList.add('hidden');
+  document.getElementById('scr-app').style.display='flex';
+
+  const nome = profile?.nome||'Você';
+  document.getElementById('hdr-name').textContent = 'Olá, '+nome+' 👋';
+  document.getElementById('hdr-sub').textContent = saudar();
+  document.getElementById('streak-pill').textContent='🔥 '+streak+' dia'+(streak>1?'s':'');
+  document.getElementById('home-greet').textContent = nome+'!';
+  document.getElementById('home-avatar').textContent = avatarEmoji();
+
+  const idx = new Date().getDay();
+  const dm = DAILY_MSGS[idx % DAILY_MSGS.length];
+  document.getElementById('dm-cat').textContent = dm.cat;
+  document.getElementById('dm-text').textContent = dm.msg;
+  document.getElementById('dm-copy').onclick=()=>copyText(dm.msg);
+  document.getElementById('dm-fav').onclick=()=>toggleFavHome(dm.msg);
+  updateDmFav(dm.msg);
+
+  const tip = HOME_TIPS[idx % HOME_TIPS.length];
+  document.getElementById('tip-tag').textContent=tip.tag;
+  document.getElementById('tip-text').textContent=tip.txt;
+
+  renderDayProg();
+  renderMsgCats();
+  renderMsgs();
+  renderDicaCats();
+  renderDicas();
+  renderPlano();
+  renderFavs();
+  initChat();
+}
+
+function saudar(){ const h=new Date().getHours(); if(h<12)return'Bom dia ☀️'; if(h<18)return'Boa tarde 🌸'; return'Boa noite 🌙'; }
+function avatarEmoji(){ const m={'romantica':'🌹','pratica':'⚡','timida':'🌸','independente':'🦋'}; return m[profile?.tipo]||'💌'; }
+
+/* ═══════════════════════════════════════
+   MOOD
+═══════════════════════════════════════ */
+function setMood(key,emoji,label,btn){
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.getElementById('home-moment').textContent=label;
+  document.getElementById('home-avatar').textContent=emoji;
+  const tips={
+    triste:'Tudo bem sentir. Mas lembre: sua dor hoje é a sua força amanhã. Respira.',
+    ansiosa:'Ansiedade é energia mal direcionada. Use ela a seu favor — cuide de você agora.',
+    bem:'Aproveite esse estado! Energia positiva é o melhor momento para tomar atitudes.',
+    forte:'Você está no seu melhor momento. É hora de agir com confiança.',
+  };
+  document.getElementById('tip-text').textContent=tips[key]||document.getElementById('tip-text').textContent;
+}
+
+/* ═══════════════════════════════════════
+   TABS
+═══════════════════════════════════════ */
 function showTab(name, btn){
-  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.tab-pane').forEach(p=>{ p.classList.remove('active'); p.style.display='none'; });
+  const pane = document.getElementById('tab-'+name);
+  if(name==='chat'){ pane.style.display='flex'; pane.classList.add('active'); setTimeout(()=>{ const el=document.getElementById('chat-msgs'); el.scrollTop=el.scrollHeight; },100); }
+  else{ pane.style.display='block'; pane.classList.add('active'); }
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const target = btn || document.getElementById('nav-'+name);
-  if(target) target.classList.add('active');
+  if(btn) btn.classList.add('active');
   if(name==='favs') renderFavs();
 }
 
-function openModal(id){
-  const m = MSGS.find(x=>x.id===id);
-  if(!m) return;
-  currentModalMsg = m;
-  document.getElementById('mSit').textContent = m.sit;
-  document.getElementById('mMsg').textContent = m.msg;
-  document.getElementById('mDica').textContent = m.dica;
-  document.getElementById('mWhen').textContent = m.quando;
-  document.getElementById('modal').classList.add('open');
-}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
-document.getElementById('mCopyBtn').addEventListener('click',function(){if(currentModalMsg)copyText(currentModalMsg.msg);});
-
-function initHome(){
-  const idx = new Date().getDay();
-  const m = MSGS[idx % MSGS.length];
-  const tip = TIPS_HOME[idx % TIPS_HOME.length];
-  document.getElementById('dailyCat').textContent = m.cat.charAt(0).toUpperCase()+m.cat.slice(1);
-  document.getElementById('dailyMsg').textContent = m.msg;
-  document.getElementById('tipTag').textContent = tip.tag;
-  document.getElementById('tipText').textContent = tip.txt;
-  document.getElementById('streakPill').textContent = '🔥 '+streak+' dia'+(streak>1?'s':'');
-  const isFav = favs.includes(m.msg);
-  document.getElementById('btnFavDaily').textContent = isFav ? '💛' : '🤍';
-  document.getElementById('btnCopyDaily').onclick = ()=>copyText(m.msg);
-  document.getElementById('btnFavDaily').onclick = ()=>{
-    const idx2 = favs.indexOf(m.msg);
-    if(idx2===-1){favs.push(m.msg);document.getElementById('btnFavDaily').textContent='💛';showToast('Salvo nos favoritos!');}
-    else{favs.splice(idx2,1);document.getElementById('btnFavDaily').textContent='🤍';}
-    save('mi_favs',favs);
-  };
-  renderDayProg();
-}
-
-function renderDayProg(){
-  const dnames=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  const done=days.filter(Boolean).length;
-  document.getElementById('dayCircles').innerHTML=days.map((d,i)=>{
-    const cls=d?'done':(i===done?'today':'');
-    return`<div class="dc"><div class="dc-circle ${cls}">${d?'✓':i+1}</div><div class="dc-label">${dnames[i]}</div></div>`;
-  }).join('');
-  const pct=Math.round((done/7)*100);
-  document.getElementById('progFill').style.width=pct+'%';
-  document.getElementById('progPct').textContent=pct+'%';
-  const curr=Math.min(done,6);
-  document.getElementById('progTitle').textContent='Dia '+(curr+1)+' de 7 — '+PLANO[curr].titulo;
-}
-
+/* ═══════════════════════════════════════
+   MENSAGENS
+═══════════════════════════════════════ */
 function renderMsgCats(){
-  document.getElementById('msgsCats').innerHTML=MSG_CATS.map(c=>`<button class="cat-pill${c.id===currentMsgCat?' active':''}" onclick="selectMsgCat('${c.id}',this)">${c.label}</button>`).join('');
+  document.getElementById('msg-cats').innerHTML=MSG_CATS.map(c=>`<button class="cat-pill${c.id===currentMsgCat?' active':''}" onclick="selMsgCat('${c.id}',this)">${c.label}</button>`).join('');
 }
-function selectMsgCat(id,el){
-  currentMsgCat=id;
-  document.querySelectorAll('.msgs-cats .cat-pill').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  renderMsgs();
-}
+function selMsgCat(id,el){ currentMsgCat=id; document.querySelectorAll('#msg-cats .cat-pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); renderMsgs(); }
 function renderMsgs(){
   const list=currentMsgCat==='all'?MSGS:MSGS.filter(m=>m.cat===currentMsgCat);
-  document.getElementById('msgsList').innerHTML=list.map(m=>{
-    const isFav=favs.includes(m.msg);
+  document.getElementById('msgs-list').innerHTML=list.map(m=>{
+    const f=favs.includes(m.msg);
     return`<div class="msg-card" onclick="openModal(${m.id})">
       <div class="msg-sit">${m.sit}</div>
       <div class="msg-body">${m.msg}</div>
-      <div class="msg-footer">
-        <span class="msg-hint">Toque para ver a dica completa</span>
+      <div class="msg-foot">
+        <span class="msg-hint">Toque para ver a dica</span>
         <div class="msg-btns">
-          <button class="btn-fav-sm" onclick="event.stopPropagation();toggleFavMsg(${m.id},this)">${isFav?'💛':'🤍'}</button>
+          <button class="btn-fav-sm" onclick="event.stopPropagation();toggleFavMsg(${m.id},this)">${f?'💛':'🤍'}</button>
           <button class="btn-copy-sm" onclick="event.stopPropagation();copyText(${JSON.stringify(m.msg)})">Copiar</button>
         </div>
       </div>
     </div>`;
   }).join('');
 }
-function toggleFavMsg(id,btn){
-  const m=MSGS.find(x=>x.id===id);if(!m)return;
-  const i=favs.indexOf(m.msg);
-  if(i===-1){favs.push(m.msg);btn.textContent='💛';showToast('Salvo!');}
-  else{favs.splice(i,1);btn.textContent='🤍';}
-  save('mi_favs',favs);renderFavs();
-}
+function toggleFavMsg(id,btn){ const m=MSGS.find(x=>x.id===id); if(!m)return; const i=favs.indexOf(m.msg); if(i===-1){favs.push(m.msg);btn.textContent='💛';showToast('Salvo!');}else{favs.splice(i,1);btn.textContent='🤍';} LS('mi_favs',favs); renderFavs(); }
+function toggleFavHome(msg){ const i=favs.indexOf(msg); if(i===-1){favs.push(msg);showToast('Salvo nos favoritos!');} else{favs.splice(i,1);} LS('mi_favs',favs); updateDmFav(msg); renderFavs(); }
+function updateDmFav(msg){ document.getElementById('dm-fav').textContent=favs.includes(msg)?'💛':'🤍'; }
 
-function renderDicaCats(){
-  document.getElementById('dicasCats').innerHTML=DICA_CATS.map(c=>`<button class="cat-pill${c.id===currentDicaCat?' active':''}" onclick="selectDicaCat('${c.id}',this)">${c.label}</button>`).join('');
-}
-function selectDicaCat(id,el){
-  currentDicaCat=id;
-  document.querySelectorAll('.dicas-cats .cat-pill').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  renderDicas();
-}
+/* ═══════════════════════════════════════
+   MODAL
+═══════════════════════════════════════ */
+function openModal(id){ const m=MSGS.find(x=>x.id===id); if(!m)return; currentModalMsg=m; document.getElementById('m-sit').textContent=m.sit; document.getElementById('m-msg').textContent=m.msg; document.getElementById('m-dica').textContent=m.dica; document.getElementById('m-when').textContent=m.quando; document.getElementById('modal').classList.add('open'); }
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').addEventListener('click',e=>{ if(e.target===document.getElementById('modal'))closeModal(); });
+document.getElementById('m-copy').onclick=()=>{ if(currentModalMsg)copyText(currentModalMsg.msg); };
+
+/* ═══════════════════════════════════════
+   DICAS
+═══════════════════════════════════════ */
+function renderDicaCats(){ document.getElementById('dica-cats').innerHTML=DICA_CATS.map(c=>`<button class="cat-pill${c.id===currentDicaCat?' active':''}" onclick="selDicaCat('${c.id}',this)">${c.label}</button>`).join(''); }
+function selDicaCat(id,el){ currentDicaCat=id; document.querySelectorAll('#dica-cats .cat-pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); renderDicas(); }
 function renderDicas(){
   const list=DICAS[currentDicaCat]||[];
-  document.getElementById('dicasList').innerHTML=list.map((d,i)=>`
-    <div class="dica-card" id="dica-${currentDicaCat}-${i}">
-      <div class="dica-header" onclick="toggleDica('${currentDicaCat}',${i})">
-        <div class="dica-icon-wrap" style="background:${d.cor}22;">${d.icone}</div>
-        <div class="dica-info"><strong>${d.titulo}</strong><span>${d.passos.length} dicas</span></div>
-        <span class="dica-arrow">›</span>
+  document.getElementById('dicas-list').innerHTML=list.map((d,i)=>`
+    <div class="dica-card" id="dc-${currentDicaCat}-${i}">
+      <div class="dica-hdr" onclick="toggleDica('${currentDicaCat}',${i})">
+        <div class="dica-ico" style="background:${d.cor}22;">${d.icone}</div>
+        <div class="dica-info"><strong>${d.titulo}</strong><span>${d.passos.length} dicas práticas</span></div>
+        <span class="dica-arr">›</span>
       </div>
       <div class="dica-body">
-        ${d.passos.map((p,n)=>`<div class="dica-step"><span class="dica-step-num">${n+1}</span>${p}</div>`).join('')}
+        ${d.passos.map((p,n)=>`<div class="dica-step"><span class="dica-num">${n+1}</span>${p}</div>`).join('')}
       </div>
     </div>`).join('');
 }
-function toggleDica(cat,i){
-  const el=document.getElementById('dica-'+cat+'-'+i);
-  el.classList.toggle('open');
-}
+function toggleDica(cat,i){ document.getElementById('dc-'+cat+'-'+i).classList.toggle('open'); }
 
+/* ═══════════════════════════════════════
+   PLANO 7 DIAS
+═══════════════════════════════════════ */
+function renderDayProg(){
+  const dnames=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const done=days.filter(Boolean).length;
+  document.getElementById('day-dots').innerHTML=days.map((d,i)=>{
+    const cls=d?'done':(i===done?'today':'');
+    return`<div class="dd"><div class="dd-c ${cls}">${d?'✓':i+1}</div><div class="dd-l">${dnames[i]}</div></div>`;
+  }).join('');
+  const pct=Math.round((done/7)*100);
+  document.getElementById('prog-f').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  const curr=Math.min(done,6);
+  document.getElementById('prog-t').textContent='Dia '+(curr+1)+' — '+PLANO[curr].titulo;
+}
 function renderPlano(){
   const done=days.filter(Boolean).length;
-  document.getElementById('planoList').innerHTML=PLANO.map((d,i)=>{
+  document.getElementById('plano-list').innerHTML=PLANO.map((d,i)=>{
     const isDone=days[i];const isActive=i===done;
     return`<div class="plano-card${isDone?' done':''}${isActive?' active-day':''}" id="pc-${i}">
-      <div class="plano-card-header" onclick="togglePlano(${i})">
+      <div class="plano-hdr" onclick="togglePlano(${i})">
         <div class="plano-num">${isDone?'✓':d.dia}</div>
         <div class="plano-info"><strong>Dia ${d.dia}: ${d.titulo}</strong><span>${d.sub}</span></div>
       </div>
       <div class="plano-body">
         ${d.passos.map(p=>`<div class="plano-step">${p}</div>`).join('')}
-        <button class="plano-mark-btn" onclick="markDay(${i})">${isDone?'✓ Concluído':'Marcar como concluído'}</button>
+        <button class="plano-mark" onclick="markDay(${i})">${isDone?'✓ Concluído':'Marcar como concluído'}</button>
       </div>
     </div>`;
   }).join('');
 }
-function togglePlano(i){document.getElementById('pc-'+i).classList.toggle('open');}
-function markDay(i){days[i]=true;save('mi_days',days);renderDayProg();renderPlano();showToast('🎉 Dia '+(i+1)+' concluído!');}
+function togglePlano(i){ document.getElementById('pc-'+i).classList.toggle('open'); }
+function markDay(i){ days[i]=true; LS('mi_days',days); renderDayProg(); renderPlano(); showToast('🎉 Dia '+(i+1)+' concluído!'); }
 
+/* ═══════════════════════════════════════
+   FAVORITOS
+═══════════════════════════════════════ */
 function renderFavs(){
-  const empty=document.getElementById('favEmpty');
-  const list=document.getElementById('favsList');
-  if(!favs.length){list.innerHTML='';empty.style.display='block';return;}
-  empty.style.display='none';
+  const empty=document.getElementById('fav-empty');
+  const list=document.getElementById('favs-list');
+  if(!favs.length){ list.innerHTML=''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
   list.innerHTML=favs.map((msg,i)=>`
     <div class="msg-card">
       <div class="msg-body">${msg}</div>
-      <div class="msg-footer"><span></span>
+      <div class="msg-foot"><span></span>
         <div class="msg-btns">
-          <button class="btn-fav-sm" onclick="favs.splice(${i},1);save('mi_favs',favs);renderFavs()">🗑️</button>
+          <button class="btn-fav-sm" onclick="favs.splice(${i},1);LS('mi_favs',favs);renderFavs()">🗑️</button>
           <button class="btn-copy-sm" onclick="copyText(${JSON.stringify(msg)})">Copiar</button>
         </div>
       </div>
     </div>`).join('');
 }
 
-function boot(){
-  initHome();
-  renderMsgCats();renderMsgs();
-  renderDicaCats();renderDicas();
-  renderPlano();
-  document.getElementById('splash').style.display='none';
-  document.getElementById('app').style.display='block';
+/* ═══════════════════════════════════════
+   CHAT IA (Anthropic API)
+═══════════════════════════════════════ */
+function initChat(){
+  const nome = profile?.nome||'você';
+  const sit = {reconquista:'quer reconquistar alguém',atrair:'quer atrair alguém novo',manter:'está em um relacionamento e quer melhorá-lo',eu:'quer se fortalecer e se valorizar'}[profile?.sit]||'está passando por questões de relacionamento';
+  const tipo = {romantica:'é romântica e apaixonada, sente tudo intensamente',pratica:'é prática e direta, gosta de objetividade',timida:'é reservada e sensível, precisa de segurança para se abrir',independente:'é independente e segura, mas quer se relacionar melhor'}[profile?.tipo]||'é uma mulher que busca se relacionar melhor';
+  const sys = `Você é a assistente pessoal de relacionamentos do app "Mulher Inesquecível". Você está conversando com ${nome}, que ${sit}. Ela ${tipo}.
+
+Seu papel:
+- Ser uma amiga sábia, empática e encorajadora que entende de psicologia de relacionamentos
+- Dar conselhos práticos, diretos e personalizados
+- Ajudar com mensagens específicas que ela pode enviar
+- Apoiar emocionalmente quando ela está triste ou ansiosa
+- Nunca julgar, sempre acolher primeiro
+- Usar linguagem feminina, calorosa e próxima (tutear)
+- Respostas curtas e objetivas (máximo 4 parágrafos) — ela está no celular
+- Quando sugerir mensagens, coloque entre aspas
+- Se ela parecer muito mal emocionalmente, lembre gentilmente que apoio profissional existe
+
+Não use asteriscos nem markdown. Escreva de forma natural como em uma conversa.`;
+
+  chatHistory = [{role:'user',content:'Oi!'},{role:'assistant',content:`Oi, ${nome}! 🌸 Que bom ter você aqui!\n\nSou sua assistente pessoal de relacionamentos. Pode me contar tudo — o que está sentindo, o que aconteceu, o que quer fazer. Estou aqui pra te ajudar com conselhos, mensagens prontas ou só pra ouvir.\n\nO que está rolando?`}];
+  renderChatMsgs();
+  document.getElementById('chat-input').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();} });
+  window._chatSysPrompt = sys;
 }
 
-const loadMsgs=['Preparando seu app...','Carregando mensagens...','Montando suas dicas...','Quase lá...'];
+function renderChatMsgs(){
+  const el=document.getElementById('chat-msgs');
+  el.innerHTML=chatHistory.map(m=>{
+    const isAI=m.role==='assistant';
+    const now=new Date(); const t=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+    return`<div class="chat-bubble ${isAI?'ai':'user'}">
+      <div class="bubble-inner">${m.content.replace(/\n/g,'<br>')}</div>
+      <div class="bubble-time">${t}</div>
+    </div>`;
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+function addTyping(){
+  const el=document.getElementById('chat-msgs');
+  const div=document.createElement('div'); div.id='typing-ind'; div.className='chat-typing';
+  div.innerHTML='<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  el.appendChild(div); el.scrollTop=el.scrollHeight;
+}
+function removeTyping(){ const el=document.getElementById('typing-ind'); if(el)el.remove(); }
+
+async function sendChat(){
+  const input=document.getElementById('chat-input');
+  const txt=input.value.trim();
+  if(!txt)return;
+  input.value=''; input.style.height='40px';
+  document.getElementById('chat-send').disabled=true;
+
+  chatHistory.push({role:'user',content:txt});
+  renderChatMsgs();
+  addTyping();
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:window._chatSysPrompt||'Você é uma assistente de relacionamentos empática e prática para mulheres.',
+        messages:chatHistory
+      })
+    });
+    const data=await res.json();
+    removeTyping();
+    const reply=data.content?.map(c=>c.text||'').join('')||'Ops, algo deu errado. Tente de novo 💕';
+    chatHistory.push({role:'assistant',content:reply});
+  }catch(e){
+    removeTyping();
+    chatHistory.push({role:'assistant',content:'Parece que estou offline agora 💕 Mas estou aqui assim que a conexão voltar!'});
+  }
+  renderChatMsgs();
+  document.getElementById('chat-send').disabled=false;
+}
+
+function autoResize(el){ el.style.height='40px'; el.style.height=Math.min(el.scrollHeight,100)+'px'; }
+
+/* ═══════════════════════════════════════
+   SPLASH → ONBOARD OU APP
+═══════════════════════════════════════ */
+const loadLabels=['Carregando...','Preparando dicas...','Configurando chat IA...','Quase lá...'];
 let prog=0,li=0;
 const iv=setInterval(()=>{
-  prog+=Math.random()*20+6;
-  if(prog>=100){prog=100;clearInterval(iv);setTimeout(boot,350);}
+  prog+=Math.random()*22+8;
+  if(prog>=100){prog=100;clearInterval(iv);setTimeout(()=>{
+    document.getElementById('scr-splash').classList.add('hidden');
+    const saved=LS('mi_profile');
+    if(saved){ startApp(); }
+    else{ document.getElementById('scr-onboard').classList.remove('hidden'); }
+  },350);}
   document.getElementById('pbar').style.width=Math.min(prog,100)+'%';
-  if(prog>li*25+25&&li<loadMsgs.length-1){li++;document.getElementById('loadLabel').textContent=loadMsgs[li];}
+  if(prog>li*25+25&&li<loadLabels.length-1){ li++; document.getElementById('plabel').textContent=loadLabels[li]; }
 },100);
 </script>
 </body>
