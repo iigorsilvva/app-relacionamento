@@ -3,259 +3,276 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0F0608">
+<meta name="theme-color" content="#0A0308">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Inesquecível">
 <link rel="manifest" id="mf">
-<title>Mulher Inesquecível</title>
+<title>Inesquecível — Comunidade</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<!-- Firebase 9 Compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <style>
+/* ═══ RESET & TOKENS ════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
   --r:#C8174A;--rd:#9A1038;--rl:rgba(200,23,74,.1);
   --v:#7B0D2A;--v2:#3D0614;
   --d:#C9932A;--dl:rgba(201,147,42,.12);
-  --roxo:#5A1A8A;--roxo-l:rgba(90,26,138,.15);
-  --bg:#0F0608;--s1:#1C0C12;--s2:#261018;--s3:#341420;
-  --bdr:rgba(200,23,74,.18);
-  --t:#F5ECF0;--t2:#C07888;--t3:#7A4055;
-  --sat:env(safe-area-inset-top,44px);
-  --sab:env(safe-area-inset-bottom,34px);
+  --roxo:#7B3FA0;--roxol:rgba(123,63,160,.15);
+  --bg:#0A0308;--s1:#160A10;--s2:#211018;--s3:#2C141E;--s4:#381824;
+  --bdr:rgba(200,23,74,.15);--bdr2:rgba(200,23,74,.28);
+  --t:#F5ECF0;--t2:#C07888;--t3:#7A4055;--t4:#4A2030;
+  --sat:env(safe-area-inset-top,44px);--sab:env(safe-area-inset-bottom,34px);
 }
 html{height:100%;overflow:hidden;background:var(--bg);}
 body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--t);height:100%;height:-webkit-fill-available;overflow:hidden;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;}
 
-/* ── SHELL ───────────────────────────────────── */
+/* ═══ APP SHELL ═════════════════════════════════ */
 #APP{position:fixed;inset:0;display:none;flex-direction:column;padding-top:var(--sat);padding-bottom:var(--sab);}
+
+/* HEADER */
 .hdr{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--s1);border-bottom:1px solid var(--bdr);flex-shrink:0;min-height:52px;}
-.hdr-logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.hdr-info{flex:1;min-width:0;}
-.hdr-info strong{display:block;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.hdr-info span{font-size:10px;color:var(--t2);}
-.hdr-streak{background:var(--dl);border:1px solid rgba(201,147,42,.25);border-radius:50px;padding:4px 10px;font-size:11px;font-weight:800;color:var(--d);white-space:nowrap;flex-shrink:0;}
+.hdr-logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.hdr-title{flex:1;font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff;}
+.hdr-title span{color:var(--r);font-style:italic;}
+.hdr-notif{position:relative;width:36px;height:36px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;flex-shrink:0;}
+.notif-badge{position:absolute;top:1px;right:1px;width:10px;height:10px;border-radius:50%;background:var(--r);border:1.5px solid var(--s1);display:none;}
+.notif-badge.on{display:block;}
+
+/* CONTENT */
 .content{flex:1;overflow:hidden;position:relative;min-height:0;}
-.pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:14px 14px 16px;display:none;}
+.pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 12px;display:none;}
 .pg.on{display:block;}
-.chat-pg{position:absolute;inset:0;display:none;flex-direction:column;}
-.chat-pg.on{display:flex;}
+
+/* NAV */
 .nav{display:flex;background:var(--s1);border-top:1px solid var(--bdr);flex-shrink:0;}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px;border:none;background:transparent;cursor:pointer;gap:2px;min-width:0;}
 .ni{font-size:18px;transition:transform .18s;}
 .nl{font-size:7px;font-weight:800;letter-spacing:.2px;text-transform:uppercase;color:var(--t3);white-space:nowrap;}
 .nb.on .nl{color:var(--r);}
-.nb.on .ni{transform:scale(1.1);}
+.nb.on .ni{transform:scale(1.12);}
 
-/* ── SPLASH ──────────────────────────────────── */
-#SPL{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--sat)+30px) 28px calc(var(--sab)+20px);text-align:center;}
-.spl-logo{width:88px;height:88px;border-radius:24px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:42px;margin:0 auto 22px;box-shadow:0 16px 50px rgba(200,23,74,.5);}
-.spl-h{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;line-height:1.2;margin-bottom:8px;}
+/* ═══ SPLASH ════════════════════════════════════ */
+#SPL{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center;}
+.spl-logo{width:90px;height:90px;border-radius:24px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:44px;margin:0 auto 22px;box-shadow:0 16px 52px rgba(200,23,74,.55);animation:splPulse 2s infinite;}
+@keyframes splPulse{0%,100%{box-shadow:0 16px 52px rgba(200,23,74,.55)}50%{box-shadow:0 16px 72px rgba(200,23,74,.75)}}
+.spl-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1.15;margin-bottom:6px;}
 .spl-h em{color:var(--r);font-style:italic;}
-.spl-p{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:36px;}
-.pb-w{width:100%;background:rgba(255,255,255,.07);border-radius:50px;height:5px;overflow:hidden;}
-.pb{height:100%;background:var(--r);border-radius:50px;width:0;transition:width .08s;}
-.pb-lbl{font-size:11px;color:var(--t2);margin-top:8px;}
+.spl-p{font-size:13px;color:var(--t2);margin-bottom:36px;}
+.pb-w{width:100%;background:rgba(255,255,255,.07);border-radius:50px;height:4px;overflow:hidden;}
+.pb{height:100%;background:linear-gradient(90deg,var(--r),#E8194E);border-radius:50px;width:0;transition:width .1s;}
+.pb-lbl{font-size:11px;color:var(--t3);margin-top:8px;}
 
-/* ── ONBOARDING ──────────────────────────────── */
-#OB{position:fixed;inset:0;background:var(--bg);z-index:900;display:none;overflow-y:auto;padding:calc(var(--sat)+24px) 20px calc(var(--sab)+24px);}
+/* ═══ SETUP (Firebase config) ══════════════════ */
+#SETUP{position:fixed;inset:0;background:var(--bg);z-index:990;display:none;overflow-y:auto;padding:calc(var(--sat)+20px) 22px calc(var(--sab)+20px);}
+.setup-logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;}
+.setup-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;text-align:center;margin-bottom:6px;}
+.setup-h em{color:var(--r);font-style:italic;}
+.setup-desc{font-size:12px;color:var(--t2);text-align:center;line-height:1.7;margin-bottom:22px;}
+.setup-step{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin-bottom:12px;}
+.setup-step-n{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--r);margin-bottom:5px;}
+.setup-step-t{font-size:13px;font-weight:700;color:var(--t);margin-bottom:4px;}
+.setup-step-p{font-size:12px;color:var(--t2);line-height:1.6;}
+.setup-link{color:var(--d);font-weight:700;}
+.setup-textarea{width:100%;background:var(--s3);border:1.5px solid var(--bdr);border-radius:10px;padding:12px;font-family:'Nunito',sans-serif;font-size:12px;color:var(--t);outline:none;resize:none;min-height:130px;margin-top:10px;-webkit-appearance:none;}
+.setup-textarea:focus{border-color:var(--r);}
+.setup-btn{display:block;width:100%;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;padding:14px;border-radius:50px;border:none;cursor:pointer;text-align:center;margin-top:14px;box-shadow:0 6px 22px rgba(200,23,74,.4);}
+.setup-skip{display:block;text-align:center;font-size:12px;color:var(--t3);margin-top:10px;cursor:pointer;background:none;border:none;font-family:'Nunito',sans-serif;width:100%;}
+.setup-err{background:rgba(200,23,74,.12);border:1px solid rgba(200,23,74,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:#FF8FAD;margin-top:8px;display:none;}
+
+/* ═══ ONBOARDING ════════════════════════════════ */
+#OB{position:fixed;inset:0;background:var(--bg);z-index:980;display:none;overflow-y:auto;padding:calc(var(--sat)+24px) 20px calc(var(--sab)+20px);}
 .ob-step{display:none;}
 .ob-step.on{display:block;}
-.ob-logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;box-shadow:0 10px 30px rgba(200,23,74,.4);}
+.ob-prog{display:flex;gap:5px;justify-content:center;margin-bottom:20px;}
+.ob-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);}
+.ob-dot.on{background:var(--r);width:18px;border-radius:3px;}
+.ob-logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;}
 .ob-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;text-align:center;line-height:1.3;margin-bottom:6px;}
 .ob-h em{color:var(--r);font-style:italic;}
 .ob-s{font-size:13px;color:var(--t2);text-align:center;line-height:1.6;margin-bottom:20px;}
 .ob-lbl{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--t2);margin-bottom:6px;display:block;}
-.ob-in{width:100%;background:var(--s2);border:1.5px solid var(--bdr);border-radius:12px;padding:13px 16px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:600;color:var(--t);outline:none;margin-bottom:14px;-webkit-appearance:none;}
+.ob-in{width:100%;background:var(--s2);border:1.5px solid var(--bdr);border-radius:12px;padding:13px 16px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:600;color:var(--t);outline:none;margin-bottom:12px;-webkit-appearance:none;}
 .ob-in::placeholder{color:var(--t3);}
 .ob-in:focus{border-color:var(--r);}
-.ob-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
-.ob-opts.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.ob-opt{background:var(--s2);border:1.5px solid var(--bdr);border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;text-align:left;width:100%;}
+.ob-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.ob-opt{background:var(--s2);border:1.5px solid var(--bdr);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;text-align:left;width:100%;}
 .ob-opt.on{background:var(--rl);border-color:var(--r);}
-.ob-opts.grid .ob-opt{flex-direction:column;text-align:center;padding:14px 10px;gap:6px;}
 .ob-em{font-size:20px;flex-shrink:0;}
 .ob-ot strong{display:block;font-size:13px;font-weight:700;color:var(--t);margin-bottom:1px;}
 .ob-ot span{font-size:11px;color:var(--t2);}
-.ob-next{display:block;width:100%;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;padding:14px;border-radius:50px;border:none;cursor:pointer;text-align:center;box-shadow:0 6px 22px rgba(200,23,74,.4);margin-top:14px;}
+.signo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px;}
+.signo-btn{background:var(--s2);border:1.5px solid var(--bdr);border-radius:10px;padding:11px 6px;cursor:pointer;text-align:center;}
+.signo-btn.on{background:var(--roxol);border-color:var(--roxo);}
+.signo-em{font-size:20px;display:block;margin-bottom:2px;}
+.signo-nm{font-size:10px;font-weight:700;color:var(--t2);}
+.signo-btn.on .signo-nm{color:#C090FF;}
+.ob-next{display:block;width:100%;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;padding:14px;border-radius:50px;border:none;cursor:pointer;text-align:center;margin-top:14px;}
 .ob-next:disabled{opacity:.35;pointer-events:none;}
 .ob-skip{display:block;text-align:center;font-size:12px;color:var(--t3);margin-top:10px;cursor:pointer;background:none;border:none;font-family:'Nunito',sans-serif;width:100%;}
-.ob-prog{display:flex;gap:5px;justify-content:center;margin-bottom:20px;}
-.ob-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);}
-.ob-dot.on{background:var(--r);width:18px;border-radius:3px;}
-.signo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px;}
-.signo-btn{background:var(--s2);border:1.5px solid var(--bdr);border-radius:10px;padding:10px 6px;cursor:pointer;text-align:center;}
-.signo-btn.on{background:rgba(90,26,138,.2);border-color:var(--roxo);}
-.signo-em{font-size:20px;display:block;margin-bottom:3px;}
-.signo-nm{font-size:11px;font-weight:700;color:var(--t2);}
-.signo-btn.on .signo-nm{color:#C090FF;}
 
-/* ── SHARED ──────────────────────────────────── */
+/* ═══ SHARED COMPONENTS ═════════════════════════ */
 .slbl{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:8px;}
-.pills{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:none;}
+.pills{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:11px;scrollbar-width:none;}
 .pills::-webkit-scrollbar{display:none;}
 .pill{flex-shrink:0;padding:6px 13px;border-radius:50px;border:1.5px solid var(--bdr);font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;background:transparent;white-space:nowrap;}
 .pill.on{background:var(--r);border-color:var(--r);color:#fff;}
-.card-base{background:var(--s2);border:1px solid var(--bdr);border-radius:13px;padding:14px;margin-bottom:10px;}
+.divider{height:1px;background:var(--bdr);margin:0 16px;}
 
-/* ── HOME ────────────────────────────────────── */
-.home-greet{background:linear-gradient(130deg,var(--v),#3A0D1C);border-radius:16px;padding:15px;margin-bottom:11px;}
-.hg-top{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
-.hg-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
-.hg-tx strong{display:block;font-size:14px;font-weight:800;}
-.hg-tx span{font-size:11px;color:rgba(255,200,220,.8);}
-.mood-row{display:flex;gap:5px;flex-wrap:wrap;}
-.mbtn{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:50px;padding:5px 10px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);cursor:pointer;}
-.mbtn.on{background:var(--r);border-color:var(--r);color:#fff;}
-.daily-row{display:flex;gap:9px;margin-bottom:11px;}
-.daily-sm{flex:1;border-radius:13px;padding:13px 12px;cursor:pointer;border:1px solid var(--bdr);}
-.daily-sm:active{transform:scale(.97);}
-.ds-tag{font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;opacity:.7;}
-.ds-txt{font-size:12px;font-weight:600;line-height:1.45;}
-.ds-btns{display:flex;gap:5px;margin-top:9px;}
-.ds-btn{background:rgba(255,255,255,.15);border:none;border-radius:50px;padding:5px 9px;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;color:#fff;cursor:pointer;}
-.card-msg{background:var(--r);}
-.card-msg .ds-tag,.card-msg .ds-txt{color:#fff;}
-.card-ref{background:linear-gradient(135deg,rgba(90,26,138,.4),rgba(61,6,20,.7));border:1px solid rgba(90,26,138,.3);}
-.card-ref .ds-tag{color:#C090FF;}
-.card-ref .ds-txt{color:#DFB0FF;font-family:'Playfair Display',serif;font-style:italic;font-size:11px;}
-.dica-dia{background:var(--dl);border:1px solid rgba(201,147,42,.22);border-radius:13px;padding:13px;margin-bottom:11px;}
-.dica-dia .slbl{color:var(--d);}
-.dica-txt{font-size:13px;color:#FFE4A0;line-height:1.6;}
-/* Pregnancy alert */
-.preg-alert{background:rgba(100,20,80,.3);border:1.5px solid rgba(200,23,74,.4);border-radius:13px;padding:14px;margin-bottom:11px;}
-.preg-alert-t{font-size:12px;font-weight:800;color:#FFB0D0;margin-bottom:6px;}
-.preg-alert-p{font-size:12px;color:rgba(255,200,220,.8);line-height:1.6;}
-/* Quick grid */
-.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:11px;}
-.qa-c{background:var(--s2);border:1px solid var(--bdr);border-radius:13px;padding:13px 12px;cursor:pointer;display:flex;flex-direction:column;gap:6px;}
-.qa-c.hl{border-color:rgba(200,23,74,.4);background:rgba(200,23,74,.06);}
-.qa-c.hl2{border-color:rgba(90,26,138,.35);background:rgba(90,26,138,.07);}
-.qa-icon{font-size:21px;}
-.qa-tit{font-size:12px;font-weight:800;color:var(--t);}
-.qa-sub{font-size:10px;color:var(--t2);line-height:1.35;}
-/* Prog mini */
-.prog-mini{background:var(--s3);border:1px solid var(--bdr);border-radius:13px;padding:13px;margin-bottom:10px;}
-.prog-tt{font-size:11px;font-weight:800;margin-bottom:8px;}
-.dots-row{display:flex;gap:4px;justify-content:space-between;margin-bottom:7px;}
-.dot-w{flex:1;text-align:center;}
-.dot-c{width:27px;height:27px;border-radius:50%;border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin:0 auto 3px;color:var(--t3);transition:all .3s;}
-.dot-c.done{background:var(--r);border-color:var(--r);color:#fff;}
-.dot-c.tod{border-color:var(--d);color:var(--d);}
-.dot-lbl{font-size:8px;color:var(--t3);font-weight:600;}
-.pbar{background:rgba(255,255,255,.06);border-radius:50px;height:4px;margin-bottom:5px;}
-.pfil{height:100%;background:linear-gradient(90deg,var(--r),#E8194E);border-radius:50px;transition:width .5s;}
-.pfoot{display:flex;justify-content:space-between;font-size:9px;color:var(--t3);}
-.pfoot strong{color:var(--t);}
-.lbtn{background:none;border:none;color:var(--r);font-family:'Nunito',sans-serif;font-size:9px;font-weight:800;cursor:pointer;}
+/* ═══ FEED / SOCIAL ════════════════════════════ */
+/* Stories row */
+.stories-row{display:flex;gap:12px;overflow-x:auto;padding:14px 16px 10px;scrollbar-width:none;flex-shrink:0;}
+.stories-row::-webkit-scrollbar{display:none;}
+.story-item{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;cursor:pointer;}
+.story-ring{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--roxo));padding:2px;box-shadow:0 2px 10px rgba(200,23,74,.3);}
+.story-av{width:100%;height:100%;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid var(--s1);}
+.story-name{font-size:10px;font-weight:600;color:var(--t2);max-width:54px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.story-add{border:2px dashed var(--bdr);background:transparent;}
+.story-add-ic{width:100%;height:100%;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:22px;border:none;}
 
-/* ── MENSAGENS ───────────────────────────────── */
-.mc{background:var(--s2);border:1.5px solid var(--bdr);border-radius:12px;padding:12px;margin-bottom:9px;cursor:pointer;}
-.mc:active{border-color:var(--r);}
-.mc-sit{font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--d);margin-bottom:4px;}
-.mc-txt{font-size:13px;color:#FFBFD0;line-height:1.5;margin-bottom:8px;}
-.mc-foot{display:flex;justify-content:space-between;align-items:center;}
-.mc-hint{font-size:10px;color:rgba(255,255,255,.18);}
-.mc-btns{display:flex;gap:5px;}
-.fvb{background:none;border:none;font-size:15px;cursor:pointer;padding:3px;}
-.cpb{background:var(--rl);border:1px solid rgba(200,23,74,.28);border-radius:50px;padding:4px 11px;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;color:var(--r);cursor:pointer;}
+/* Post creation */
+.post-create{display:flex;align-items:center;gap:11px;padding:12px 16px;background:var(--s1);border-bottom:1px solid var(--bdr);}
+.pc-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.pc-input{flex:1;background:var(--s3);border:1px solid var(--bdr);border-radius:50px;padding:9px 16px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--t3);cursor:pointer;}
 
-/* ── CARTA DO DIA ────────────────────────────── */
-.carta-pg{text-align:center;padding-bottom:20px;}
-.carta-header{margin-bottom:24px;}
-.carta-header h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:4px;}
-.carta-header p{font-size:13px;color:var(--t2);}
-/* Deck container */
-.deck-wrap{position:relative;height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:32px;}
-.deck-card{
-  position:absolute;width:120px;height:190px;
+/* Post card */
+.post-card{background:var(--s1);border-bottom:1px solid var(--bdr);padding:14px 16px;}
+.post-header{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+.post-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.post-meta{flex:1;min-width:0;}
+.post-name{font-size:13px;font-weight:800;color:var(--t);display:block;}
+.post-info{font-size:10px;color:var(--t3);}
+.post-more{font-size:18px;color:var(--t3);cursor:pointer;padding:4px;}
+.post-text{font-size:14px;color:rgba(255,255,255,.85);line-height:1.65;margin-bottom:12px;word-break:break-word;}
+.post-actions{display:flex;align-items:center;gap:18px;padding-top:4px;}
+.post-action{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;font-weight:700;color:var(--t2);}
+.post-action svg{width:18px;height:18px;stroke:var(--t2);fill:none;stroke-width:2;}
+.post-action.liked svg{stroke:var(--r);}
+.post-action.liked{color:var(--r);}
+.like-anim{animation:heartPop .3s ease;}
+@keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+.feed-empty{padding:56px 24px;text-align:center;}
+.feed-empty-icon{font-size:48px;margin-bottom:14px;}
+.feed-empty h3{font-size:17px;font-weight:700;margin-bottom:6px;color:var(--t);}
+.feed-empty p{font-size:13px;color:var(--t2);line-height:1.6;}
+
+/* Comments sheet */
+.comments-sheet{position:fixed;inset:0;z-index:700;display:none;flex-direction:column;}
+.comments-sheet.on{display:flex;}
+.cs-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.7);}
+.cs-panel{position:absolute;bottom:0;left:0;right:0;background:var(--s1);border-radius:22px 22px 0 0;padding:0 0 calc(var(--sab)+8px);max-height:80vh;display:flex;flex-direction:column;animation:sUp .25s ease;}
+.cs-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--bdr);flex-shrink:0;}
+.cs-hdl{width:32px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;position:absolute;top:10px;left:50%;transform:translateX(-50%);}
+.cs-title{font-size:14px;font-weight:800;color:var(--t);}
+.cs-close{font-size:18px;cursor:pointer;color:var(--t3);}
+.cs-list{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px;flex:1;}
+.comment-item{display:flex;gap:9px;margin-bottom:14px;}
+.c-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.c-bubble{background:var(--s3);border-radius:12px;border-top-left-radius:3px;padding:9px 12px;flex:1;}
+.c-name{font-size:11px;font-weight:800;color:var(--t2);margin-bottom:3px;}
+.c-text{font-size:13px;color:var(--t);line-height:1.5;}
+.c-time{font-size:9px;color:var(--t3);margin-top:4px;}
+.cs-input-row{display:flex;gap:8px;padding:8px 14px 8px;border-top:1px solid var(--bdr);flex-shrink:0;}
+.ci-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ci-in{flex:1;background:var(--s3);border:1.5px solid var(--bdr);border-radius:18px;padding:8px 14px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--t);outline:none;-webkit-appearance:none;}
+.ci-btn{width:36px;height:36px;border-radius:50%;background:var(--r);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+
+/* ═══ POST CREATION MODAL ══════════════════════ */
+.post-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;display:none;flex-direction:column;padding:calc(var(--sat)+8px) 0 0;}
+.post-modal.on{display:flex;}
+.pm-header{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--bdr);background:var(--s1);flex-shrink:0;}
+.pm-cancel{font-size:14px;font-weight:700;color:var(--t2);cursor:pointer;background:none;border:none;font-family:'Nunito',sans-serif;}
+.pm-title{flex:1;font-size:14px;font-weight:800;text-align:center;color:var(--t);}
+.pm-submit{font-size:14px;font-weight:800;color:#fff;background:var(--r);border:none;border-radius:50px;padding:7px 16px;cursor:pointer;font-family:'Nunito',sans-serif;}
+.pm-submit:disabled{opacity:.4;pointer-events:none;}
+.pm-body{flex:1;padding:16px;background:var(--s1);display:flex;flex-direction:column;gap:12px;}
+.pm-user{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.pm-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.pm-name{font-size:14px;font-weight:800;color:var(--t);}
+.pm-textarea{flex:1;background:transparent;border:none;font-family:'Nunito',sans-serif;font-size:15px;color:var(--t);outline:none;resize:none;line-height:1.6;min-height:120px;-webkit-appearance:none;}
+.pm-textarea::placeholder{color:var(--t4);}
+.pm-chars{font-size:11px;color:var(--t3);text-align:right;}
+.pm-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.pm-tag{background:var(--s3);border:1px solid var(--bdr);border-radius:50px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;}
+.pm-tag.on{background:var(--rl);border-color:var(--r);color:var(--r);}
+
+/* ═══ TAROT / CARTA ════════════════════════════ */
+.carta-wrap{padding:20px 16px;text-align:center;}
+.carta-top{margin-bottom:22px;}
+.carta-top h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:4px;}
+.carta-date{font-size:12px;color:var(--t3);}
+.deck-area{position:relative;height:230px;display:flex;align-items:center;justify-content:center;margin-bottom:28px;perspective:1000px;}
+.d-card{
+  position:absolute;width:118px;height:188px;
   border-radius:14px;cursor:pointer;
   transform-origin:bottom center;
-  transition:transform .3s, box-shadow .3s;
-  -webkit-transform-style:preserve-3d;
+  transition:transform .35s ease, box-shadow .3s;
   transform-style:preserve-3d;
 }
-.deck-card:hover{box-shadow:0 12px 40px rgba(200,23,74,.5);}
-/* Card faces */
-.card-face{
-  position:absolute;inset:0;border-radius:14px;
-  -webkit-backface-visibility:hidden;
-  backface-visibility:hidden;
-}
-.card-back{
-  background:linear-gradient(135deg,var(--v2),var(--v));
-  border:2px solid rgba(201,147,42,.4);
+.d-card:hover{box-shadow:0 8px 32px rgba(200,23,74,.45)!important;}
+.d-face{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.d-back{
+  background:radial-gradient(ellipse at 30% 30%, rgba(123,63,160,.3), transparent 60%), linear-gradient(135deg,var(--v2),var(--v));
+  border:2px solid rgba(201,147,42,.35);
   display:flex;align-items:center;justify-content:center;
-  font-size:32px;
+  position:relative;overflow:hidden;
 }
-.card-back-pattern{
-  position:absolute;inset:6px;border-radius:10px;
-  border:1px solid rgba(201,147,42,.25);
-  background:repeating-linear-gradient(
-    45deg,
-    transparent,transparent 8px,
-    rgba(200,23,74,.05) 8px,rgba(200,23,74,.05) 10px
-  );
-}
-.card-back-logo{position:relative;z-index:1;font-size:30px;}
-.card-front{
-  background:linear-gradient(160deg,#1A0A20,#3D0614);
-  border:2px solid rgba(201,147,42,.5);
-  -webkit-transform:rotateY(180deg);
-  transform:rotateY(180deg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:14px 10px;
-}
-.deck-card.flip{
-  -webkit-transform:rotateY(180deg) translateY(-30px) scale(1.08);
-  transform:rotateY(180deg) translateY(-30px) scale(1.08);
-  box-shadow:0 20px 60px rgba(200,23,74,.5);
-  z-index:100 !important;
-}
-/* Card front content */
-.cf-symbol{font-size:36px;margin-bottom:8px;}
-.cf-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--d);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
-.cf-divider{width:40px;height:1px;background:rgba(201,147,42,.4);margin:0 auto 8px;}
-.cf-phrase{font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:rgba(255,255,255,.85);line-height:1.55;text-align:center;}
-/* Instruction */
-.carta-instrucao{font-size:13px;color:var(--t2);margin-bottom:20px;}
-.carta-instrucao strong{color:var(--t);font-weight:700;}
-/* Revealed card full */
-.carta-revealed{
-  background:linear-gradient(160deg,#1A0A20,#3D0614);
-  border:1.5px solid rgba(201,147,42,.4);
-  border-radius:16px;padding:28px 22px;
-  margin:0 auto 20px;max-width:300px;
-  display:none;
-  animation:fadeUp .4s ease;
-}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.d-back-pattern{position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 6px,rgba(200,23,74,.04) 6px,rgba(200,23,74,.04) 7px);}
+.d-back-inner{position:absolute;inset:7px;border-radius:8px;border:1px solid rgba(201,147,42,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
+.d-back-logo{font-size:26px;position:relative;z-index:1;}
+.d-back-txt{font-size:8px;font-weight:800;letter-spacing:2px;color:rgba(201,147,42,.5);text-transform:uppercase;}
+.d-front{background:linear-gradient(160deg,#1A0830,#3D0614);border:2px solid rgba(201,147,42,.5);transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;padding:12px 8px;}
+.d-card.flipped{transform:rotateY(180deg) translateY(-30px) scale(1.06)!important;box-shadow:0 20px 60px rgba(200,23,74,.55)!important;z-index:100!important;}
+.cf-sym{font-size:32px;}
+.cf-num{font-size:8px;font-weight:800;letter-spacing:2px;color:rgba(201,147,42,.6);text-transform:uppercase;}
+.cf-name{font-family:'Playfair Display',serif;font-size:11px;font-weight:700;color:var(--d);text-align:center;line-height:1.3;}
+.cf-div{width:30px;height:1px;background:rgba(201,147,42,.35);}
+.cf-kw{font-size:8px;color:rgba(255,255,255,.5);text-align:center;letter-spacing:.5px;}
+/* Carta revelada */
+.carta-revealed{background:linear-gradient(160deg,#1A0830,#3D0614);border:1.5px solid rgba(201,147,42,.4);border-radius:18px;padding:26px 22px;margin:0 auto 22px;max-width:310px;display:none;animation:fadeUp .4s ease;}
 .carta-revealed.on{display:block;}
-.cr-symbol{font-size:52px;margin-bottom:12px;}
-.cr-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--d);margin-bottom:12px;letter-spacing:2px;text-transform:uppercase;}
-.cr-phrase{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.9);line-height:1.65;margin-bottom:14px;}
-.cr-msg{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:16px;}
-.cr-btn{background:rgba(255,255,255,.08);border:none;border-radius:50px;padding:9px 20px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:var(--t);cursor:pointer;margin-top:4px;}
-.carta-drawn-info{font-size:11px;color:var(--t3);margin-top:8px;}
-/* New draw button */
-.nova-carta-btn{background:linear-gradient(135deg,var(--roxo),#3A0A6A);color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;padding:14px 28px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 24px rgba(90,26,138,.45);margin-bottom:16px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.cr-sym{font-size:52px;margin-bottom:8px;}
+.cr-arcana{font-size:10px;font-weight:800;letter-spacing:2px;color:rgba(201,147,42,.6);margin-bottom:4px;text-transform:uppercase;}
+.cr-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--d);margin-bottom:12px;}
+.cr-keywords{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.cr-kw{background:rgba(201,147,42,.1);border:1px solid rgba(201,147,42,.2);border-radius:50px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--d);}
+.cr-phrase{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.88);line-height:1.65;margin-bottom:12px;}
+.cr-msg{font-size:12px;color:var(--t2);line-height:1.65;margin-bottom:16px;}
+.cr-love{background:rgba(200,23,74,.1);border:1px solid rgba(200,23,74,.2);border-radius:10px;padding:11px;font-size:12px;color:#FFBFD0;line-height:1.55;}
+.cr-love-t{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--r);margin-bottom:5px;}
+.carta-hint{font-size:13px;color:var(--t2);margin-bottom:20px;}
+.carta-hint strong{color:var(--t);}
+.nova-carta-btn{background:linear-gradient(135deg,var(--roxo),#4A1070);color:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;padding:12px 24px;border-radius:50px;border:none;cursor:pointer;display:none;margin:0 auto 14px;}
 
-/* ── CICLO ───────────────────────────────────── */
-.ciclo-header{background:linear-gradient(130deg,#3D1030,#1A0A10);border-radius:16px;padding:16px;margin-bottom:11px;border:1px solid rgba(200,23,74,.2);}
+/* ═══ CICLO ═════════════════════════════════════ */
+.ciclo-pg{padding:14px 14px;}
+.ciclo-header{background:linear-gradient(130deg,#3D1030,#1A0A10);border-radius:16px;padding:16px;margin-bottom:12px;border:1px solid rgba(200,23,74,.2);}
 .ciclo-h-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.ciclo-phase-badge{display:flex;align-items:center;gap:7px;background:rgba(200,23,74,.15);border-radius:50px;padding:6px 13px;border:1px solid rgba(200,23,74,.3);}
-.ciclo-phase-dot{width:7px;height:7px;border-radius:50%;background:var(--r);}
-.ciclo-phase-name{font-size:12px;font-weight:800;color:#fff;}
-.ciclo-day-num{font-size:12px;color:var(--t2);}
+.c-phase-badge{display:flex;align-items:center;gap:7px;background:rgba(200,23,74,.15);border-radius:50px;padding:6px 13px;border:1px solid rgba(200,23,74,.3);}
+.c-phase-dot{width:7px;height:7px;border-radius:50%;}
+.c-phase-nm{font-size:12px;font-weight:800;color:#fff;}
+.c-day-n{font-size:12px;color:var(--t2);}
 .ciclo-cal{display:flex;gap:5px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
 .ciclo-cal::-webkit-scrollbar{display:none;}
-.ciclo-day{flex-shrink:0;width:36px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;}
-.ciclo-day-name{font-size:8px;font-weight:700;color:var(--t3);text-transform:uppercase;}
-.ciclo-day-num2{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--t2);}
-.ciclo-day.menstrual .ciclo-day-num2{background:rgba(200,23,74,.3);border:1.5px solid var(--r);color:#fff;}
-.ciclo-day.fertil .ciclo-day-num2{background:rgba(100,160,80,.3);border:1.5px solid #5CA840;color:#A0E880;}
-.ciclo-day.ovulacao .ciclo-day-num2{background:rgba(200,23,74,.5);border:1.5px solid var(--r);color:#fff;}
-.ciclo-day.sel .ciclo-day-num2{background:var(--r);color:#fff;}
-.ciclo-day.today .ciclo-day-num2{border:2px solid var(--d);}
+.c-day{flex-shrink:0;width:36px;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.c-day-name{font-size:8px;font-weight:700;color:var(--t3);text-transform:uppercase;}
+.c-day-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--t2);}
+.c-day.menstrual .c-day-num{background:rgba(200,23,74,.3);border:1.5px solid var(--r);color:#fff;}
+.c-day.fertil .c-day-num{background:rgba(100,160,80,.3);border:1.5px solid #5CA840;color:#A0E880;}
+.c-day.ovulacao .c-day-num{background:rgba(200,23,74,.5);border:1.5px solid var(--r);color:#fff;}
+.c-day.sel .c-day-num{background:var(--r);color:#fff;}
+.c-day.today .c-day-num{box-shadow:0 0 0 2px var(--d);}
+.preg-banner{background:rgba(120,20,80,.35);border:2px solid rgba(220,100,150,.4);border-radius:13px;padding:16px;margin-bottom:12px;}
+.preg-b-icon{font-size:26px;margin-bottom:7px;}
+.preg-b-tit{font-size:13px;font-weight:800;color:#FFB0D0;margin-bottom:7px;}
+.preg-b-txt{font-size:12px;color:rgba(255,180,210,.85);line-height:1.65;margin-bottom:11px;}
+.preg-step{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:rgba(255,200,220,.9);line-height:1.5;margin-bottom:8px;}
+.preg-num{width:20px;height:20px;border-radius:50%;background:rgba(220,100,150,.4);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;color:#fff;}
+.preg-dismiss{background:rgba(255,255,255,.1);border:none;border-radius:50px;padding:8px 16px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:rgba(255,200,220,.8);cursor:pointer;margin-top:4px;}
 .fase-card{background:var(--s2);border:1px solid var(--bdr);border-radius:13px;padding:14px;margin-bottom:10px;}
 .fase-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .fase-icon{font-size:26px;}
@@ -265,21 +282,11 @@ body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--
 .fase-tips-t{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:7px;}
 .fase-tip{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--t);line-height:1.5;margin-bottom:6px;}
 .fase-tip-dot{width:5px;height:5px;border-radius:50%;background:var(--r);flex-shrink:0;margin-top:5px;}
-/* Pregnancy alert */
-.preg-banner{background:rgba(120,20,80,.4);border:2px solid rgba(220,100,150,.5);border-radius:13px;padding:16px;margin-bottom:12px;}
-.preg-b-icon{font-size:28px;margin-bottom:8px;}
-.preg-b-tit{font-size:14px;font-weight:800;color:#FFB0D0;margin-bottom:8px;}
-.preg-b-txt{font-size:13px;color:rgba(255,180,210,.85);line-height:1.65;margin-bottom:12px;}
-.preg-b-steps{display:flex;flex-direction:column;gap:7px;margin-bottom:12px;}
-.preg-b-step{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:rgba(255,200,220,.9);line-height:1.5;}
-.preg-b-num{width:20px;height:20px;border-radius:50%;background:rgba(220,100,150,.4);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;color:#fff;}
-.preg-dismiss{background:rgba(255,255,255,.1);border:none;border-radius:50px;padding:9px 18px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:rgba(255,200,220,.8);cursor:pointer;}
-/* Humor / sintomas */
-.humor-grid{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px;}
+.humor-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px;}
 .humor-btn{background:var(--s2);border:1px solid var(--bdr);border-radius:50px;padding:6px 12px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;}
 .humor-btn.on{background:var(--r);border-color:var(--r);color:#fff;}
-.sintoma-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px;}
-.sint-btn{background:var(--s2);border:1.5px solid var(--bdr);border-radius:10px;padding:10px 8px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;text-align:center;}
+.sint-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px;}
+.sint-btn{background:var(--s2);border:1.5px solid var(--bdr);border-radius:10px;padding:9px 8px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;text-align:center;}
 .sint-btn.on{background:var(--rl);border-color:var(--r);color:var(--r);}
 .ciclo-cfg{background:var(--s2);border:1px solid var(--bdr);border-radius:13px;padding:14px;margin-bottom:10px;}
 .cfg-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
@@ -289,194 +296,156 @@ body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--
 .cfg-in{background:var(--s3);border:1px solid var(--bdr);border-radius:8px;padding:7px 10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--t);outline:none;width:80px;text-align:center;-webkit-appearance:none;}
 .save-btn{display:block;width:100%;background:var(--r);color:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;padding:12px;border-radius:50px;border:none;cursor:pointer;text-align:center;margin-top:12px;}
 
-/* ── CHAT ────────────────────────────────────── */
-.chat-msgs{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 13px 8px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch;}
-.bw{display:flex;flex-direction:column;}
-.bw.ai{align-items:flex-start;}
-.bw.usr{align-items:flex-end;}
-.bbl{max-width:85%;padding:10px 13px;border-radius:16px;font-size:13px;line-height:1.55;}
-.ai .bbl{background:var(--s3);border:1px solid var(--bdr);color:#FFBFD0;border-bottom-left-radius:3px;}
-.usr .bbl{background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;border-bottom-right-radius:3px;}
-.bbl-t{font-size:9px;color:var(--t3);margin-top:2px;padding:0 3px;}
-.bw.usr .bbl-t{text-align:right;}
-.typing-bbl{display:flex;gap:4px;padding:10px 13px;background:var(--s3);border:1px solid var(--bdr);border-radius:16px;border-bottom-left-radius:3px;width:52px;align-self:flex-start;}
-.td{width:6px;height:6px;border-radius:50%;background:var(--t2);animation:tdot 1.3s infinite;}
-.td:nth-child(2){animation-delay:.2s;}
-.td:nth-child(3){animation-delay:.4s;}
-@keyframes tdot{0%,100%{opacity:.25;transform:scale(.8);}50%{opacity:1;transform:scale(1);}}
-.qr-scroll{display:flex;gap:6px;overflow-x:auto;padding:6px 12px 0;flex-shrink:0;scrollbar-width:none;}
-.qr-scroll::-webkit-scrollbar{display:none;}
-.qr{flex-shrink:0;background:var(--s2);border:1px solid var(--bdr);border-radius:50px;padding:5px 12px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:600;color:var(--t2);cursor:pointer;white-space:nowrap;}
-.qr:active{background:var(--rl);border-color:var(--r);color:var(--r);}
-.chat-bar{padding:8px 12px;padding-bottom:calc(8px + var(--sab));background:var(--s1);border-top:1px solid var(--bdr);display:flex;gap:7px;align-items:flex-end;flex-shrink:0;}
-.cta{flex:1;background:var(--s2);border:1.5px solid var(--bdr);border-radius:18px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:14px;color:var(--t);outline:none;resize:none;max-height:80px;min-height:38px;line-height:1.45;-webkit-appearance:none;}
-.cta::placeholder{color:var(--t3);}
-.cta:focus{border-color:var(--r);}
-.snd{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--rd));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 3px 14px rgba(200,23,74,.4);}
-.snd:active{transform:scale(.93);}
-.snd:disabled{opacity:.4;pointer-events:none;}
+/* ═══ PERFIL ═════════════════════════════════════ */
+.profile-wrap{padding:0 0 12px;}
+.profile-cover{height:130px;background:linear-gradient(135deg,var(--v2),var(--v));position:relative;overflow:hidden;}
+.profile-cover::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(200,23,74,.2),transparent);}
+.profile-info{padding:0 16px 14px;margin-top:-34px;}
+.profile-av-big{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid var(--bg);box-shadow:0 4px 18px rgba(200,23,74,.4);margin-bottom:10px;}
+.profile-name{font-size:20px;font-weight:900;color:#fff;margin-bottom:2px;}
+.profile-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.prof-badge{border-radius:50px;padding:4px 11px;font-size:10px;font-weight:700;}
+.pb-r{background:var(--rl);color:var(--r);}
+.pb-p{background:var(--roxol);color:#C090FF;}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bdr);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.pstat{background:var(--s2);padding:13px 10px;text-align:center;}
+.pstat-n{font-size:20px;font-weight:900;color:var(--t);display:block;}
+.pstat-l{font-size:10px;color:var(--t2);}
+.my-posts-title{font-size:14px;font-weight:800;color:var(--t);padding:0 2px;margin-bottom:12px;}
 
-/* ── MENU / PERFIL ───────────────────────────── */
-.prof-c{background:linear-gradient(130deg,var(--v),#3A0D1C);border-radius:15px;padding:17px;margin-bottom:12px;text-align:center;}
-.pav{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;box-shadow:0 5px 20px rgba(200,23,74,.4);}
-.pnm{font-size:18px;font-weight:800;margin-bottom:2px;}
-.psb{font-size:12px;color:rgba(255,200,220,.8);}
-.pbgs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:9px;}
-.pbg{background:rgba(255,255,255,.1);border-radius:50px;padding:4px 10px;font-size:10px;font-weight:700;}
-.pbg.roxo{background:rgba(90,26,138,.3);color:#C090FF;}
-.mst{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
-.sb{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:11px;text-align:center;}
-.sn{font-size:24px;font-weight:800;color:var(--r);display:block;}
-.sl{font-size:10px;color:var(--t2);margin-top:2px;}
-/* Parceiro ideal */
-.parceiro-card{background:var(--s2);border:1px solid var(--bdr);border-radius:13px;padding:14px;margin-bottom:10px;}
-.parceiro-form{display:flex;flex-direction:column;gap:10px;}
-.pf-label{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--t2);margin-bottom:5px;display:block;}
-.pf-opts{display:flex;flex-wrap:wrap;gap:7px;}
-.pf-opt{background:var(--s3);border:1.5px solid var(--bdr);border-radius:50px;padding:6px 13px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;}
-.pf-opt.on{background:var(--rl);border-color:var(--r);color:var(--r);}
-.pf-textarea{width:100%;background:var(--s3);border:1.5px solid var(--bdr);border-radius:10px;padding:10px 12px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--t);outline:none;resize:none;min-height:70px;-webkit-appearance:none;}
-.pf-textarea:focus{border-color:var(--r);}
-/* Signo card */
-.signo-card{background:linear-gradient(135deg,rgba(90,26,138,.3),rgba(61,6,20,.5));border:1px solid rgba(90,26,138,.3);border-radius:13px;padding:14px;margin-bottom:10px;}
-.signo-big{font-size:36px;margin-bottom:8px;}
-.signo-nome{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#C090FF;margin-bottom:4px;}
-.signo-datas{font-size:11px;color:var(--t3);margin-bottom:10px;}
-.signo-desc{font-size:12px;color:#DFB0FF;line-height:1.65;margin-bottom:10px;}
-.signo-aff{background:rgba(90,26,138,.2);border-radius:9px;padding:11px;font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:#E8C0FF;line-height:1.6;}
-/* Menu items */
-.msec-t{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin:13px 0 8px 3px;}
-.mi{display:flex;align-items:center;gap:10px;padding:12px;background:var(--s2);border:1px solid var(--bdr);border-radius:12px;margin-bottom:7px;cursor:pointer;}
-.mi:active{border-color:var(--r);}
-.mi-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.mi-in{flex:1;min-width:0;}
-.mi-in strong{display:block;font-size:12px;font-weight:700;margin-bottom:1px;}
-.mi-in span{font-size:10px;color:var(--t2);}
-.mi-ar{font-size:14px;color:var(--t3);flex-shrink:0;}
+/* ═══ NOTIFICAÇÕES PANEL ════════════════════════ */
+.notif-panel{position:fixed;inset:0;z-index:600;display:none;flex-direction:column;}
+.notif-panel.on{display:flex;}
+.notif-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.7);}
+.notif-sheet{position:absolute;top:calc(var(--sat)+52px);right:12px;width:calc(100% - 24px);max-width:340px;background:var(--s2);border-radius:16px;border:1px solid var(--bdr);max-height:70vh;overflow-y:auto;animation:fadeUp .2s ease;box-shadow:0 12px 40px rgba(0,0,0,.5);}
+.notif-header{padding:14px 16px 10px;border-bottom:1px solid var(--bdr);}
+.notif-header h3{font-size:14px;font-weight:800;color:var(--t);}
+.notif-item{padding:12px 16px;border-bottom:1px solid var(--bdr);cursor:pointer;}
+.notif-item:last-child{border-bottom:none;}
+.notif-item:active{background:var(--s3);}
+.ni-title{font-size:13px;font-weight:700;color:var(--t);margin-bottom:3px;}
+.ni-body{font-size:12px;color:var(--t2);line-height:1.5;}
+.ni-time{font-size:10px;color:var(--t3);margin-top:4px;}
+.ni-empty{padding:28px 16px;text-align:center;color:var(--t3);font-size:13px;}
 
-/* ── MODAL ───────────────────────────────────── */
-.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:800;align-items:flex-end;justify-content:center;}
+/* ═══ ADMIN PANEL ══════════════════════════════ */
+#ADMIN{position:fixed;inset:0;background:var(--bg);z-index:900;display:none;overflow-y:auto;padding:calc(var(--sat)+10px) 0 calc(var(--sab)+20px);}
+.admin-hdr{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--bdr);margin-bottom:0;}
+.admin-close{font-size:22px;cursor:pointer;color:var(--t2);}
+.admin-title{font-size:16px;font-weight:800;color:var(--t);flex:1;}
+.admin-body{padding:16px;}
+.admin-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:20px;}
+.ast{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:14px;text-align:center;}
+.ast-n{font-size:28px;font-weight:900;color:var(--r);display:block;}
+.ast-l{font-size:10px;color:var(--t2);}
+.admin-section{margin-bottom:24px;}
+.admin-section-t{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:12px;}
+/* Notification sender */
+.notif-form{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:14px;}
+.nf-in{width:100%;background:var(--s3);border:1.5px solid var(--bdr);border-radius:10px;padding:10px 12px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--t);outline:none;margin-bottom:8px;-webkit-appearance:none;}
+.nf-in::placeholder{color:var(--t3);}
+.nf-in:focus{border-color:var(--r);}
+.nf-ta{width:100%;background:var(--s3);border:1.5px solid var(--bdr);border-radius:10px;padding:10px 12px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--t);outline:none;resize:none;min-height:70px;margin-bottom:10px;-webkit-appearance:none;}
+.nf-ta::placeholder{color:var(--t3);}
+.nf-ta:focus{border-color:var(--r);}
+.send-notif-btn{display:block;width:100%;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;padding:13px;border-radius:50px;border:none;cursor:pointer;text-align:center;}
+/* User list */
+.user-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--bdr);}
+.user-row:last-child{border-bottom:none;}
+.ur-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.ur-info{flex:1;min-width:0;}
+.ur-name{font-size:13px;font-weight:700;color:var(--t);}
+.ur-meta{font-size:10px;color:var(--t3);}
+.ur-posts{font-size:11px;font-weight:700;color:var(--t2);}
+/* Admin login */
+.admin-login{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:20px;}
+.admin-login h3{font-size:16px;font-weight:800;color:var(--t);margin-bottom:14px;text-align:center;}
+
+/* ═══ MODAL ═════════════════════════════════════ */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:750;align-items:flex-end;justify-content:center;}
 .modal-ov.on{display:flex;}
 .modal-sh{background:var(--s2);border-radius:22px 22px 0 0;padding:18px 18px;padding-bottom:calc(22px + var(--sab));width:100%;max-width:430px;max-height:88vh;overflow-y:auto;animation:sUp .22s ease;}
 @keyframes sUp{from{transform:translateY(36px);opacity:0;}to{transform:translateY(0);opacity:1;}}
-.m-hdl{width:32px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto 14px;}
-.m-sit{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--d);margin-bottom:6px;}
-.m-msg{font-size:14px;font-weight:700;color:var(--t);line-height:1.6;padding:13px;background:var(--rl);border-radius:9px;border-left:3px solid var(--r);margin-bottom:14px;}
-.m-sec{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:5px;}
-.m-dica{font-size:12px;color:#FFBFD0;line-height:1.65;margin-bottom:14px;}
-.m-when{background:var(--dl);border:1px solid rgba(201,147,42,.18);border-radius:9px;padding:10px;font-size:11px;color:#FFE4A0;line-height:1.6;margin-bottom:16px;}
-.m-cp{display:block;width:100%;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;padding:13px;border-radius:50px;border:none;cursor:pointer;text-align:center;}
-.m-cl{display:block;width:100%;background:transparent;color:var(--t2);font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;padding:10px;border-radius:50px;border:1px solid var(--bdr);cursor:pointer;text-align:center;margin-top:7px;}
-.tst{position:fixed;bottom:calc(62px + var(--sab));left:50%;transform:translateX(-50%) translateY(8px);background:#fff;color:#1A0A10;font-size:12px;font-weight:700;padding:9px 20px;border-radius:50px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:999;white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.25);}
+.m-hdl{width:32px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto 15px;}
+.m-cl{display:block;width:100%;background:transparent;color:var(--t2);font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;padding:11px;border-radius:50px;border:1px solid var(--bdr);cursor:pointer;text-align:center;margin-top:7px;}
+
+/* TOAST */
+.tst{position:fixed;bottom:calc(62px + var(--sab));left:50%;transform:translateX(-50%) translateY(8px);background:#fff;color:#1A0A10;font-size:12px;font-weight:700;padding:9px 20px;border-radius:50px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:9999;white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.25);}
 .tst.on{opacity:1;transform:translateX(-50%) translateY(0);}
-.empty-i{padding:46px 20px;text-align:center;}
-.empty-i .ei{font-size:42px;margin-bottom:12px;}
-.empty-i h3{font-size:15px;font-weight:700;margin-bottom:5px;}
-.empty-i p{font-size:12px;color:var(--t2);line-height:1.6;}
-/* Dicas e Plano */
-.tip-c{background:var(--s2);border:1.5px solid var(--bdr);border-radius:12px;margin-bottom:9px;overflow:hidden;}
-.tip-hdr{display:flex;align-items:center;gap:10px;padding:12px;cursor:pointer;}
-.tip-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.tip-in{flex:1;min-width:0;}
-.tip-in strong{display:block;font-size:12px;font-weight:700;color:var(--t);margin-bottom:1px;}
-.tip-in span{font-size:10px;color:var(--t2);}
-.tip-ar{font-size:14px;color:var(--t3);transition:transform .22s;flex-shrink:0;}
-.tip-c.op .tip-ar{transform:rotate(90deg);}
-.tip-bd{display:none;padding:0 12px 12px;}
-.tip-c.op .tip-bd{display:block;}
-.tip-s{font-size:12px;color:#FFBFD0;line-height:1.6;padding:6px 0 6px 22px;border-bottom:1px solid rgba(255,255,255,.05);position:relative;}
-.tip-s:last-child{border-bottom:none;}
-.tip-n{position:absolute;left:0;top:8px;width:16px;height:16px;border-radius:50%;background:var(--r);font-size:8px;font-weight:900;text-align:center;line-height:16px;color:#fff;}
-.pl-c{background:var(--s2);border:1.5px solid var(--bdr);border-radius:12px;margin-bottom:9px;overflow:hidden;}
-.pl-c.done{border-color:var(--r);}
-.pl-hdr{display:flex;align-items:center;gap:10px;padding:12px;cursor:pointer;}
-.pl-n{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;color:var(--t3);}
-.pl-c.done .pl-n{background:var(--r);border-color:var(--r);color:#fff;}
-.pl-c.tod2 .pl-n{border-color:var(--d);color:var(--d);}
-.pl-in strong{display:block;font-size:12px;font-weight:700;margin-bottom:1px;}
-.pl-in span{font-size:10px;color:var(--t2);}
-.pl-bd{display:none;padding:0 12px 12px;border-top:1px solid var(--bdr);}
-.pl-c.op .pl-bd{display:block;}
-.pl-s{font-size:11px;color:#FFBFD0;line-height:1.6;padding:6px 0 6px 16px;position:relative;border-bottom:1px solid rgba(255,255,255,.05);}
-.pl-s:last-of-type{border-bottom:none;}
-.pl-s::before{content:'→';position:absolute;left:0;color:var(--r);}
-.pl-mk{display:block;width:100%;background:var(--rl);border:1px solid rgba(200,23,74,.28);border-radius:50px;padding:9px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--r);cursor:pointer;text-align:center;margin-top:10px;}
-.pl-c.done .pl-mk{background:rgba(200,23,74,.22);color:#FFBFD0;cursor:default;}
+
+/* Loader */
+.loader{display:flex;justify-content:center;padding:28px;}<br>
+.spin{width:28px;height:28px;border:2px solid rgba(200,23,74,.15);border-top-color:var(--r);border-radius:50%;animation:spn .8s linear infinite;}
+@keyframes spn{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
 
+<!-- SPLASH -->
 <div id="SPL">
   <div class="spl-logo">💌</div>
   <h1 class="spl-h">Mulher<br><em>Inesquecível</em></h1>
-  <p class="spl-p" id="splP">Carregando...</p>
+  <p class="spl-p">Comunidade + Autoconhecimento</p>
   <div class="pb-w"><div class="pb" id="pb"></div></div>
-  <p class="pb-lbl" id="pbLbl">Preparando sua experiência...</p>
+  <p class="pb-lbl" id="pbLbl">Carregando...</p>
 </div>
 
-<!-- ONBOARDING MULTI-STEP -->
+<!-- SETUP Firebase -->
+<div id="SETUP">
+  <div class="setup-logo">🔥</div>
+  <h1 class="ob-h">Configuração<br><em>inicial</em></h1>
+  <p class="setup-desc">Para ativar o feed social, notificações e o painel admin, você precisa conectar ao Firebase (gratuito).</p>
+  <div class="setup-step">
+    <div class="setup-step-n">Passo 1</div>
+    <div class="setup-step-t">Crie seu projeto Firebase</div>
+    <div class="setup-step-p">Acesse <strong class="setup-link">console.firebase.google.com</strong>, crie um projeto, ative o <strong>Firestore Database</strong> e o <strong>Authentication</strong> (método anônimo).</div>
+  </div>
+  <div class="setup-step">
+    <div class="setup-step-n">Passo 2</div>
+    <div class="setup-step-t">Copie a configuração do app</div>
+    <div class="setup-step-p">Em Configurações do Projeto → Seus apps → Web, copie o objeto <strong>firebaseConfig</strong> e cole abaixo:</div>
+    <textarea class="setup-textarea" id="setupCfg" placeholder='Cole aqui o JSON do firebaseConfig:&#10;{&#10;  "apiKey": "...",&#10;  "authDomain": "...",&#10;  "projectId": "...",&#10;  "storageBucket": "...",&#10;  "messagingSenderId": "...",&#10;  "appId": "..."&#10;}'></textarea>
+  </div>
+  <div class="setup-step">
+    <div class="setup-step-n">Passo 3</div>
+    <div class="setup-step-t">Configure as Regras do Firestore</div>
+    <div class="setup-step-p">No Firestore → Regras, cole:<br><br><strong style="font-size:11px;color:var(--d);">rules_version = '2';<br>service cloud.firestore {<br>&nbsp;match /databases/{db}/documents {<br>&nbsp;&nbsp;match /{doc=**} {<br>&nbsp;&nbsp;&nbsp;allow read, write: if true;<br>&nbsp;&nbsp;}<br>&nbsp;}<br>}</strong></div>
+  </div>
+  <div id="setupErr" class="setup-err">Configuração inválida. Verifique o JSON e tente novamente.</div>
+  <button class="setup-btn" onclick="applySetup()">Conectar e iniciar →</button>
+  <button class="ob-skip" onclick="startDemoMode()">Usar em modo demonstração (sem backend)</button>
+</div>
+
+<!-- ONBOARDING -->
 <div id="OB">
-  <!-- Passo 1: Nome -->
+  <!-- Step 1 -->
   <div class="ob-step on" id="ob1">
-    <div class="ob-prog"><div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+    <div class="ob-prog"><div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
     <div class="ob-logo">💌</div>
-    <h1 class="ob-h">Olá! Vamos te<br><em>conhecer</em></h1>
-    <p class="ob-s">Vai levar menos de 2 minutos. Prometo que vale.</p>
-    <label class="ob-lbl">Seu nome</label>
-    <input class="ob-in" id="obNome" type="text" placeholder="Como posso te chamar?" maxlength="30" oninput="chkOb1()">
+    <h1 class="ob-h">Olá! Como você<br><em>se chama?</em></h1>
+    <p class="ob-s">Seu nome aparecerá no feed da comunidade.</p>
+    <label class="ob-lbl">Seu nome ou apelido</label>
+    <input class="ob-in" id="obNome" type="text" placeholder="Como quer ser chamada?" maxlength="24" oninput="chkOb1()">
     <button class="ob-next" id="ob1btn" disabled onclick="nextOb(2)">Continuar →</button>
   </div>
-
-  <!-- Passo 2: Objetivo -->
+  <!-- Step 2: Objetivo -->
   <div class="ob-step" id="ob2">
-    <div class="ob-prog"><div class="ob-dot"></div><div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+    <div class="ob-prog"><div class="ob-dot"></div><div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
     <h1 class="ob-h">O que você<br><em>está buscando?</em></h1>
-    <p class="ob-s">Isso vai personalizar tudo para você.</p>
+    <p class="ob-s">Isso personaliza seu conteúdo e sua carta diária.</p>
     <div class="ob-opts" id="ob-obj">
-      <button class="ob-opt" onclick="selOb('obj','reconciliacao',this)"><span class="ob-em">💔</span><div class="ob-ot"><strong>Reconciliação</strong><span>Quero reconquistar alguém</span></div></button>
-      <button class="ob-opt" onclick="selOb('obj','relacionamento',this)"><span class="ob-em">💑</span><div class="ob-ot"><strong>Novo relacionamento</strong><span>Quero atrair alguém especial</span></div></button>
-      <button class="ob-opt" onclick="selOb('obj','manter',this)"><span class="ob-em">💫</span><div class="ob-ot"><strong>Melhorar meu relacionamento</strong><span>Já estou com alguém</span></div></button>
-      <button class="ob-opt" onclick="selOb('obj','eu',this)"><span class="ob-em">👑</span><div class="ob-ot"><strong>Me reconhecer mais</strong><span>Autoestima e autoconhecimento</span></div></button>
+      <button class="ob-opt" onclick="selOb('obj','reconciliacao',this)"><span class="ob-em">💔</span><div class="ob-ot"><strong>Reconquista</strong><span>Quero ele de volta</span></div></button>
+      <button class="ob-opt" onclick="selOb('obj','relacionamento',this)"><span class="ob-em">✨</span><div class="ob-ot"><strong>Novo Amor</strong><span>Quero atrair alguém especial</span></div></button>
+      <button class="ob-opt" onclick="selOb('obj','manter',this)"><span class="ob-em">💑</span><div class="ob-ot"><strong>Fortalecer</strong><span>Melhorar meu relacionamento atual</span></div></button>
+      <button class="ob-opt" onclick="selOb('obj','eu',this)"><span class="ob-em">👑</span><div class="ob-ot"><strong>Me Conhecer</strong><span>Autoestima e autoconhecimento</span></div></button>
     </div>
     <button class="ob-next" id="ob2btn" disabled onclick="nextOb(3)">Continuar →</button>
   </div>
-
-  <!-- Passo 3: Identidade de gênero -->
+  <!-- Step 3: Signo -->
   <div class="ob-step" id="ob3">
-    <div class="ob-prog"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
-    <h1 class="ob-h">Como você<br><em>se identifica?</em></h1>
-    <p class="ob-s">Sem julgamentos. Personalizamos o conteúdo para quem você é.</p>
-    <div class="ob-opts" id="ob-genero">
-      <button class="ob-opt" onclick="selOb('genero','mulher',this)"><span class="ob-em">🌸</span><div class="ob-ot"><strong>Mulher</strong><span>Cis ou trans</span></div></button>
-      <button class="ob-opt" onclick="selOb('genero','homem',this)"><span class="ob-em">⚡</span><div class="ob-ot"><strong>Homem</strong><span>Cis ou trans</span></div></button>
-      <button class="ob-opt" onclick="selOb('genero','trans',this)"><span class="ob-em">🏳️‍⚧️</span><div class="ob-ot"><strong>Trans / Não-binário</strong><span>Minha identidade é fluida</span></div></button>
-      <button class="ob-opt" onclick="selOb('genero','livre',this)"><span class="ob-em">🦋</span><div class="ob-ot"><strong>Prefiro não dizer</strong><span>Só quero o conteúdo</span></div></button>
-    </div>
-    <button class="ob-next" id="ob3btn" disabled onclick="nextOb(4)">Continuar →</button>
-  </div>
-
-  <!-- Passo 4: Orientação -->
-  <div class="ob-step" id="ob4">
-    <div class="ob-prog"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot on"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
-    <h1 class="ob-h">Você se considera...</h1>
-    <p class="ob-s">Para que as mensagens e conselhos façam sentido para você.</p>
-    <div class="ob-opts grid" id="ob-orient">
-      <button class="ob-opt" onclick="selOb('orient','hetero',this)"><span class="ob-em">💞</span><div class="ob-ot"><strong>Hétero</strong></div></button>
-      <button class="ob-opt" onclick="selOb('orient','bi',this)"><span class="ob-em">💜</span><div class="ob-ot"><strong>Bi</strong></div></button>
-      <button class="ob-opt" onclick="selOb('orient','lesbica',this)"><span class="ob-em">🌈</span><div class="ob-ot"><strong>Lésbica</strong></div></button>
-      <button class="ob-opt" onclick="selOb('orient','gay',this)"><span class="ob-em">🏳️‍🌈</span><div class="ob-ot"><strong>Gay</strong></div></button>
-      <button class="ob-opt" onclick="selOb('orient','cachorra',this)"><span class="ob-em">🐾</span><div class="ob-ot"><strong>Cachorra</strong></div></button>
-      <button class="ob-opt" onclick="selOb('orient','livre',this)"><span class="ob-em">🦋</span><div class="ob-ot"><strong>Livre</strong></div></button>
-    </div>
-    <button class="ob-next" id="ob4btn" disabled onclick="nextOb(5)">Continuar →</button>
-    <button class="ob-skip" onclick="obD.orient='livre';nextOb(5)">Pular esta etapa</button>
-  </div>
-
-  <!-- Passo 5: Signo -->
-  <div class="ob-step" id="ob5">
-    <div class="ob-prog"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot on"></div><div class="ob-dot"></div></div>
+    <div class="ob-prog"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot on"></div><div class="ob-dot"></div></div>
     <h1 class="ob-h">Qual é o<br><em>seu signo?</em></h1>
-    <p class="ob-s">Usamos isso para sua carta diária e horóscopo personalizado.</p>
+    <p class="ob-s">Para personalizar sua carta do tarot diária.</p>
     <div class="signo-grid" id="ob-signo">
       <button class="signo-btn" onclick="selSigno('aries',this)"><span class="signo-em">♈</span><span class="signo-nm">Áries</span></button>
       <button class="signo-btn" onclick="selSigno('touro',this)"><span class="signo-em">♉</span><span class="signo-nm">Touro</span></button>
@@ -491,21 +460,17 @@ body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--
       <button class="signo-btn" onclick="selSigno('aquario',this)"><span class="signo-em">♒</span><span class="signo-nm">Aquário</span></button>
       <button class="signo-btn" onclick="selSigno('peixes',this)"><span class="signo-em">♓</span><span class="signo-nm">Peixes</span></button>
     </div>
-    <button class="ob-next" id="ob5btn" disabled onclick="nextOb(6)">Continuar →</button>
+    <button class="ob-next" id="ob3btn" disabled onclick="nextOb(4)">Continuar →</button>
   </div>
-
-  <!-- Passo 6: Situação -->
-  <div class="ob-step" id="ob6">
-    <div class="ob-prog"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot on"></div></div>
-    <h1 class="ob-h">Sua situação<br><em>agora</em></h1>
-    <p class="ob-s">Última pergunta, prometo!</p>
-    <div class="ob-opts" id="ob-sit">
-      <button class="ob-opt" onclick="selOb('sit','reconquista',this)"><span class="ob-em">💔</span><div class="ob-ot"><strong>Quero reconquistar alguém</strong><span>Término ou afastamento</span></div></button>
-      <button class="ob-opt" onclick="selOb('sit','atrair',this)"><span class="ob-em">✨</span><div class="ob-ot"><strong>Quero atrair alguém novo</strong><span>Crush ou início de relação</span></div></button>
-      <button class="ob-opt" onclick="selOb('sit','manter',this)"><span class="ob-em">💑</span><div class="ob-ot"><strong>Melhorar meu relacionamento</strong><span>Já estou com alguém</span></div></button>
-      <button class="ob-opt" onclick="selOb('sit','eu',this)"><span class="ob-em">👑</span><div class="ob-ot"><strong>Foco em mim mesma</strong><span>Autoestima e autovalorização</span></div></button>
-    </div>
-    <button class="ob-next" id="ob6btn" disabled onclick="finishOb()">Entrar no app ✨</button>
+  <!-- Step 4: Bio -->
+  <div class="ob-step" id="ob4">
+    <div class="ob-prog"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot on"></div></div>
+    <h1 class="ob-h">Uma frase<br><em>sobre você</em></h1>
+    <p class="ob-s">Aparecerá no seu perfil da comunidade. Pode pular.</p>
+    <label class="ob-lbl">Sua bio (opcional)</label>
+    <input class="ob-in" id="obBio" type="text" placeholder="Ex: Buscando meu melhor eu..." maxlength="60">
+    <button class="ob-next" onclick="finishOb()">Entrar na comunidade ✨</button>
+    <button class="ob-skip" onclick="finishOb()">Pular e entrar</button>
   </div>
 </div>
 
@@ -513,458 +478,691 @@ body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--
 <div id="APP">
   <div class="hdr">
     <div class="hdr-logo">💌</div>
-    <div class="hdr-info"><strong id="hNm">Olá!</strong><span id="hSb">Bem-vinda</span></div>
-    <div class="hdr-streak" id="hStk">🔥 1 dia</div>
+    <div class="hdr-title">Inesquecível <span>·</span> Comunidade</div>
+    <div class="hdr-notif" onclick="toggleNotifPanel()">🔔<div class="notif-badge" id="notifBadge"></div></div>
   </div>
   <div class="content">
 
-    <!-- HOME -->
-    <div class="pg on" id="pg-home">
-      <div id="pregAlert" style="display:none;"></div>
-      <div class="home-greet">
-        <div class="hg-top"><div class="hg-av" id="gAv">🌸</div><div class="hg-tx"><strong id="gNm">Olá!</strong><span id="gMood">Como você está hoje?</span></div></div>
-        <div class="mood-row">
-          <button class="mbtn" onclick="setMood('triste','😢','Dia difícil',this)">😢 Triste</button>
-          <button class="mbtn" onclick="setMood('ansiosa','😰','Ansiosa',this)">😰 Ansiosa</button>
-          <button class="mbtn" onclick="setMood('bem','😊','Bem',this)">😊 Bem</button>
-          <button class="mbtn" onclick="setMood('forte','💪','Forte',this)">💪 Forte</button>
+    <!-- FEED -->
+    <div class="pg on" id="pg-feed">
+      <!-- Stories -->
+      <div class="stories-row" id="storiesRow">
+        <div class="story-item" onclick="openPostModal()">
+          <div class="story-ring"><div class="story-add-ic story-av">+</div></div>
+          <span class="story-name">Postar</span>
         </div>
       </div>
-      <div class="daily-row">
-        <div class="daily-sm card-msg" onclick="openDmModal()">
-          <div class="ds-tag">Mensagem do dia</div>
-          <div class="ds-txt" id="dmTxt">...</div>
-          <div class="ds-btns">
-            <button class="ds-btn" onclick="event.stopPropagation();cp(curDmMsg?.msg)">Copiar</button>
-            <button class="ds-btn" id="dmFv" onclick="event.stopPropagation();togHomeFav()">🤍</button>
-          </div>
-        </div>
-        <div class="daily-sm card-ref">
-          <div class="ds-tag">Reflexão do dia</div>
-          <div class="ds-txt" id="refTxt">...</div>
-        </div>
+      <div class="divider"></div>
+      <!-- Post creation shortcut -->
+      <div class="post-create">
+        <div class="pc-av" id="pcAv">🌸</div>
+        <div class="pc-input" onclick="openPostModal()">O que você está sentindo hoje?</div>
       </div>
-      <div class="dica-dia">
-        <div class="slbl" id="tipTag">Dica do dia</div>
-        <div class="dica-txt" id="tipTxt">...</div>
-      </div>
-      <div class="slbl">Acesso rápido</div>
-      <div class="qa-grid">
-        <div class="qa-c hl" onclick="goPage('chat')"><span class="qa-icon">🤖</span><div class="qa-tit">Conversar com a IA</div><div class="qa-sub">Peça conselhos ou desabafe</div></div>
-        <div class="qa-c hl2" onclick="goPage('carta')"><span class="qa-icon">🃏</span><div class="qa-tit">Carta do Dia</div><div class="qa-sub" id="cartaHomeSub">Retire sua carta de hoje</div></div>
-        <div class="qa-c" onclick="goPage('ciclo')"><span class="qa-icon">🌸</span><div class="qa-tit">Meu Ciclo</div><div class="qa-sub" id="cicloHomeSub">Acompanhe seu ciclo</div></div>
-        <div class="qa-c" onclick="goPage('msgs')"><span class="qa-icon">💬</span><div class="qa-tit">Mensagens Prontas</div><div class="qa-sub">40+ mensagens categorias</div></div>
-      </div>
-      <div class="slbl">Plano de 7 dias</div>
-      <div class="prog-mini">
-        <div class="prog-tt" id="progT">Dia 1 — Silêncio estratégico</div>
-        <div class="dots-row" id="dotsRow"></div>
-        <div class="pbar"><div class="pfil" id="pFil" style="width:14%"></div></div>
-        <div class="pfoot"><span>Progresso: <strong id="pPct">14%</strong></span><button class="lbtn" onclick="goPage('plano')">Ver plano →</button></div>
-      </div>
+      <div class="divider"></div>
+      <!-- Feed posts -->
+      <div id="feedList"><div class="loader"><div class="spin"></div></div></div>
     </div>
 
-    <!-- MENSAGENS -->
-    <div class="pg" id="pg-msgs">
-      <div class="pills" id="mCats"></div>
-      <div id="mList"></div>
-    </div>
-
-    <!-- CARTA DO DIA -->
+    <!-- CARTA -->
     <div class="pg" id="pg-carta">
-      <div class="carta-pg">
-        <div class="carta-header">
+      <div class="carta-wrap">
+        <div class="carta-top">
           <h2>Carta do Dia</h2>
-          <p>Uma mensagem do universo especialmente para você</p>
+          <p class="carta-date" id="cartaDate"></p>
         </div>
-        <div id="cartaDrawnArea">
-          <p class="carta-instrucao"><strong>Respire fundo.</strong><br>Toque em uma carta para revelar sua mensagem.</p>
-          <div class="deck-wrap" id="deckWrap"></div>
+        <div id="cartaDrawArea">
+          <p class="carta-hint"><strong>Respire fundo.</strong><br>Escolha uma carta com a intuição.</p>
+          <div class="deck-area" id="deckWrap"></div>
         </div>
         <div class="carta-revealed" id="cartaRevealed"></div>
-        <div style="text-align:center;">
-          <button class="nova-carta-btn" id="novaCarta" onclick="resetCarta()" style="display:none;">Embaralhar novamente</button>
-        </div>
-        <div class="carta-drawn-info" id="cartaInfo" style="display:none;"></div>
+        <div style="text-align:center;"><button class="nova-carta-btn" id="novaCarta" onclick="resetCarta()">🔀 Embaralhar novamente</button></div>
       </div>
     </div>
-
-    <!-- FAVORITOS -->
-    <div class="pg" id="pg-favs">
-      <div id="favList"></div>
-      <div class="empty-i" id="favEm" style="display:none;"><div class="ei">🤍</div><h3>Ainda sem favoritas</h3><p>Toque no coração em qualquer mensagem para salvar aqui.</p></div>
-    </div>
-
-    <!-- DICAS -->
-    <div class="pg" id="pg-dicas">
-      <div class="pills" id="dCats"></div>
-      <div id="dList"></div>
-    </div>
-
-    <!-- PLANO -->
-    <div class="pg" id="pg-plano"><div id="plList"></div></div>
 
     <!-- CICLO -->
     <div class="pg" id="pg-ciclo">
-      <div id="cicloContent"></div>
+      <div class="ciclo-pg" id="cicloContent"></div>
     </div>
 
-    <!-- MENU -->
-    <div class="pg" id="pg-menu">
-      <div class="prof-c">
-        <div class="pav" id="mAv">💌</div>
-        <div class="pnm" id="mNm"></div>
-        <div class="psb" id="mSb"></div>
-        <div class="pbgs" id="mBgs"></div>
-      </div>
-      <div class="mst" id="mStat"></div>
-      <!-- Signo -->
-      <div class="signo-card" id="signoCard" style="display:none;"></div>
-      <div class="msec-t">Funcionalidades</div>
-      <div class="mi" onclick="goPage('msgs')"><div class="mi-ic" style="background:var(--rl);">💬</div><div class="mi-in"><strong>Mensagens prontas</strong><span>40+ mensagens em categorias</span></div><span class="mi-ar">›</span></div>
-      <div class="mi" onclick="goPage('favs')"><div class="mi-ic" style="background:var(--rl);">🤍</div><div class="mi-in"><strong>Favoritas</strong><span id="mFvSb">Suas mensagens salvas</span></div><span class="mi-ar">›</span></div>
-      <div class="mi" onclick="goPage('carta')"><div class="mi-ic" style="background:rgba(90,26,138,.2);">🃏</div><div class="mi-in"><strong>Carta do Dia</strong><span>Sua mensagem do universo</span></div><span class="mi-ar">›</span></div>
-      <div class="mi" onclick="goPage('dicas')"><div class="mi-ic" style="background:var(--rl);">✨</div><div class="mi-in"><strong>Dicas de beleza e estilo</strong><span>Guia completo</span></div><span class="mi-ar">›</span></div>
-      <div class="mi" onclick="goPage('plano')"><div class="mi-ic" style="background:var(--rl);">📅</div><div class="mi-in"><strong>Plano de 7 dias</strong><span id="mPlSb">Acompanhe seu progresso</span></div><span class="mi-ar">›</span></div>
-      <div class="mi" onclick="goPage('ciclo')"><div class="mi-ic" style="background:rgba(200,23,74,.15);">🌸</div><div class="mi-in"><strong>Ciclo Menstrual</strong><span>Rastreamento e dicas diárias</span></div><span class="mi-ar">›</span></div>
-      <div class="mi" onclick="goPage('chat')"><div class="mi-ic" style="background:var(--rl);">🤖</div><div class="mi-in"><strong>Chat com IA</strong><span>Converse e peça conselhos</span></div><span class="mi-ar">›</span></div>
-      <!-- Parceiro ideal -->
-      <div class="msec-t">Meu perfil</div>
-      <div class="parceiro-card">
-        <div class="slbl">Como é a pessoa que você quer?</div>
-        <div class="parceiro-form" id="parceiroForm"></div>
-        <button class="save-btn" onclick="salvarParceiro()">Salvar meu perfil ideal</button>
-      </div>
-      <div class="msec-t">Conta</div>
-      <div class="mi" onclick="if(confirm('Reiniciar perfil e apagar todos os dados?')){localStorage.clear();location.reload();}"><div class="mi-ic" style="background:rgba(255,255,255,.06);">🔄</div><div class="mi-in"><strong>Reiniciar perfil</strong><span>Atualizar suas informações</span></div><span class="mi-ar">›</span></div>
+    <!-- PERFIL -->
+    <div class="pg" id="pg-perfil">
+      <div class="profile-wrap" id="profileContent"></div>
     </div>
-  </div>
 
-  <!-- CHAT -->
-  <div class="chat-pg" id="pg-chat">
-    <div class="chat-msgs" id="chatMsgs"></div>
-    <div class="qr-scroll" id="qrRow"></div>
-    <div class="chat-bar">
-      <textarea class="cta" id="chatIn" placeholder="Pergunte, desabafe, peça uma mensagem..." rows="1" oninput="autoH(this)"></textarea>
-      <button class="snd" id="sndBtn" onclick="sendChat()">➤</button>
-    </div>
-  </div>
+  </div><!-- /content -->
 
   <nav class="nav">
-    <button class="nb on" id="nb-home" onclick="goPage('home')"><span class="ni">🏠</span><span class="nl">Início</span></button>
-    <button class="nb" id="nb-msgs" onclick="goPage('msgs')"><span class="ni">💬</span><span class="nl">Mensagens</span></button>
+    <button class="nb on" id="nb-feed" onclick="goPage('feed')"><span class="ni">🏠</span><span class="nl">Feed</span></button>
     <button class="nb" id="nb-carta" onclick="goPage('carta')"><span class="ni">🃏</span><span class="nl">Carta</span></button>
     <button class="nb" id="nb-ciclo" onclick="goPage('ciclo')"><span class="ni">🌸</span><span class="nl">Ciclo</span></button>
-    <button class="nb" id="nb-menu" onclick="goPage('menu');renderMenu()"><span class="ni">☰</span><span class="nl">Menu</span></button>
+    <button class="nb" id="nb-perfil" onclick="goPage('perfil');renderProfile()"><span class="ni">👤</span><span class="nl">Perfil</span></button>
+    <button class="nb" id="nb-admin" onclick="openAdmin()"><span class="ni">⚙️</span><span class="nl">Admin</span></button>
   </nav>
 </div>
 
-<!-- MODAL -->
-<div class="modal-ov" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal-sh">
-    <div class="m-hdl"></div>
-    <div class="m-sit" id="mSit"></div>
-    <div class="m-msg" id="mMsg"></div>
-    <div class="m-sec">💡 Por que funciona</div>
-    <div class="m-dica" id="mDica"></div>
-    <div class="m-sec">⏰ Quando usar</div>
-    <div class="m-when" id="mWhen"></div>
-    <button class="m-cp" id="mCpBtn">📋 Copiar mensagem</button>
-    <button class="m-cl" onclick="closeModal()">Fechar</button>
+<!-- POST MODAL -->
+<div class="post-modal" id="postModal">
+  <div class="pm-header">
+    <button class="pm-cancel" onclick="closePostModal()">Cancelar</button>
+    <span class="pm-title">Nova publicação</span>
+    <button class="pm-submit" id="pmSubmit" disabled onclick="submitPost()">Publicar</button>
+  </div>
+  <div class="pm-body">
+    <div class="pm-user"><div class="pm-av" id="pmAv">🌸</div><span class="pm-name" id="pmName">Você</span></div>
+    <textarea class="pm-textarea" id="pmText" placeholder="Compartilhe como você está se sentindo, um aprendizado, uma vitória..." maxlength="400" oninput="pmCheck()"></textarea>
+    <div class="pm-chars"><span id="pmChars">0</span>/400</div>
+    <div class="slbl">Categoria</div>
+    <div class="pm-tags" id="pmTags">
+      <button class="pm-tag on" data-tag="desabafo" onclick="selTag(this)">💬 Desabafo</button>
+      <button class="pm-tag" data-tag="vitoria" onclick="selTag(this)">🏆 Vitória</button>
+      <button class="pm-tag" data-tag="dica" onclick="selTag(this)">💡 Dica</button>
+      <button class="pm-tag" data-tag="reflexao" onclick="selTag(this)">🌸 Reflexão</button>
+      <button class="pm-tag" data-tag="pergunta" onclick="selTag(this)">❓ Pergunta</button>
+    </div>
   </div>
 </div>
+
+<!-- COMMENTS SHEET -->
+<div class="comments-sheet" id="commentsSheet">
+  <div class="cs-backdrop" onclick="closeComments()"></div>
+  <div class="cs-panel">
+    <div class="cs-hdl"></div>
+    <div class="cs-header">
+      <span class="cs-title">Comentários</span>
+      <span class="cs-close" onclick="closeComments()">✕</span>
+    </div>
+    <div class="cs-list" id="commentsList"><div class="loader"><div class="spin"></div></div></div>
+    <div class="cs-input-row">
+      <div class="ci-av" id="ciAv">🌸</div>
+      <input class="ci-in" id="commentIn" placeholder="Escreva um comentário..." maxlength="200">
+      <button class="ci-btn" onclick="submitComment()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIF PANEL -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-backdrop" onclick="closeNotifPanel()"></div>
+  <div class="notif-sheet">
+    <div class="notif-header"><h3>Notificações</h3></div>
+    <div id="notifList"><div class="ni-empty">Nenhuma notificação</div></div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="ADMIN">
+  <div class="admin-hdr">
+    <span class="admin-close" onclick="closeAdmin()">✕</span>
+    <span class="admin-title">Painel Admin</span>
+  </div>
+  <div class="admin-body">
+    <!-- Login -->
+    <div id="adminLogin" class="admin-login">
+      <h3>🔐 Acesso Restrito</h3>
+      <input class="nf-in" id="adminPwd" type="password" placeholder="Senha do painel admin">
+      <button class="send-notif-btn" onclick="loginAdmin()">Entrar →</button>
+    </div>
+    <!-- Dashboard (hidden until logged in) -->
+    <div id="adminDash" style="display:none;">
+      <div class="admin-stats" id="adminStats"></div>
+      <!-- Send notification -->
+      <div class="admin-section">
+        <div class="admin-section-t">Enviar notificação para todos</div>
+        <div class="notif-form">
+          <input class="nf-in" id="notifTitle" placeholder="Título da notificação" maxlength="50">
+          <textarea class="nf-ta" id="notifBody" placeholder="Mensagem para todas as usuárias..." maxlength="200"></textarea>
+          <button class="send-notif-btn" onclick="sendAdminNotif()">🔔 Enviar para todas →</button>
+        </div>
+      </div>
+      <!-- Users list -->
+      <div class="admin-section">
+        <div class="admin-section-t">Usuárias cadastradas</div>
+        <div id="adminUserList"><div class="loader"><div class="spin"></div></div></div>
+      </div>
+      <!-- Posts moderation -->
+      <div class="admin-section">
+        <div class="admin-section-t">Postagens recentes</div>
+        <div id="adminPostList"><div class="loader"><div class="spin"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="tst" id="tst"></div>
 
 <script>
-/* ════════ DADOS ══════════════════════════════════ */
-const MSGS=[
-  {id:1,cat:'reconquista',sit:'Após silêncio longo',msg:'Não vou fingir que não pensei em você. Mas aprendi que algumas coisas a gente sente e guarda.',tip:'Demonstra sentimento sem implorar.',when:'Use após pelo menos 7 dias de silêncio.'},
-  {id:2,cat:'reconquista',sit:'Depois de uma briga',msg:'Não estou bem desde aquilo. Não pra cobrar — só pra ser honesta com você.',tip:'Honestidade sem agressividade gera culpa saudável nele.',when:'Use 2-3 dias após a briga.'},
-  {id:3,cat:'reconquista',sit:'Quando ele some',msg:'Tudo bem por aí? Percebi que a gente está sumida e não quero fingir que está normal.',tip:'Nomeia o problema sem atacar.',when:'Quando o silêncio dele já passou 5+ dias.'},
-  {id:4,cat:'reconquista',sit:'Ele voltou depois de sumir',msg:'Oi. Fico feliz que voltou. Mas agora as coisas vão ser diferentes da última vez.',tip:'Recebe sem punir, mas posiciona que você cresceu.',when:'Assim que ele entrar em contato depois de sumir.'},
-  {id:5,cat:'reconquista',sit:'Saudade sem parecer carente',msg:'Tive um sonho com você essa semana. Acordei rindo à toa. Achei que ia ficar esquisito não contar.',tip:'Sonhos são íntimos e neutros.',when:'Quando sentir saudade genuína.'},
-  {id:6,cat:'reconquista',sit:'Após término',msg:'Não sei exatamente por que estou escrevendo isso. Sei apenas que sou mais honesta comigo quando não finjo que você não existiu.',tip:'Vulnerabilidade inteligente sem pedir retorno.',when:'15+ dias após o término.'},
-  {id:7,cat:'reconquista',sit:'Reconquista indireta',msg:'Você apareceu no meu feed hoje. Fiquei olhando por tempo demais. Achei que você devia saber.',tip:'Honestidade leve que provoca curiosidade.',when:'Quando viu algo dele nas redes.'},
-  {id:8,cat:'atração',sit:'Para despertar curiosidade',msg:'Acabei de passar por um lugar que me fez lembrar muito de você. Curioso, né?',tip:'Ativa o instinto de curiosidade.',when:'Para iniciar contato sem parecer desesperada.'},
-  {id:9,cat:'atração',sit:'Para criar mistério',msg:'Tive um dia que me ensinou bastante coisa. Queria muito te contar, mas talvez não seja o momento ainda.',tip:'O "ainda" cria antecipação.',when:'Para manter conversa interessante.'},
-  {id:10,cat:'atração',sit:'Para virar assunto',msg:'Você aparece em várias músicas que ouço ultimamente. Minha playlist sabe mais de mim do que eu.',tip:'Leve, verdadeira e com humor.',when:'Quando estão com boa energia.'},
-  {id:11,cat:'atração',sit:'Para ele sentir sua falta',msg:'Hoje foi um dia que eu teria adorado dividir com você. Ainda não encontrei ninguém que ouvisse igual.',tip:'Específico + exclusivo.',when:'Após um bom acontecimento no seu dia.'},
-  {id:12,cat:'atração',sit:'Primeiro contato com crush',msg:'Você tem uma energia diferente. Fiquei curiosa pra saber quem você é de verdade.',tip:'Ninguém resiste a saber que foi percebido de forma especial.',when:'Nas primeiras trocas com quem te interessa.'},
-  {id:13,cat:'atração',sit:'Criando interesse',msg:'Tô num projeto que tá me consumindo completamente. Sabe quando você está tão focada que esquece o mundo? Tô nessa fase.',tip:'Demonstra vida ocupada e interessante.',when:'Para gerar interesse sem falar diretamente de relacionamento.'},
-  {id:14,cat:'atração',sit:'Depois de um bom papo',msg:'Acabei de terminar uma call longa, mas a conversa que ficou na minha cabeça foi a nossa.',tip:'Específico e elegante.',when:'Horas depois de uma boa conversa.'},
-  {id:15,cat:'reacao',sit:'Ele enviou "oi" seco',msg:'Oi! Tô no meio de uma coisa, te falo mais tarde 😊',tip:'Nunca responda "oi" com "oi".',when:'Sempre que receber mensagens monossilábicas.'},
-  {id:16,cat:'reacao',sit:'Ele demorou horas',msg:'Haha tudo bem, estava atarefada aqui também. O que rolou?',tip:'Nunca demonstre que percebeu o delay.',when:'Quando ele demorar mais de 3h sem motivo.'},
-  {id:17,cat:'reacao',sit:'Ele te elogiou',msg:'Que bom que você percebeu isso. Não sou sempre assim, mas hoje tava me sentindo bem.',tip:'Aceita o elogio com confiança.',when:'Ao receber elogios. Nunca diga "que nada".'},
-  {id:18,cat:'reacao',sit:'Ele sumiu e voltou',msg:'Olha quem apareceu! Estava sumido... tudo bem?',tip:'Nomeia o sumiço com leveza.',when:'Quando ele voltar depois de sumir.'},
-  {id:19,cat:'reacao',sit:'Ele ficou frio',msg:'Tô sentindo você diferente hoje. Tá tudo bem?',tip:'Nomeia a mudança sem drama.',when:'Quando sentir a conversa esfriando.'},
-  {id:20,cat:'reacao',sit:'Mensagem de madrugada',msg:'Que horas são essas pra aparecer? 😂 O que foi?',tip:'Humor + posicionamento.',when:'Ao receber mensagens após meia-noite.'},
-  {id:21,cat:'reacao',sit:'Ele mandou áudio longo',msg:'Ouvi! Haha você é engraçado. Mas agora preciso correr — te respondo direitinho mais tarde.',tip:'Mostra que ouviu, demonstra vida.',when:'Para responder áudios sem parecer grudada.'},
-  {id:22,cat:'valorização',sit:'Quando ele testa seus limites',msg:'Eu me importo com você, mas não a ponto de me perder por isso.',tip:'Amor com limite.',when:'Quando sentir que está cedendo mais do que deveria.'},
-  {id:23,cat:'valorização',sit:'Quando ele te ignora',msg:'Tudo bem. Tenho coisas demais acontecendo pra ficar esperando o que não está disponível pra mim.',tip:'Posiciona você com valor e escolha.',when:'Quando estiver sendo deixada em segundo plano.'},
-  {id:24,cat:'valorização',sit:'Sendo tratada como opção',msg:'Posso esperar muita coisa, mas não sou opção.',tip:'Curta, direta e poderosa.',when:'Quando se sentir sendo tratada como segunda opção.'},
-  {id:25,cat:'valorização',sit:'Ele não liga a compromisso',msg:'Não preciso de promessas. Preciso de coerência. Tem diferença.',tip:'Madura e firme sem agressividade.',when:'Quando ele evitar qualquer forma de comprometimento.'},
-  {id:26,cat:'valorização',sit:'Autoestima em alta',msg:'Hoje acordei diferente. Sabe aquele dia que você simplesmente sabe seu próprio valor? Tô nesse.',tip:'Demonstra segurança e desperta interesse.',when:'Para mostrar evolução e autoconfiança.'},
-  {id:27,cat:'vacuo',sit:'Encerrar conversa no pique',msg:'Bom, vou te deixar — tenho coisas pra resolver. Continuamos depois? 😊',tip:'Encerrar quando está bom faz ele querer mais.',when:'Quando a conversa atingir um pico de energia.'},
-  {id:28,cat:'vacuo',sit:'Resposta estratégica',msg:'Nossa, me perdi hoje completamente. Como foi seu dia?',tip:'Demora natural + interesse real.',when:'Para responder com atraso proposital.'},
-  {id:29,cat:'vacuo',sit:'Vácuo após briga',msg:'Preciso de um tempo pra processar. Quando eu tiver pronta, a gente conversa direito.',tip:'Silêncio com explicação breve.',when:'Logo após uma discussão acalorada.'},
-  {id:30,cat:'primeiro',sit:'Retomar depois de semanas',msg:'Ei, apareceu uma coisa que eu sei que você ia adorar. Ainda tenho esse costume de pensar em você 😅',tip:'O "ainda" indica continuidade sem dependência.',when:'Para reabrir contato após 15+ dias.'},
-  {id:31,cat:'primeiro',sit:'Retomar após término',msg:'Não sei se é o momento certo, mas não consegui ficar sem dizer que sinto sua falta.',tip:'Vulnerabilidade no timing certo magnetiza.',when:'Após pelo menos 21 dias de zero contato.'},
-  {id:32,cat:'primeiro',sit:'Primeiro contato pós-bloqueio',msg:'Vi que me desbloqueou. Não vou fingir que não vi. Quer conversar?',tip:'Direto e sem drama.',when:'Quando ela o desbloqueio for percebido.'},
-  {id:33,cat:'primeiro',sit:'Reaproximação estratégica',msg:'Encontrei aquela coisa que você me recomendou meses atrás. Você tinha razão. Obrigada por isso.',tip:'Referência ao passado sem ser dramática.',when:'Para reaproximar usando uma memória positiva.'},
-  {id:34,cat:'chat',sit:'Para puxar papo',msg:'Oi, sumida também por aqui. O que tem de novo na sua vida?',tip:'Leve e abre espaço para ele falar.',when:'Para iniciar conversa sem contexto obrigatório.'},
-  {id:35,cat:'chat',sit:'Para criar intimidade',msg:'Tenho pensado em fazer algo diferente esse fim de semana. Você costuma ser de fazer planos de última hora?',tip:'Cria abertura para um convite indireto.',when:'Quando quiser criar oportunidade de encontro.'},
-  {id:36,cat:'chat',sit:'Para manter interesse',msg:'Você é a terceira pessoa que me lembra hoje. Talvez seja sinal de alguma coisa. Haha.',tip:'Cria mistério e interesse.',when:'Para surpreender no meio de uma conversa parada.'},
-  {id:37,cat:'chat',sit:'Para criar expectativa',msg:'Preciso te contar uma coisa que aconteceu, mas pessoalmente. Tenho compromisso agora, mas quando você tiver livre?',tip:'Cria suspense e antecipação.',when:'Para criar encontro de forma natural.'},
-  {id:38,cat:'chat',sit:'Mensagem que faz pensar',msg:'Às vezes fico pensando que as pessoas que passam pela gente deixam uma impressão permanente, mesmo sem querer.',tip:'Filosófica e íntima ao mesmo tempo.',when:'Para criar conexão emocional mais profunda.'},
-  {id:39,cat:'chat',sit:'Elogiar sem ser óbvia',msg:'Tem gente que sabe exatamente como fazer os outros se sentirem vistos. Você tem esse talento.',tip:'Elogio específico e inteligente.',when:'Para elogiar sem parecer bajuladora.'},
-  {id:40,cat:'chat',sit:'Para reconquistar pela emoção',msg:'Sabe o que é engraçado? A gente às vezes só percebe o quanto alguém importa quando o silêncio fica pesado demais.',tip:'Abre o coração sem pedir nada.',when:'Para mensagem mais profunda após período de distância.'},
+/* ════════════════════════════════════════════════
+   TAROT — 22 ARCANOS MAIORES
+════════════════════════════════════════════════ */
+const TAROT = [
+  {num:'0',sym:'🌟',nome:'O Louco',kws:['Início','Liberdade','Salto de fé'],phrase:'Dê o salto. O universo coloca a rede quando você confia.',amor:'Este é um momento de novos começos amorosos. Algo inesperado pode surgir. Abra-se para o imprevisível.'},
+  {num:'I',sym:'🪄',nome:'O Mago',kws:['Poder','Vontade','Manifestação'],phrase:'Você tem tudo que precisa. É hora de usar.',amor:'Você tem o poder de transformar esta situação. Aja com intenção e foco — o resultado está em suas mãos.'},
+  {num:'II',sym:'🌙',nome:'A Sacerdotisa',kws:['Intuição','Mistério','Sabedoria'],phrase:'Sua intuição sabe o que sua mente ainda não processou.',amor:'Confie no que está sentindo sobre esta situação. Nem tudo precisa ser dito — o silêncio também comunica.'},
+  {num:'III',sym:'🌺',nome:'A Imperatriz',kws:['Abundância','Beleza','Cuidado'],phrase:'Você merece receber o mesmo amor que dá.',amor:'Um período de beleza e conexão. Cuide de você com o mesmo carinho que cuida dos outros.'},
+  {num:'IV',sym:'🏛️',nome:'O Imperador',kws:['Estrutura','Limites','Estabilidade'],phrase:'Estabeleça seus limites com clareza. Quem te ama os respeita.',amor:'É hora de construir algo sólido. Defina o que aceita e o que não aceita — e não negocie seus valores.'},
+  {num:'V',sym:'🕍',nome:'O Hierofante',kws:['Tradição','Compromisso','Valores'],phrase:'O que é construído com base em valores reais dura.',amor:'Busque uma conexão baseada em valores compartilhados. O que vocês realmente têm em comum?'},
+  {num:'VI',sym:'💞',nome:'Os Amantes',kws:['Escolha','União','Coração'],phrase:'O amor real começa quando você escolhe a si mesma primeiro.',amor:'Uma escolha importante se aproxima. Siga o coração — mas não abandone a razão. O melhor amor te eleva.'},
+  {num:'VII',sym:'🏇',nome:'O Carro',kws:['Vitória','Determinação','Movimento'],phrase:'Você vai chegar onde quer chegar. Continue em movimento.',amor:'Não deixe os obstáculos te paralisarem. Sua determinação é sua maior arma neste momento.'},
+  {num:'VIII',sym:'💪',nome:'A Força',kws:['Coragem','Paciência','Poder interior'],phrase:'Sua força está na leveza, não na agressividade.',amor:'Lide com esta situação com suavidade e firmeza ao mesmo tempo. Você é mais forte do que parece.'},
+  {num:'IX',sym:'🕯️',nome:'O Eremita',kws:['Introspecção','Solidão','Clareza'],phrase:'O silêncio que você tanto teme é exatamente onde a clareza mora.',amor:'Um período de introspecção é necessário. Antes de buscar amor fora, encontre-o dentro de você.'},
+  {num:'X',sym:'🎡',nome:'A Roda da Fortuna',kws:['Ciclos','Mudança','Destino'],phrase:'O que caiu pode voltar. O que parece perdido pode estar só em trânsito.',amor:'A situação está mudando — para melhor. Os ciclos giram, e este está virando a seu favor.'},
+  {num:'XI',sym:'⚖️',nome:'A Justiça',kws:['Equilíbrio','Verdade','Karma'],phrase:'O que é feito com amor e respeito sempre volta multiplicado.',amor:'As coisas encontrarão o equilíbrio certo. Não force nada — o que é seu permanece, o que não é vai.'},
+  {num:'XII',sym:'🙃',nome:'O Enforcado',kws:['Pausa','Perspectiva','Rendição'],phrase:'Às vezes a melhor atitude é não tomar nenhuma. Espere.',amor:'Pause antes de agir. Uma nova perspectiva está surgindo — e vai mudar tudo o que você acreditava sobre esta situação.'},
+  {num:'XIII',sym:'🦋',nome:'A Morte',kws:['Transformação','Fim de ciclo','Renascimento'],phrase:'Algo precisa terminar para que o melhor de você possa nascer.',amor:'Um ciclo se fecha. Isso não é perda — é transformação. O que está acabando está abrindo espaço para algo muito melhor.'},
+  {num:'XIV',sym:'✨',nome:'A Temperança',kws:['Equilíbrio','Paciência','Harmonia'],phrase:'O equilíbrio não é rigidez. É saber quando avançar e quando esperar.',amor:'Encontre o meio-termo. Nem tudo nem nada — a justa medida nas ações e nos sentimentos é o caminho agora.'},
+  {num:'XV',sym:'⛓️',nome:'O Diabo',kws:['Apego','Medo','Libertação'],phrase:'O que te prende não é a situação. É o medo de soltá-la.',amor:'Examine os padrões que se repetem. O que você ainda carrega que não é mais seu? É hora de soltar.'},
+  {num:'XVI',sym:'⚡',nome:'A Torre',kws:['Ruptura','Revelação','Transformação rápida'],phrase:'O que cai era frágil. O que permanece é o que realmente importa.',amor:'Uma mudança brusca está acontecendo ou chegando. Pode assustar — mas está te libertando de algo que não servia mais.'},
+  {num:'XVII',sym:'⭐',nome:'A Estrela',kws:['Esperança','Cura','Renovação'],phrase:'Depois de tudo que você passou, você ainda brilha.',amor:'Há esperança real aqui. Um período de cura, renovação e conexão genuína está chegando. Confie.'},
+  {num:'XVIII',sym:'🌕',nome:'A Lua',kws:['Ilusão','Emoção','Inconsciente'],phrase:'Nem tudo que você vê é real. Nem tudo que sente é fato.',amor:'Cuidado com as ilusões e os medos que distorcem a realidade. Busque clareza antes de agir nesta situação.'},
+  {num:'XIX',sym:'☀️',nome:'O Sol',kws:['Alegria','Sucesso','Clareza'],phrase:'Você está entrando em um período de luz. Acredite nisso.',amor:'Uma das melhores cartas para o amor. Clareza, alegria e conexão genuína estão a caminho. Abra-se para receber.'},
+  {num:'XX',sym:'🎺',nome:'O Julgamento',kws:['Despertar','Segunda chance','Chamado'],phrase:'Você está sendo chamada para uma versão maior de si mesma.',amor:'Uma segunda chance pode estar chegando. Mas o mais importante é: você está respondendo ao chamado da sua melhor versão?'},
+  {num:'XXI',sym:'🌍',nome:'O Mundo',kws:['Realização','Completude','Vitória'],phrase:'Você chegou onde precisava chegar. Celebre isso.',amor:'Um ciclo completo. Realização, satisfação e completude. O que você desejou está sendo manifestado ou está muito perto.'},
 ];
 
-const CARTAS_BARALHO = [
-  {sym:'🌟',nome:'A Estrela',frase:'Você brilha mesmo quando acredita que está apagada. Hoje, confie na sua luz.',msg:'Sua essência é insubstituível. Ninguém pode ser você — e isso é um poder enorme.'},
-  {sym:'🌙',nome:'A Lua',frase:'Seus sentimentos são reais e válidos. Permita-se sentir sem se punir.',msg:'Emoções são informação, não fraqueza. Ouça o que seu coração está dizendo.'},
-  {sym:'☀️',nome:'O Sol',frase:'Um novo começo está mais perto do que você pensa. Abra-se para ele.',msg:'O passado te ensinou. O presente te pertence. O futuro te espera com possibilidades.'},
-  {sym:'💎',nome:'A Joia',frase:'Você não precisa ser polida para brilhar. Já é preciosa do jeito que está.',msg:'Seu valor não depende da aprovação de ninguém. Você já é suficiente — agora.'},
-  {sym:'🔥',nome:'O Fogo',frase:'Sua paixão é sua força. Não a apague para agradar quem não consegue suportar seu calor.',msg:'Deixe a intensidade do que você sente ser combustível para sua transformação.'},
-  {sym:'🌊',nome:'A Maré',frase:'As coisas que resistem ao fluxo acabam quebrando. Confie no processo.',msg:'Nem tudo que está se afastando é uma perda. Às vezes é o universo te reposicionando.'},
-  {sym:'🌸',nome:'A Flor',frase:'Você está crescendo, mesmo que ainda não veja o resultado.',msg:'Crescimento raramente é visível enquanto acontece. Confie nas raízes que está formando.'},
-  {sym:'🗝️',nome:'A Chave',frase:'A resposta que você procura está dentro de você. Pare de buscar fora.',msg:'Ninguém conhece você melhor do que você mesma. Confie na sua própria sabedoria.'},
-  {sym:'🦋',nome:'A Borboleta',frase:'Transformação exige dissolução. O que está terminando está fazendo espaço para o que vem.',msg:'Você está no meio da sua metamorfose. O que parece caos é na verdade construção.'},
-  {sym:'⚡',nome:'O Raio',frase:'Sua intuição está certa. Confie no que você sente, mesmo sem explicação lógica.',msg:'Há momentos em que a clareza vem antes do entendimento. Confie nisso.'},
-  {sym:'🏹',nome:'A Flecha',frase:'Foco. O que você deseja com clareza, o universo conspira a te dar.',msg:'Saiba o que você quer antes de buscar. Desejo claro tem uma força que a dúvida não tem.'},
-  {sym:'🌿',nome:'A Raiz',frase:'Você é mais forte do que parece. Sua resiliência é maior do que sua dor.',msg:'Raízes profundas sobrevivem a qualquer tempestade. As suas são mais fundas do que você imagina.'},
-  {sym:'🪄',nome:'A Magia',frase:'Acredite que o melhor ainda está por vir. A magia existe para quem acredita.',msg:'Não desista do que não veio ainda. O tempo de cada coisa é exato, mesmo quando parece errado.'},
-  {sym:'👑',nome:'A Coroa',frase:'Você não precisa lutar por um lugar que já é seu por direito.',msg:'Uma rainha não precisa provar nada. Ela apenas existe — e isso já é suficiente.'},
-  {sym:'🌺',nome:'O Florescimento',frase:'Este é o momento de abrir. Não de fechar.',msg:'Suas experiências mais dolorosas estão te preparando para uma versão de você que ainda não existe.'},
-  {sym:'🕊️',nome:'A Paz',frase:'Deixe ir. Não o que você ama, mas o peso que não é seu carregar.',msg:'Paz verdadeira começa quando você para de lutar contra o que não pode controlar.'},
-  {sym:'🌈',nome:'O Arco-íris',frase:'Depois da tempestade, sempre vem a claridade. Você está quase lá.',msg:'O arco-íris só aparece quando há sol E chuva ao mesmo tempo. Beleza e dor coexistem.'},
-  {sym:'🔮',nome:'O Oráculo',frase:'Algo importante está prestes a se revelar. Preste atenção nos sinais.',msg:'O universo fala através de coincidências, intuições e pequenos momentos. Esteja presente.'},
-  {sym:'🌙',nome:'A Nova Lua',frase:'É um bom dia para começar algo novo. Uma semente plantada hoje floresce no tempo certo.',msg:'Intenções claras têm poder. Decida hoje o que você quer criar nos próximos dias.'},
-  {sym:'💫',nome:'A Estrela Cadente',frase:'Seu desejo mais profundo já está a caminho. Acredite nisso.',msg:'Às vezes o universo trabalha nos bastidores antes de revelar o que preparou para você.'},
-  {sym:'🌍',nome:'O Mundo',frase:'Você é maior do que qualquer situação. Expanda sua perspectiva.',msg:'Olhar de cima transforma qualquer problema. O que parece imenso de perto é pequeno na escala da sua vida.'},
-];
-
-const SIGNOS = {
-  aries:{em:'♈',nome:'Áries',datas:'21 mar – 19 abr',desc:'Você é pioneira, corajosa e apaixonada. Vai com tudo quando quer algo. Seu desafio é a impulsividade — mas sua força está exatamente na energia que você traz para tudo que faz.',aff:'Minha energia é meu poder. Hoje, canalizarei minha paixão com sabedoria e clareza.'},
-  touro:{em:'♉',nome:'Touro',datas:'20 abr – 20 mai',desc:'Você é leal, sensível e sabe o que quer. Ama o conforto, a beleza e as coisas que duram. Sua força está na constância — quando se compromete, é para valer.',aff:'Meu valor é inabalável. Eu confio no meu timing e na minha capacidade de criar o que desejo.'},
-  gemeos:{em:'♊',nome:'Gêmeos',datas:'21 mai – 20 jun',desc:'Você é criativa, curiosa e sabe se comunicar como ninguém. Sua mente trabalha em múltiplas direções ao mesmo tempo. Sua força está na adaptabilidade e no encanto natural que você exerce.',aff:'Minha mente é meu instrumento. Uso meu carisma para criar conexões verdadeiras e profundas.'},
-  cancer:{em:'♋',nome:'Câncer',datas:'21 jun – 22 jul',desc:'Você sente tudo profundamente e tem uma capacidade enorme de amor. Intuitiva, protetora e sensível, sua força está na conexão emocional autêntica que cria com quem ama.',aff:'Minha sensibilidade é um presente. Cuido de mim antes de cuidar de alguém.'},
-  leao:{em:'♌',nome:'Leão',datas:'23 jul – 22 ago',desc:'Você nasceu para brilhar e sabe disso. Generosa, criativa e magnética, sua presença é impossível de ignorar. Sua força está na confiança genuína que você irradia.',aff:'Eu sou luz. Permito-me brilhar sem pedir permissão a ninguém.'},
-  virgem:{em:'♍',nome:'Virgem',datas:'23 ago – 22 set',desc:'Você é analítica, dedicada e percebe detalhes que ninguém mais vê. Sua força está no cuidado que você coloca em tudo o que faz — e na capacidade de criar ordem onde há caos.',aff:'Minha atenção aos detalhes é um superpoder. Cuido de mim com o mesmo cuidado que dedico a tudo.'},
-  libra:{em:'♎',nome:'Libra',datas:'23 set – 22 out',desc:'Você busca equilíbrio, beleza e conexão verdadeira. Charmosa, diplomática e justa, sua força está na capacidade de criar harmonia e de fazer as pessoas ao seu redor se sentirem especiais.',aff:'Eu mereço o equilíbrio que busco para os outros. Hoje, coloco minha paz em primeiro lugar.'},
-  escorpiao:{em:'♏',nome:'Escorpião',datas:'23 out – 21 nov',desc:'Você é intensa, magnética e vai fundo em tudo. Sua força está na intuição aguçada e na capacidade de transformar qualquer situação — especialmente as mais difíceis.',aff:'Minha intensidade é poder. Uso minha profundidade para criar conexões que realmente importam.'},
-  sagitario:{em:'♐',nome:'Sagitário',datas:'22 nov – 21 dez',desc:'Você é livre, aventureira e otimista. Seu entusiasmo pela vida é contagiante. Sua força está na fé de que sempre haverá algo melhor esperando em cada nova direção.',aff:'Minha liberdade é sagrada. Cada passo em direção ao que me faz bem é o caminho certo.'},
-  capricornio:{em:'♑',nome:'Capricórnio',datas:'22 dez – 19 jan',desc:'Você é determinada, responsável e construída para durar. Sua força está na disciplina silenciosa com que constrói sua vida — tijolo por tijolo, sem precisar de validação.',aff:'Minha determinação me leva exatamente onde preciso chegar. Confio no meu processo.'},
-  aquario:{em:'♒',nome:'Aquário',datas:'20 jan – 18 fev',desc:'Você é única, visionária e pensa diferente de todo mundo. Sua força está na capacidade de enxergar o que ainda não existe e de inspirar os outros com sua visão.',aff:'Minha originalidade é minha maior força. Não preciso ser compreendida por todos para ter valor.'},
-  peixes:{em:'♓',nome:'Peixes',datas:'19 fev – 20 mar',desc:'Você é empática, intuitiva e conectada a algo maior. Sua força está na capacidade de sentir o que os outros não conseguem articular e de transformar emoção em beleza.',aff:'Minha sensibilidade é sabedoria. Hoje, cuido da minha energia e escolho o que merece minha magia.'},
-};
-
-const DICAS_DB={
-  beleza:[
-    {t:'Pele que fala por você',i:'✨',c:'#C8174A',p:['Hidrate o rosto toda manhã e noite — pele hidratada ilumina qualquer rosto mesmo sem maquiagem.','Protetor solar diário é anti-idade, anti-manchas e dá brilho saudável.','Esfolie uma vez por semana para renovar células.','Beba 2 litros de água por dia.','Durma bem: olheiras comunicam cansaço antes de você falar.']},
-    {t:'Cabelo que atrai olhares',i:'💇',c:'#C9932A',p:['Cabelo limpo e com bom cheiro é o detalhe mais notado.','Hidratação semanal faz mais diferença do que qualquer produto caro.','Defina um estilo consistente.','Soro leave-in finaliza e protege.']},
-    {t:'Maquiagem que valoriza',i:'💄',c:'#7B0D2A',p:['BB cream dá cobertura leve e cuida da pele ao mesmo tempo.','Máscara de cílios sozinha transforma qualquer rosto em segundos.','Blush ascendente deixa o rosto jovem e saudável.','Sobrancelha definida estrutura o olhar inteiro.','Batom nude é o look mais elegante e atemporal.']},
-    {t:'Perfume: seu cartão de visita',i:'🌸',c:'#5B0F5E',p:['Aplique nos pulsos, pescoço e atrás dos joelhos.','Não esfregue os pulsos após aplicar — quebra as moléculas.','Tenha um perfume do dia e um para noite.','Quem sente seu cheiro lembra de você.']},
-  ],
-  estilo:[
-    {t:'Roupas que comunicam poder',i:'👗',c:'#C8174A',p:['Vista o que faz você se sentir bem — confiança é o acessório mais visível.','Roupas bem passadas valem mais do que qualquer peça cara amassada.','Aprenda as cores que valorizam seu tom de pele.','Menos é mais: um look simples bem combinado supera excesso de peças.']},
-    {t:'Postura e linguagem corporal',i:'🦋',c:'#1D9E75',p:['Ombros para trás e queixo levemente levantado comunicam segurança.','Sorrir com os olhos cria conexão genuína e imediata.','Contato visual por 3-5 segundos.','Gestos lentos e controlados comunicam calma e autoconfiança.']},
-  ],
-  encontro:[
-    {t:'Antes do encontro',i:'📋',c:'#C9932A',p:['Confirme o encontro no dia anterior.','Vista algo que te deixe confortável E atraente.','Chegue no máximo 5 minutos atrasada.','Deixe o celular no silencioso.']},
-    {t:'Durante o encontro',i:'💫',c:'#C8174A',p:['Faça perguntas com interesse genuíno.','Ria do que realmente achar graça.','Compartilhe algo seu — vulnerabilidade leve cria conexão.','Encerre deixando ele querendo mais.']},
-    {t:'Depois do encontro',i:'📲',c:'#7B0D2A',p:['Espere ele entrar em contato primeiro, ou aguarde 4h.','Nunca pergunte "gostou?"','Mencione algo positivo do encontro.']},
-    {t:'O que nunca fazer',i:'🚫',c:'#C8174A',p:['Não fique no celular durante o encontro.','Não beba demais.','Não fale mal de outras pessoas.','Não force intimidade.']},
-  ],
-  psicologia:[
-    {t:'O gatilho da escassez',i:'🔑',c:'#C8174A',p:['Quanto mais disponível você parece, menos atraente você se torna.','Quanto menos você precisa dele, mais ele tende a querer você.','Ter vida própria não é joguinho — é a realidade que você deve viver.']},
-    {t:'A psicologia do silêncio',i:'🔇',c:'#185FA5',p:['Silêncio após conflito não é punição — é espaço para respirar.','Responder de forma reflexiva sempre produz melhores resultados.','O silêncio da mulher segura assusta mais do que qualquer briga.']},
-  ],
-};
-
-const PLANO=[
-  {d:1,t:'Silêncio estratégico',s:'As primeiras 24h',p:['Não envie nenhuma mensagem.','Cuide da sua aparência como se fosse sair com alguém especial.','Escreva 3 qualidades suas. Releia antes de dormir.']},
-  {d:2,t:'Presença sem pedir',s:'Apareça no radar levemente',p:['Atualize status ou foto com algo positivo.','Saia para algo — café, parque, academia.','Não abra mensagens dele se houver.']},
-  {d:3,t:'Primeiro contato estratégico',s:'Uma mensagem. Só uma.',p:['Use: "Acabei de passar por um lugar que me fez lembrar muito de você."','Depois de enviar, pare. Viva seu dia normalmente.','Se ele responder, espere pelo menos 30 min antes de responder.']},
-  {d:4,t:'Cultivando mistério',s:'Menos é sempre mais',p:['Respostas curtas, positivas e curiosas.','Encerre a conversa antes que perca energia.','Não explique onde está ou o que está fazendo.']},
-  {d:5,t:'Investindo em você',s:'O dia mais transformador',p:['Faça algo que te dê prazer: academia, salão, amigas, curso.','Compare como se sente hoje vs. dia 1.','Cuide da alimentação e durma cedo.']},
-  {d:6,t:'Ativando a saudade',s:'Uma memória que fica',p:['Use: "Tive um sonho com você essa semana. Acordei rindo à toa."','Depois disso, silêncio.','Vista algo que te faça se sentir poderosa.']},
-  {d:7,t:'Posicionamento final',s:'A nova versão de você',p:['Se ele procurou: responda com calma e segurança.','Se não procurou: você ganhou autoconhecimento.','De qualquer forma: você provou que consegue se priorizar.']},
-];
-
-const REFS=[
-  {tag:'Autovalor',txt:'"Você não precisa ser perfeita para ser amada. Você precisa ser verdadeira."'},
-  {tag:'Força',txt:'"A mulher mais poderosa é aquela que sabe o que quer e não tem medo de esperar."'},
-  {tag:'Autoestima',txt:'"Se você não acredita que merece o melhor, ninguém acreditará por você."'},
-  {tag:'Limites',txt:'"Dizer não é um ato de amor próprio."'},
-  {tag:'Mudança',txt:'"Você não está tentando mudar ele. Está se tornando a versão que não precisa mudar ninguém."'},
-  {tag:'Paciência',txt:'"O que é seu vem até você. O que não vem, te ensina."'},
-  {tag:'Recomeço',txt:'"Cada dia em que você escolhe a si mesma é um passo em direção a quem você realmente é."'},
-];
-
-const MSGS_DIA=[
-  {cat:'Reconquista',msg:'Não vou fingir que não pensei em você. Mas aprendi que algumas coisas a gente sente e guarda.'},
-  {cat:'Atração',msg:'Você tem uma energia diferente. Fiquei curiosa pra saber quem você é de verdade.'},
-  {cat:'Valorização',msg:'Eu me importo com você, mas não a ponto de me perder por isso.'},
-  {cat:'Mistério',msg:'Tive um dia que me ensinou bastante coisa. Queria muito te contar, mas talvez não seja o momento ainda.'},
-  {cat:'Saudade',msg:'Tive um sonho com você essa semana. Acordei rindo à toa.'},
-  {cat:'Autoestima',msg:'Posso esperar muita coisa, mas não sou opção.'},
-  {cat:'Sedução',msg:'Você aparece em várias músicas que ouço ultimamente. Minha playlist sabe mais de mim do que eu.'},
-];
-
-const DICAS_DIA=[
-  {tag:'Psicologia',txt:'Nunca responda no mesmo segundo. Uma pausa comunica que você tem vida própria.'},
-  {tag:'Linguagem corporal',txt:'Sorrir com os olhos — não só a boca — cria uma conexão genuína que nenhuma palavra cria.'},
-  {tag:'Gestão emocional',txt:'Encerre toda conversa boa antes que ela perca energia. Ele vai querer continuar.'},
-  {tag:'Autoestima',txt:'Fale menos sobre seus sentimentos e mais sobre o que você está vivendo. Vida interessante atrai mais.'},
-  {tag:'Silêncio',txt:'O silêncio estratégico não é punição — é você investindo em si mesma. Ele sente a diferença.'},
-  {tag:'Autenticidade',txt:'Uma mulher que ri de si mesma com leveza é mais atraente do que uma que precisa ser perfeita.'},
-  {tag:'Posicionamento',txt:'Demonstrar que você tem escolhas — mesmo sem dizer — é o maior gatilho de atração que existe.'},
-];
-
-const MCATS=[{id:'all',l:'Todas'},{id:'reconquista',l:'💔 Reconquista'},{id:'atração',l:'✨ Atração'},{id:'reacao',l:'💭 Como reagir'},{id:'valorização',l:'👑 Me valorizar'},{id:'vacuo',l:'🔇 Silêncio'},{id:'primeiro',l:'📩 Retomar'},{id:'chat',l:'💬 Papo natural'}];
-const DCATS=[{id:'beleza',l:'💄 Beleza'},{id:'estilo',l:'👗 Estilo'},{id:'encontro',l:'💫 1º Encontro'},{id:'psicologia',l:'🧠 Psicologia'}];
-
-// CICLO FASES
+/* ════════ CICLO FASES ══════════════════════════ */
 const FASES={
-  menstrual:{nome:'Fase Menstrual',em:'🩸',cor:'#C8174A',dias:'Dias 1-5',desc:'Seu corpo está se renovando. É um momento de introspecção e autocuidado.',dicas:['Priorize o descanso e o sono de qualidade','Alimentos ricos em ferro ajudam: feijão, carne vermelha, folhas escuras','Compressas quentes aliviam as cólicas naturalmente','Evite exercícios intensos — prefira caminhadas leves e yoga','É normal querer se recolher: respeite seu ritmo hoje'],rel:'Nesta fase você pode estar mais sensível e emotiva. Evite conversas difíceis — você está mais propensa a reagir no impulso.'},
-  folicula:{nome:'Fase Folicular',em:'🌱',cor:'#5CA840',dias:'Dias 6-13',desc:'Sua energia está aumentando. Você está mais criativa, comunicativa e receptiva. Ótimo para novas conexões.',dicas:['Ótimo momento para investir na sua aparência','Sua mente está mais criativa — aproveite','Energia crescente: ótimo para exercícios','Você está mais aberta a novas conexões','Sua pele tende a estar mais bonita'],rel:'Ótimo período para retomar conversas, mandar aquela mensagem estratégica e aparecer no radar. Você está radiante naturalmente.'},
-  ovulacao:{nome:'Ovulação',em:'✨',cor:'#E8A020',dias:'Dias 14-16',desc:'Seu pico de energia, confiança e atratividade. Você está no seu melhor. As pessoas percebem isso.',dicas:['Você está no pico da sua atratividade — use isso com consciência','Sua voz fica naturalmente mais suave e atraente','Energia máxima: ótimo para treinos intensos','Você está mais comunicativa e carismática','Bom momento para marcar aquele encontro especial'],rel:'Se tem alguém que você quer impressionar, este é o melhor momento. Sua presença está magnética. Aproveite com consciência.'},
-  lutea:{nome:'Fase Lútea',em:'🍂',cor:'#8A6030',dias:'Dias 17-28',desc:'Seu corpo está se preparando. É normal sentir mais emoções e uma leve irritabilidade. Você não está "exagerada" — está hormonal.',dicas:['Emoções mais intensas são normais — não tome decisões impulsivas','Chocolate amargo (70%+) realmente ajuda no TPM','Evite cafeína em excesso — piora a ansiedade','Exercício regular nesta fase reduz os sintomas do TPM','Magnésio ajuda: nozes, amêndoas, banana são fontes naturais'],rel:'Você pode estar mais sensível a rejeições e ausências. Antes de enviar qualquer mensagem importante, espere 24h e releia com calma.'},
+  menstrual:{nome:'Fase Menstrual',em:'🩸',cor:'#C8174A',dias:'Dias 1–5',desc:'Renovação e introspecção. Seu corpo está se preparando para um novo ciclo.',dicas:['Priorize o descanso e o sono','Alimentos ricos em ferro ajudam: feijão, carne, folhas escuras','Compressas quentes aliviam as cólicas','Evite exercícios intensos — prefira yoga leve'],rel:'Você pode estar mais sensível hoje. Evite enviar mensagens impulsivas — espere o momento certo.'},
+  folicula:{nome:'Fase Folicular',em:'🌱',cor:'#5CA840',dias:'Dias 6–13',desc:'Sua energia está crescendo. Você está mais criativa, comunicativa e radiante.',dicas:['Ótimo momento para cuidar da aparência','Sua mente está mais criativa — aproveite','Energia crescente: bom para exercícios','Você está mais aberta e receptiva'],rel:'Momento ideal para retomar contatos, mandar aquela mensagem estratégica. Você está no seu melhor.'},
+  ovulacao:{nome:'Ovulação',em:'✨',cor:'#E8A020',dias:'Dias 14–16',desc:'Seu pico de energia, confiança e atratividade. As pessoas percebem sua presença.',dicas:['Você está no pico da sua atratividade','Sua voz fica mais suave e atraente naturalmente','Energia máxima: bom para desafios','Bom momento para marcar aquele encontro especial'],rel:'Se tem alguém que você quer impressionar, este é o momento. Sua presença está magnética.'},
+  lutea:{nome:'Fase Lútea',em:'🍂',cor:'#8A6030',dias:'Dias 17–28',desc:'Seu corpo se prepara. Emoções mais intensas são normais — você não está "exagerada".',dicas:['Emoções mais intensas são normais — não tome decisões impulsivas','Chocolate amargo (70%+) realmente ajuda no TPM','Evite cafeína em excesso','Magnésio ajuda: nozes, amêndoas, banana'],rel:'Você pode estar mais sensível a rejeições. Antes de enviar qualquer mensagem importante, espere 24h.'},
 };
 
-/* ════════ IA ══════════════════════════════════════ */
-class ChatIA {
-  constructor(p){this.p=p;this.nome=p?.nome||'linda';this.ctx={topic:null,waiting:null,turns:0,himName:null};}
-  n(){return this.nome;}
-  r(arr){return arr[Math.floor(Math.random()*arr.length)];}
-  msgSug(cat){const opts=MSGS.filter(m=>m.cat===cat);if(!opts.length)return'';const m=opts[Math.floor(Math.random()*opts.length)];return`\n\n💌 Sugestão de mensagem:\n"${m.msg}"`;}
-  norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,' ').trim();}
-  detect(msg){
-    const l=this.norm(msg);
-    if(/trai(u|ram)|engan(ou|aram)|corno|mentiu|mentira|flagrei|pegou no flagra|saiu com (outra|amiga|amigo)|ficou com (outra|amiga|amigo|o amigo)/.test(l))return'traicao';
-    if(/termin(ou|ei|amos)|acab(ou|ei)|separou|me deixou|foi embora|me largou/.test(l))return'termino';
-    if(/sumiu|sumindo|nao respond|me ignor|invisivel|viu e nao|leu e nao|deixou no visto/.test(l))return'sumiu';
-    if(/(me da|quero|preciso de|manda).{0,20}mensagem|como (falo|escrevo|mando|respondo)|o que (falo|mando|escrevo)/.test(l))return'pedido_msg';
-    if(/saudade|sinto falta|penso nele|nao consigo esquecer|sonhei com/.test(l))return'saudade';
-    if(/ansiosa|ansiedad|nervosa|insegura|com medo|preocupada/.test(l))return'ansiedade';
-    if(/trist|chorand|chorei|estou mal|to mal|pessima|deprimida/.test(l))return'tristeza';
-    if(/auto.?estima|me odeio|feia|burra|nao presto|nao sou boa|insuficiente/.test(l))return'autoestima';
-    if(/ciume|ela|outra mulher|ex dele|ex dela/.test(l))return'ciume';
-    if(/nao quer assumir|zona de amizade|fica mas nao|ficamos mas/.test(l))return'indefinido';
-    if(/primeiro.?encontro|vou sair com|ele me chamou|date/.test(l))return'encontro';
-    if(/crush|gosto de alguem|comecei a gostar|me interessei/.test(l))return'crush';
-    if(/reconquistar|reconquista|voltar com|quero ele de volta/.test(l))return'reconquista';
-    if(/ele (voltou|apareceu|entrou em contato|me escreveu|quer voltar)/.test(l))return'voltou';
-    if(/bloqueou|me bloqueou|me deletou|sumiu das redes/.test(l))return'bloqueou';
-    if(/gravida|grav|menstrua(cao|ao) atrasad|periodo atrasad|testando|barra azul|dois risco|nao veio|nao desceu/.test(l))return'gravidez';
-    if(/ciclo|menstrual|ovulac|tpm|colic/.test(l))return'ciclo_q';
-    if(/signo|horoscopo|astrolog/.test(l))return'signo_q';
-    if(/^(oi|ola|bom dia|boa tarde|boa noite|e ai|tudo bem)[\s!?.,]*$/.test(l))return'greeting';
-    if(/obrigad|valeu|ajudou|funcionou|deu certo/.test(l))return'obrigada';
-    if(/^(sim|nao|ok|claro|pode|quero|conta)[\s!?.,]*$/.test(l))return'confirma';
-    return'geral';
+/* ════════ STATE ════════════════════════════════ */
+let prof=null, db=null, auth=null, currentUid=null;
+let demoMode=false;
+let feedUnsubscribe=null;
+let notifsUnsubscribe=null;
+let currentCommentPostId=null;
+let cartaDrawn=false, obD={}, obStep=1;
+let selSintomas=[], selHumorVal='';
+let adminLoggedIn=false;
+let pmSelectedTag='desabafo';
+let localPosts=[]; // Demo mode
+let notifsSeen=[];
+
+/* ════════ UTILS ════════════════════════════════ */
+function LS(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function toast(t,d=2200){const e=document.getElementById('tst');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),d);}
+function cp(txt){if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>toast('✅ Copiado!'));}else{toast('✅ Copiado!');}}
+function nt(){const d=new Date();return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+function timeAgo(ts){
+  const diff=Date.now()-ts;
+  if(diff<60000)return'agora';
+  if(diff<3600000)return`${Math.floor(diff/60000)}min`;
+  if(diff<86400000)return`${Math.floor(diff/3600000)}h`;
+  return`${Math.floor(diff/86400000)}d`;
+}
+function getAvatar(){
+  const map={reconciliacao:'💔',relacionamento:'✨',manter:'💑',eu:'👑'};
+  return prof?.avatar||map[prof?.obj]||'🌸';
+}
+function uid(){return currentUid||'demo-user';}
+
+/* PWA */
+(function(){
+  const mf={name:'Inesquecível',short_name:'Inesquecível',start_url:'.',display:'standalone',background_color:'#0A0308',theme_color:'#0A0308',icons:[{src:`data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" rx="22" fill="#C8174A"/><text y="68" x="48" text-anchor="middle" font-size="54">💌</text></svg>')}`,sizes:'any',type:'image/svg+xml',purpose:'any maskable'}]};
+  const b=new Blob([JSON.stringify(mf)],{type:'application/json'});
+  document.getElementById('mf').href=URL.createObjectURL(b);
+})();
+
+/* ════════ SPLASH ════════════════════════════════ */
+let prog=0;
+const splIv=setInterval(()=>{
+  prog+=Math.random()*18+7;
+  if(prog>=100){prog=100;clearInterval(splIv);}
+  document.getElementById('pb').style.width=Math.min(prog,100)+'%';
+},100);
+
+setTimeout(()=>{
+  document.getElementById('SPL').style.display='none';
+  boot();
+},1800);
+
+/* ════════ BOOT ══════════════════════════════════ */
+function boot(){
+  const fbCfg=LS('mi_fbcfg');
+  const p=LS('mi_p');
+  if(!fbCfg){
+    if(p){startDemoMode();}
+    else{document.getElementById('SETUP').style.display='block';}
+    return;
   }
-  respond(userMsg){
-    this.ctx.turns++;
-    const intent=this.detect(userMsg);
-    const n=this.n();
-    const him=this.ctx.himName?`o ${this.ctx.himName}`:'ele';
-    const nm=userMsg.match(/(?:chama|nome [eé]|se chama)\s+([A-Z][a-z]+)/i);
-    if(nm&&nm[1].length>2)this.ctx.himName=nm[1];
-    if(this.ctx.waiting){
-      const w=this.ctx.waiting;this.ctx.waiting=null;
-      const l=this.norm(userMsg);
-      if(w==='tempo_sumiu'){
-        if(/1 dia|hoje|ontem/.test(l))return`${n}, um dia é pouco tempo. Minha sugestão: pelo menos 3 dias de silêncio antes de qualquer contato. Use esse tempo para cuidar de você. Quer uma mensagem para quando o momento certo chegar?`;
-        if(/[3-6] dia|essa semana/.test(l))return`Com esse tempo já dá pra agir com estratégia.${this.msgSug('vacuo')}`;
-        return`Com tanto tempo assim, a abordagem precisa ser estratégica. Apareça no seu melhor, sem cobranças.${this.msgSug('primeiro')}`;
-      }
-      if(w==='quem_terminou'){
-        if(/eu|fui eu|terminei/.test(this.norm(userMsg)))return`Então foi você que tomou a decisão, ${n}. Isso muda a dinâmica — você tem poder aqui.\n\nEstratégia: 10 dias de silêncio, cuidar muito de você, aparecer bem — e então uma mensagem leve. Quer que eu mostre como?`;
-        return`Então foi ${him} que terminou. Eu sei que dói de um jeito diferente quando é assim.\n\nO silêncio estratégico agora é sua ferramenta mais poderosa. Zero contato por 14-21 dias, investir em você, e aparecer de uma forma que ele não esperava. Quer o passo a passo?`;
-      }
-      if(w==='tipo_msg'){
-        const l=this.norm(userMsg);
-        if(/sumiu|desapareceu/.test(l))return`Para alguém que sumiu, a mensagem certa é leve, sem cobrança.${this.msgSug('reacao')}`;
-        if(/saudade|falta/.test(l))return`Para expressar saudade sem parecer carente.${this.msgSug('reconquista')}`;
-        if(/comecar|retomar/.test(l))return`Para retomar contato, a mensagem precisa despertar curiosidade.${this.msgSug('primeiro')}`;
-        return`Para essa situação, aqui está uma mensagem que costuma funcionar.${this.msgSug('atração')}`;
-      }
-    }
-    switch(intent){
-      case'greeting':return this.r([`${n}, oi! 🌸 Que bom ter você aqui. Me conta — o que está rolando no seu coração hoje?`,`Oi, ${n}! 💕 Pode me contar tudo. O que está acontecendo?`]);
-      case'traicao':return this.r([`${n}, traição é uma das dores mais profundas que existem. Você tem todo o direito de estar exatamente como está sentindo.\n\nMas um conselho: não tome nenhuma decisão grande agora, com a cabeça quente. O que aconteceu exatamente? Me conta.`,`${n}, sair com a amiga, o amigo dela, uma ex... isso machuca de um jeito que vai fundo mesmo.\n\nAntes de qualquer reação, respira. Decisões na dor raramente são as melhores. Me conta o que aconteceu.`]);
-      case'termino':this.ctx.topic='termino';this.ctx.waiting='quem_terminou';return this.r([`${n}, término dói — independente de como foi. Antes de tudo, respira.\n\nMe conta: foi ${him} que terminou ou foi você?`,`Ai, ${n}... término é uma das dores mais intensas. Mas você está aqui — e isso já diz muito.\n\nFoi ${him} que tomou essa decisão ou foi você?`]);
-      case'sumiu':this.ctx.topic='sumiu';this.ctx.waiting='tempo_sumiu';return this.r([`${n}, sumiço sem explicação é angustiante. O instinto é mandar mensagem — mas isso seria um erro agora.\n\nMe conta: faz quanto tempo ${him} está assim?`,`Quando ${him} some, a tendência é correr atrás. Mas isso é exatamente o que ele espera.\n\nQuanto tempo ${him} está sumido?`]);
-      case'pedido_msg':this.ctx.topic='msg';this.ctx.waiting='tipo_msg';return this.r([`Claro que te ajudo, ${n}! Para acertar no alvo, me conta: é para qual situação? ${him} sumiu, vocês brigaram, é alguém novo, ou quer retomar contato?`]);
-      case'saudade':return this.r([`${n}, saudade é um dos sentimentos mais honestos que existem. Mas existe uma diferença enorme entre sentir e agir.\n\nQuer uma mensagem que transmita saudade de forma que atrai ao invés de afastar?${this.msgSug('reconquista')}`,`Saudade é real, ${n}. Mas sabe o que é ainda mais real? Você está aqui, se fortalecendo.\n\nQuer que eu sugira uma mensagem que comunica saudade com elegância?`]);
-      case'ansiedade':return this.r([`Respira, ${n}. 💕\n\nAnsiedade em relacionamentos quase sempre vem de focarmos no que o outro está fazendo. O que especificamente está te deixando ansiosa?`,`${n}, esse aperto é real. Mas a energia que você transmite — calma ou ansiosa — ele sente mesmo que você não diga nada. O que está rolando?`]);
-      case'tristeza':return this.r([`${n}, tudo bem ficar triste. Você não precisa estar bem o tempo todo.\n\nO que não pode é deixar essa tristeza tomar decisões no celular. Me conta o que aconteceu.`,`Eu ouço você, ${n}. Não precisa resolver tudo agora. O que está pesando?`]);
-      case'autoestima':return this.r([`Para. ${n}.\n\nVocê não é o que essa situação te fez sentir. A dor é real — mas ela não define seu valor. O que aconteceu que te fez sentir assim?`,`${n}, quase toda insegurança que sentimos é a mentira que nossa cabeça cria quando estamos com medo.\n\nMe conta o que está te fazendo se sentir assim.`]);
-      case'ciume':return`${n}, ciúme vem da insegurança — e a melhor forma de lidar com qualquer "concorrente" não é focar nela. É se tornar tão inesquecível que a comparação nem faz mais sentido.\n\nMe conta mais — o que está acontecendo exatamente?`;
-      case'indefinido':return`${n}, a zona cinzenta é um dos lugares mais dolorosos para estar. A verdade é que quando alguém realmente quer assumir, ele assume — sem desculpas.\n\nMe conta: o que acontece exatamente entre vocês?`;
-      case'encontro':return`Que fase boa, ${n}! Primeiro encontro tem aquela combinação única de possibilidade e nervosismo.\n\nRegra de ouro: seja você mesma, mas a melhor versão. Não force nada, não fique no celular, e encerre o encontro antes que a energia caia.\n\nQuer dicas específicas de antes, durante ou depois?`;
-      case'crush':return`${n}, começos são mágicos! O maior erro nessa fase: se apagar. Manter sua vida enquanto demonstra interesse é o que atrai de verdade.\n\nQuer mensagens para essa fase inicial?${this.msgSug('atração')}`;
-      case'reconquista':return`${n}, reconquistar é possível — mas precisa ser do jeito certo. O maior erro é tentar convencer, explicar ou se justificar. Nada disso funciona.\n\nO que funciona: transformação visível + distância estratégica. Quer o passo a passo?`;
-      case'voltou':return`${n}! ${him.charAt(0).toUpperCase()+him.slice(1)} voltou! Antes de qualquer coisa, respira.\n\nA mensagem ideal é receptiva mas posicionada: você fica feliz que voltou, mas as coisas serão diferentes agora.\n\nQuer a mensagem exata?${this.msgSug('reconquista')}`;
-      case'bloqueou':return`${n}, ser bloqueada dói diferente. Mas bloquear alguém geralmente é uma resposta emocional — não necessariamente definitiva.\n\nO que aconteceu antes disso? Me conta.`;
-      case'gravidez':return`${n}, entendo que isso pode ser um momento de muita incerteza e emoção.\n\nPrimeiro e mais importante: faça um teste de farmácia. São precisos e acessíveis. Depois, independente do resultado, consulte um ginecologista — é a pessoa mais qualificada para te orientar com segurança.\n\nNão tente interpretar sintomas sozinha nem buscar respostas online de forma isolada. Um médico de confiança é o caminho mais seguro. Você tem suporte de alguém próximo?`;
-      case'ciclo_q':return`${n}, sobre seu ciclo você pode ir na aba "Ciclo" no app — tem rastreamento, informações de cada fase e dicas diárias. Tem alguma dúvida específica que posso te ajudar agora?`;
-      case'signo_q':const sig=SIGNOS[prof?.signo];if(sig)return`${n}, como ${sig.nome} você é ${sig.desc.split('.')[0].toLowerCase()}. ${sig.aff}`;return`${n}, qual é o seu signo? Posso te falar mais sobre você com base nele.`;
-      case'obrigada':return this.r([`Fico feliz que ajudou, ${n}! 💕 Continue se cuidando. Tem mais alguma coisa?`,`Que bom! 🌸 Estou sempre aqui. Lembra: você não precisa de validação para ter valor. Continue assim.`]);
-      case'confirma':if(this.ctx.topic==='reconquista')return`Então vamos lá! O primeiro passo é o silêncio estratégico — de 7 a 21 dias. Nesse tempo: zero contato, foca em você, aparece no seu melhor. Só depois, você age. Quer que eu detalhe cada etapa?`;return this.r([`Pode falar, ${n}! Estou ouvindo.`,`Conta mais pra mim, ${n}.`]);
-      default:if(this.ctx.turns<=2)return this.r([`${n}, me conta mais detalhes... quero entender bem sua situação para te ajudar da forma certa.`,`Me fala mais sobre isso. O que está acontecendo exatamente?`]);return this.r([`${n}, posso te ajudar melhor se me contar mais. O que está te pesando mais nisso tudo?`,`Me conta mais. Quero entender o que está te deixando assim.`]);
-    }
+  // Init Firebase
+  try{
+    if(!firebase.apps.length)firebase.initializeApp(fbCfg);
+    db=firebase.firestore();
+    auth=firebase.auth();
+    auth.signInAnonymously().then(cred=>{
+      currentUid=cred.user.uid;
+      if(!p){document.getElementById('OB').style.display='block';}
+      else{startApp();}
+    }).catch(()=>{
+      if(!p){document.getElementById('OB').style.display='block';}
+      else{startDemoMode();}
+    });
+  }catch(e){
+    if(!p){document.getElementById('OB').style.display='block';}
+    else{startDemoMode();}
   }
 }
 
-/* ════════ CICLO ════════════════════════════════ */
-let selSintomas=[],selHumorVal='';
-function calcFase(dataUltimaM,duracaoCiclo,duracaoMens){
+function startDemoMode(){
+  demoMode=true;currentUid='demo-'+Math.random().toString(36).substr(2,8);
+  const p=LS('mi_p');
+  if(!p){document.getElementById('SETUP').style.display='none';document.getElementById('OB').style.display='block';}
+  else{document.getElementById('SETUP').style.display='none';startApp();}
+}
+
+/* ════════ FIREBASE SETUP ════════════════════════ */
+function applySetup(){
+  const raw=document.getElementById('setupCfg').value.trim();
+  const err=document.getElementById('setupErr');
+  err.style.display='none';
+  try{
+    let cfg;
+    if(raw.startsWith('{'))cfg=JSON.parse(raw);
+    else{const m=raw.match(/\{[\s\S]+\}/);if(!m)throw new Error();cfg=JSON.parse(m[0]);}
+    if(!cfg.apiKey||!cfg.projectId)throw new Error();
+    LS('mi_fbcfg',cfg);
+    if(!firebase.apps.length)firebase.initializeApp(cfg);
+    db=firebase.firestore();auth=firebase.auth();
+    auth.signInAnonymously().then(cred=>{
+      currentUid=cred.user.uid;
+      document.getElementById('SETUP').style.display='none';
+      const p=LS('mi_p');
+      if(!p)document.getElementById('OB').style.display='block';
+      else startApp();
+    }).catch(e=>{err.textContent='Erro ao conectar: '+e.message;err.style.display='block';});
+  }catch(e){err.style.display='block';}
+}
+
+/* ════════ ONBOARDING ═════════════════════════════ */
+function chkOb1(){document.getElementById('ob1btn').disabled=document.getElementById('obNome').value.trim().length<2;}
+function selOb(k,v,el){obD[k]=v;el.closest('.ob-opts').querySelectorAll('.ob-opt').forEach(b=>b.classList.remove('on'));el.classList.add('on');const btn=document.getElementById(`ob${obStep}btn`);if(btn)btn.disabled=false;}
+function selSigno(k,el){obD.signo=k;document.querySelectorAll('.signo-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');document.getElementById('ob3btn').disabled=false;}
+function nextOb(s){document.getElementById(`ob${obStep}`).classList.remove('on');obStep=s;document.getElementById(`ob${s}`).classList.add('on');}
+function finishOb(){
+  const nome=document.getElementById('obNome').value.trim()||'Anônima';
+  const bio=document.getElementById('obBio')?.value.trim()||'';
+  prof={nome,obj:obD.obj||'eu',signo:obD.signo||'libra',bio,avatar:getObjEmoji(obD.obj),createdAt:Date.now()};
+  LS('mi_p',prof);
+  // Save to Firestore
+  if(db&&!demoMode){
+    db.collection('users').doc(uid()).set({...prof,uid:uid()}).catch(()=>{});
+  }
+  document.getElementById('OB').style.display='none';
+  startApp();
+}
+function getObjEmoji(obj){return{reconciliacao:'💔',relacionamento:'✨',manter:'💑',eu:'👑'}[obj]||'🌸';}
+
+/* ════════ APP START ══════════════════════════════ */
+function startApp(){
+  prof=LS('mi_p');
+  document.getElementById('APP').style.display='flex';
+  // Update header avatars
+  const av=getAvatar();
+  ['pcAv','pmAv','ciAv'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=av;});
+  document.getElementById('pmName').textContent=prof?.nome||'Você';
+  // Load feed
+  loadFeed();
+  // Load notifications
+  loadNotifications();
+  // Request notification permission
+  if('Notification' in window)Notification.requestPermission();
+  // Carta date
+  const d=new Date();
+  document.getElementById('cartaDate').textContent=d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+  // Build deck
+  buildDeck();
+  // Check if carta already drawn today
+  const ct=LS('mi_carta_today');
+  if(ct&&ct.date===d.toDateString()){
+    const c=TAROT[ct.idx];
+    showCartaRevealed(c);
+    document.getElementById('cartaDrawArea').style.display='none';
+    document.getElementById('novaCarta').style.display='block';
+  }
+  // Ciclo
+  renderCiclo();
+}
+
+/* ════════ NAV ═══════════════════════════════════ */
+function goPage(name){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  const nb=document.getElementById('nb-'+name);if(nb)nb.classList.add('on');
+  const pg=document.getElementById('pg-'+name);if(pg)pg.classList.add('on');
+  if(name==='perfil')renderProfile();
+  if(name==='ciclo')renderCiclo();
+  if(name==='carta'&&!cartaDrawn)buildDeck();
+}
+
+/* ════════ FEED ══════════════════════════════════ */
+const TAG_LABELS={desabafo:'💬 Desabafo',vitoria:'🏆 Vitória',dica:'💡 Dica',reflexao:'🌸 Reflexão',pergunta:'❓ Pergunta'};
+
+function loadFeed(){
+  if(demoMode){renderDemoFeed();return;}
+  if(feedUnsubscribe)feedUnsubscribe();
+  document.getElementById('feedList').innerHTML='<div class="loader"><div class="spin"></div></div>';
+  feedUnsubscribe=db.collection('posts').orderBy('createdAt','desc').limit(30)
+    .onSnapshot(snap=>{
+      const posts=[];
+      snap.forEach(doc=>posts.push({id:doc.id,...doc.data()}));
+      renderFeedPosts(posts);
+      renderStories(posts);
+    },()=>{renderDemoFeed();});
+}
+
+function renderDemoFeed(){
+  const demo=[
+    {id:'d1',uid:'u1',userName:'Camila R.',userAvatar:'💔',text:'Apliquei o silêncio estratégico por 7 dias e ele me escreveu pedindo desculpas. Achei que era mentira mas funcionou de verdade. Gratidão!',tag:'vitoria',likeCount:34,commentCount:8,createdAt:Date.now()-3600000,likes:{}},
+    {id:'d2',uid:'u2',userName:'Fernanda M.',userAvatar:'✨',text:'Alguém mais passa dias tentando entender o comportamento dele e sem conseguir dormir? Preciso de ajuda.',tag:'pergunta',likeCount:56,commentCount:14,createdAt:Date.now()-7200000,likes:{}},
+    {id:'d3',uid:'u3',userName:'Juliana P.',userAvatar:'🌸',text:'Dica que aprendi aqui: nunca respondeu no mesmo minuto. Parecer ocupada faz toda a diferença. Minha autoestima mudou completamente.',tag:'dica',likeCount:88,commentCount:21,createdAt:Date.now()-14400000,likes:{}},
+    {id:'d4',uid:'u4',userName:'Beatriz S.',userAvatar:'👑',text:'Hoje acordei e me olhei no espelho e me senti bem comigo mesma pela primeira vez em muito tempo. Parece pequeno mas pra mim foi enorme.',tag:'reflexao',likeCount:102,commentCount:9,createdAt:Date.now()-86400000,likes:{}},
+    {id:'d5',uid:'u5',userName:'Larissa T.',userAvatar:'💑',text:'Meu relacionamento estava acabando e apliquei as técnicas de reposicionamento. Duas semanas depois ele me disse que me ama mais do que nunca. Incrível.',tag:'vitoria',likeCount:145,commentCount:33,createdAt:Date.now()-172800000,likes:{}},
+  ];
+  renderFeedPosts(demo);
+  renderStories(demo);
+}
+
+function renderFeedPosts(posts){
+  if(!posts.length){
+    document.getElementById('feedList').innerHTML=`<div class="feed-empty"><div class="feed-empty-icon">🌸</div><h3>Seja a primeira a postar!</h3><p>Compartilhe como você está se sentindo. A comunidade está aqui para te apoiar.</p></div>`;
+    return;
+  }
+  const myLikes=LS('mi_likes')||{};
+  document.getElementById('feedList').innerHTML=posts.map(p=>{
+    const liked=myLikes[p.id]||false;
+    return`<div class="post-card" id="post-${p.id}">
+      <div class="post-header">
+        <div class="post-av">${p.userAvatar||'🌸'}</div>
+        <div class="post-meta">
+          <span class="post-name">${p.userName||'Anônima'}</span>
+          <span class="post-info">${p.tag?TAG_LABELS[p.tag]||p.tag:''} · ${timeAgo(p.createdAt)}</span>
+        </div>
+        ${p.uid===uid()?`<span class="post-more" onclick="deletePost('${p.id}')">🗑️</span>`:`<span class="post-more">···</span>`}
+      </div>
+      <div class="post-text">${escHtml(p.text)}</div>
+      <div class="post-actions">
+        <div class="post-action${liked?' liked':''}" onclick="toggleLike('${p.id}',${liked},this)">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" ${liked?'fill="#C8174A" stroke="#C8174A"':''}></path></svg>
+          <span id="lc-${p.id}">${p.likeCount||0}</span>
+        </div>
+        <div class="post-action" onclick="openComments('${p.id}')">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          ${p.commentCount||0}
+        </div>
+        <div class="post-action" onclick="sharePost('${escHtml(p.text)}')">
+          <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderStories(posts){
+  const seen=new Set();const users=[];
+  users.push({uid:uid(),name:'Minha\nHistória',av:getAvatar()});
+  posts.forEach(p=>{if(!seen.has(p.uid)&&p.uid!==uid()){seen.add(p.uid);users.push({uid:p.uid,name:p.userName,av:p.userAvatar||'🌸'});}});
+  const row=document.getElementById('storiesRow');
+  row.innerHTML=`<div class="story-item" onclick="openPostModal()"><div class="story-ring"><div class="story-add-ic story-av">+</div></div><span class="story-name">Postar</span></div>`
+    +users.slice(0,8).map(u=>`<div class="story-item"><div class="story-ring"><div class="story-av">${u.av}</div></div><span class="story-name">${u.name.split('\n')[0]}</span></div>`).join('');
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function toggleLike(postId,wasLiked,el){
+  const myLikes=LS('mi_likes')||{};
+  const liked=!wasLiked;
+  myLikes[postId]=liked;
+  LS('mi_likes',myLikes);
+  el.classList.toggle('liked',liked);
+  const heart=el.querySelector('svg path');
+  if(heart)heart.setAttribute('fill',liked?'#C8174A':'none'),heart.setAttribute('stroke',liked?'#C8174A':'currentColor');
+  const cnt=document.getElementById('lc-'+postId);
+  if(cnt)cnt.textContent=parseInt(cnt.textContent)+(liked?1:-1);
+  if(liked)el.classList.add('like-anim'),setTimeout(()=>el.classList.remove('like-anim'),300);
+  if(db&&!demoMode){
+    const ref=db.collection('posts').doc(postId);
+    ref.update({likeCount:firebase.firestore.FieldValue.increment(liked?1:-1)}).catch(()=>{});
+    if(liked)ref.collection('likes').doc(uid()).set({uid:uid()}).catch(()=>{});
+    else ref.collection('likes').doc(uid()).delete().catch(()=>{});
+  }
+}
+
+function sharePost(text){
+  if(navigator.share)navigator.share({title:'Inesquecível',text:text,url:location.href}).catch(()=>{});
+  else{cp(text);}
+}
+
+function deletePost(id){
+  if(!confirm('Apagar esta publicação?'))return;
+  if(db&&!demoMode){db.collection('posts').doc(id).delete().catch(()=>toast('Erro ao apagar'));}
+  document.getElementById('post-'+id)?.remove();
+  toast('Publicação apagada');
+}
+
+/* POST CREATION */
+function openPostModal(){
+  document.getElementById('postModal').classList.add('on');
+  document.getElementById('pmText').focus();
+}
+function closePostModal(){
+  document.getElementById('postModal').classList.remove('on');
+  document.getElementById('pmText').value='';
+  document.getElementById('pmChars').textContent='0';
+  document.getElementById('pmSubmit').disabled=true;
+}
+function pmCheck(){
+  const l=document.getElementById('pmText').value.length;
+  document.getElementById('pmChars').textContent=l;
+  document.getElementById('pmSubmit').disabled=l<3;
+}
+function selTag(el){
+  document.querySelectorAll('.pm-tag').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  pmSelectedTag=el.dataset.tag;
+}
+async function submitPost(){
+  const text=document.getElementById('pmText').value.trim();
+  if(!text)return;
+  const post={uid:uid(),userName:prof?.nome||'Anônima',userAvatar:getAvatar(),text,tag:pmSelectedTag,likeCount:0,commentCount:0,createdAt:Date.now()};
+  closePostModal();
+  if(db&&!demoMode){
+    try{await db.collection('posts').add(post);}
+    catch(e){toast('Erro ao publicar. Verifique a conexão.');}
+  }else{
+    localPosts.unshift({...post,id:'local-'+Date.now()});
+    renderFeedPosts(localPosts);
+    renderStories(localPosts);
+  }
+  toast('Publicado! 🌸');
+}
+
+/* COMMENTS */
+function openComments(postId){
+  currentCommentPostId=postId;
+  document.getElementById('commentsSheet').classList.add('on');
+  loadComments(postId);
+}
+function closeComments(){document.getElementById('commentsSheet').classList.remove('on');currentCommentPostId=null;}
+function loadComments(postId){
+  const list=document.getElementById('commentsList');
+  list.innerHTML='<div class="loader"><div class="spin"></div></div>';
+  if(demoMode||!db){
+    list.innerHTML='<div style="padding:20px 16px;text-align:center;color:var(--t3);font-size:13px;">Comentários disponíveis no modo conectado</div>';
+    return;
+  }
+  db.collection('comments').where('postId','==',postId).orderBy('createdAt','asc').limit(50)
+    .onSnapshot(snap=>{
+      const comments=[];
+      snap.forEach(doc=>comments.push({id:doc.id,...doc.data()}));
+      if(!comments.length){list.innerHTML='<div style="padding:20px 16px;text-align:center;color:var(--t3);font-size:13px;">Seja a primeira a comentar! 💬</div>';return;}
+      list.innerHTML=comments.map(c=>`<div class="comment-item"><div class="c-av">${c.userAvatar||'🌸'}</div><div class="c-bubble"><div class="c-name">${c.userName||'Anônima'}</div><div class="c-text">${escHtml(c.text)}</div><div class="c-time">${timeAgo(c.createdAt)}</div></div></div>`).join('');
+      list.scrollTop=list.scrollHeight;
+    },()=>{list.innerHTML='<div style="padding:16px;color:var(--t3);font-size:12px;">Não foi possível carregar comentários.</div>';});
+}
+async function submitComment(){
+  const text=document.getElementById('commentIn').value.trim();
+  if(!text||!currentCommentPostId)return;
+  document.getElementById('commentIn').value='';
+  if(demoMode||!db){toast('Comentários disponíveis no modo conectado');return;}
+  const comment={postId:currentCommentPostId,uid:uid(),userName:prof?.nome||'Anônima',userAvatar:getAvatar(),text,createdAt:Date.now()};
+  try{
+    await db.collection('comments').add(comment);
+    await db.collection('posts').doc(currentCommentPostId).update({commentCount:firebase.firestore.FieldValue.increment(1)});
+  }catch(e){toast('Erro ao comentar');}
+}
+
+/* ════════ NOTIFICAÇÕES ══════════════════════════ */
+function loadNotifications(){
+  if(demoMode||!db)return;
+  if(notifsUnsubscribe)notifsUnsubscribe();
+  const seen=LS('mi_notifs_seen')||[];
+  notifsUnsubscribe=db.collection('notifications').orderBy('createdAt','desc').limit(20)
+    .onSnapshot(snap=>{
+      const notifs=[];
+      snap.forEach(doc=>notifs.push({id:doc.id,...doc.data()}));
+      renderNotifications(notifs,seen);
+      const unseen=notifs.filter(n=>!seen.includes(n.id));
+      if(unseen.length){
+        document.getElementById('notifBadge').classList.add('on');
+        // Show browser notification for the latest
+        const latest=unseen[0];
+        if(Notification.permission==='granted'&&latest){
+          new Notification(latest.title||'Inesquecível',{body:latest.body||'',icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" rx="22" fill="%23C8174A"/></svg>'});
+        }
+      }
+    });
+}
+
+function renderNotifications(notifs,seen){
+  const list=document.getElementById('notifList');
+  if(!notifs.length){list.innerHTML='<div class="ni-empty">Nenhuma notificação</div>';return;}
+  list.innerHTML=notifs.map(n=>`<div class="notif-item"><div class="ni-title">${escHtml(n.title||'Nova notificação')}</div><div class="ni-body">${escHtml(n.body||'')}</div><div class="ni-time">${timeAgo(n.createdAt)}</div></div>`).join('');
+}
+
+function toggleNotifPanel(){
+  const p=document.getElementById('notifPanel');
+  if(p.classList.contains('on')){closeNotifPanel();}
+  else{p.classList.add('on');markNotifsRead();}
+}
+function closeNotifPanel(){document.getElementById('notifPanel').classList.remove('on');}
+function markNotifsRead(){
+  document.getElementById('notifBadge').classList.remove('on');
+  // Mark all as seen
+  if(db&&!demoMode){
+    db.collection('notifications').limit(20).get().then(snap=>{
+      const ids=[];snap.forEach(d=>ids.push(d.id));
+      LS('mi_notifs_seen',ids);
+    }).catch(()=>{});
+  }
+}
+
+/* ════════ TAROT / CARTA ═════════════════════════ */
+function buildDeck(){
+  const wrap=document.getElementById('deckWrap');
+  if(!wrap)return;
+  wrap.innerHTML='';
+  cartaDrawn=false;
+  const n=9,spread=130;
+  for(let i=0;i<n;i++){
+    const card=document.createElement('div');
+    card.className='d-card';
+    const ang=-spread/2+(i/(n-1))*spread;
+    const tz=-Math.abs(ang)*0.65;
+    card.style.cssText=`transform:rotate(${ang}deg) translateY(${tz}px);z-index:${i};`;
+    card.innerHTML=`<div class="d-face d-back"><div class="d-back-pattern"></div><div class="d-back-inner"><div class="d-back-logo">💌</div><div class="d-back-txt">Tarot</div></div></div><div class="d-face d-front"></div>`;
+    card.addEventListener('click',()=>drawCard(card,i));
+    wrap.appendChild(card);
+  }
+}
+
+function drawCard(cardEl,idx){
+  if(cartaDrawn)return;
+  cartaDrawn=true;
+  const today=new Date().toDateString();
+  // Daily card: deterministic per day, but user can re-draw
+  const saved=LS('mi_carta_today');
+  let cardIdx;
+  if(saved&&saved.date===today){cardIdx=saved.idx;}
+  else{cardIdx=Math.floor(Math.random()*TAROT.length);LS('mi_carta_today',{date:today,idx:cardIdx});}
+  const carta=TAROT[cardIdx];
+  // Fill front
+  cardEl.querySelector('.d-front').innerHTML=`<div class="cf-sym">${carta.sym}</div><div class="cf-num">Arcano ${carta.num}</div><div class="cf-div"></div><div class="cf-name">${carta.nome}</div><div class="cf-div"></div><div class="cf-kw">${carta.kws[0]}</div>`;
+  // Animate others away
+  const wrap=document.getElementById('deckWrap');
+  const cards=wrap.querySelectorAll('.d-card');
+  cards.forEach((c,i)=>{
+    if(c!==cardEl){
+      const dir=i<idx?-1:1;
+      setTimeout(()=>{c.style.transition='transform .35s ease,opacity .35s';c.style.transform=`translateX(${dir*280}px) rotate(${dir*25}deg) translateY(-20px)`;c.style.opacity='0';},i*25);
+    }
+  });
+  setTimeout(()=>{
+    cardEl.style.transition='transform .65s cubic-bezier(.16,1,.3,1),box-shadow .5s';
+    cardEl.classList.add('flipped');
+    setTimeout(()=>{
+      showCartaRevealed(carta);
+      document.getElementById('cartaDrawArea').style.display='none';
+      document.getElementById('novaCarta').style.display='block';
+    },750);
+  },350);
+}
+
+function showCartaRevealed(carta){
+  const el=document.getElementById('cartaRevealed');
+  el.innerHTML=`
+    <div class="cr-sym">${carta.sym}</div>
+    <div class="cr-arcana">Arcano ${carta.num}</div>
+    <div class="cr-name">${carta.nome}</div>
+    <div class="cr-keywords">${carta.kws.map(k=>`<span class="cr-kw">${k}</span>`).join('')}</div>
+    <div class="cr-phrase">"${carta.phrase}"</div>
+    <div class="cr-msg">${carta.kws.join(' · ')}</div>
+    <div class="cr-love"><div class="cr-love-t">💕 No amor</div>${carta.amor}</div>
+  `;
+  el.classList.add('on');
+}
+
+function resetCarta(){
+  cartaDrawn=false;
+  LS('mi_carta_today',null);
+  document.getElementById('cartaRevealed').classList.remove('on');
+  document.getElementById('cartaDrawArea').style.display='block';
+  document.getElementById('novaCarta').style.display='none';
+  buildDeck();
+}
+
+/* ════════ CICLO ══════════════════════════════════ */
+function calcFase(dataUltimaM,c,m){
   const hoje=new Date(),ultima=new Date(dataUltimaM);
   const diff=Math.floor((hoje-ultima)/(1000*60*60*24));
-  const diaNo=((diff%duracaoCiclo)+duracaoCiclo)%duracaoCiclo+1;
-  if(diaNo<=duracaoMens)return{fase:'menstrual',diaNo,proxMens:duracaoCiclo-diaNo+1,atrasada:false};
-  if(diaNo<=13)return{fase:'folicula',diaNo,proxMens:duracaoCiclo-diaNo+1,atrasada:false};
-  if(diaNo<=16)return{fase:'ovulacao',diaNo,proxMens:duracaoCiclo-diaNo+1,atrasada:false};
-  const atrasada=diaNo>duracaoCiclo+5;
-  return{fase:'lutea',diaNo,proxMens:Math.max(0,duracaoCiclo-diaNo+1),atrasada};
+  const diaNo=((diff%c)+c)%c+1;
+  if(diaNo<=m)return{fase:'menstrual',diaNo,proxMens:c-diaNo+1,atrasada:false};
+  if(diaNo<=13)return{fase:'folicula',diaNo,proxMens:c-diaNo+1,atrasada:false};
+  if(diaNo<=16)return{fase:'ovulacao',diaNo,proxMens:c-diaNo+1,atrasada:false};
+  return{fase:'lutea',diaNo,proxMens:Math.max(0,c-diaNo+1),atrasada:diaNo>c+5};
 }
-function checkPregnancy(cfg){
-  if(!cfg||!cfg.data)return false;
-  const {diaNo,atrasada}=calcFase(cfg.data,cfg.ciclo||28,cfg.mens||5);
-  return atrasada||(diaNo>cfg.ciclo+5);
-}
+
 function renderCiclo(){
   const cfg=LS('mi_ciclo')||{ciclo:28,mens:5,data:null};
   if(!cfg.data){const d=new Date();d.setDate(d.getDate()-14);cfg.data=d.toISOString().split('T')[0];}
   const {fase,diaNo,proxMens,atrasada}=calcFase(cfg.data,cfg.ciclo||28,cfg.mens||5);
   const fi=FASES[fase];
-  const isPreg=atrasada;
   let html='';
-  // Pregnancy warning
-  if(isPreg){
-    html+=`<div class="preg-banner"><div class="preg-b-icon">🤰</div><div class="preg-b-tit">Sua menstruação pode estar atrasada</div><div class="preg-b-txt">Com base nas datas que você registrou, sua menstruação já deveria ter vindo. Isso pode ter várias causas — mas o mais responsável é investigar com calma.</div><div class="preg-b-steps"><div class="preg-b-step"><div class="preg-b-num">1</div>Faça um teste de farmácia. São precisos e acessíveis — podem ser feitos 1 dia após o atraso.</div><div class="preg-b-step"><div class="preg-b-num">2</div>Independente do resultado, marque uma consulta com seu ginecologista.</div><div class="preg-b-step"><div class="preg-b-num">3</div>Não tome nenhuma decisão importante sem orientação médica.</div></div><button class="preg-dismiss" onclick="this.closest('.preg-banner').style.display='none'">Entendi, obrigada</button></div>`;
-    // Also show on home
-    const ha=document.getElementById('pregAlert');
-    if(ha){ha.innerHTML=`<div class="preg-alert"><div class="preg-alert-t">🤰 Menstruação possivelmente atrasada</div><div class="preg-alert-p">Com base no seu ciclo registrado, sua menstruação pode estar atrasada. Considere fazer um teste de farmácia e consultar seu ginecologista.</div></div>`;ha.style.display='block';}
+  if(atrasada){
+    html+=`<div class="preg-banner"><div class="preg-b-icon">🤰</div><div class="preg-b-tit">Menstruação possivelmente atrasada</div><div class="preg-b-txt">Com base nas datas registradas, sua menstruação pode estar atrasada. Veja os próximos passos:</div><div class="preg-step"><div class="preg-num">1</div>Faça um teste de farmácia — são precisos e acessíveis.</div><div class="preg-step"><div class="preg-num">2</div>Independente do resultado, consulte seu ginecologista.</div><div class="preg-step"><div class="preg-num">3</div>Não tome decisões sem orientação médica.</div><button class="preg-dismiss" onclick="this.closest('.preg-banner').style.display='none'">Entendi, obrigada</button></div>`;
   }
-  // Header
-  html+=`<div class="ciclo-header"><div class="ciclo-h-top"><div class="ciclo-phase-badge"><div class="ciclo-phase-dot" style="background:${fi.cor};"></div><span class="ciclo-phase-name">${fi.nome}</span></div><span class="ciclo-day-num">Dia ${diaNo}</span></div><div class="ciclo-cal" id="cicloCal"></div></div>`;
-  // Humor
-  html+=`<div class="slbl">Como você está hoje?</div><div class="humor-grid"><button class="humor-btn${selHumorVal==='feliz'?' on':''}" onclick="selHumor('feliz',this)">😊 Feliz</button><button class="humor-btn${selHumorVal==='irritada'?' on':''}" onclick="selHumor('irritada',this)">😤 Irritada</button><button class="humor-btn${selHumorVal==='ansiosa'?' on':''}" onclick="selHumor('ansiosa',this)">😰 Ansiosa</button><button class="humor-btn${selHumorVal==='triste'?' on':''}" onclick="selHumor('triste',this)">😢 Triste</button><button class="humor-btn${selHumorVal==='cansada'?' on':''}" onclick="selHumor('cansada',this)">😴 Cansada</button><button class="humor-btn${selHumorVal==='energica'?' on':''}" onclick="selHumor('energica',this)">💪 Com energia</button></div>`;
-  // Sintomas
-  html+=`<div class="slbl">Sintomas de hoje</div><div class="sintoma-grid"><button class="sint-btn${selSintomas.includes('colica')?' on':''}" onclick="togSint('colica',this)">🩸 Cólica</button><button class="sint-btn${selSintomas.includes('dor_cabeca')?' on':''}" onclick="togSint('dor_cabeca',this)">🤕 Dor de cabeça</button><button class="sint-btn${selSintomas.includes('inchaco')?' on':''}" onclick="togSint('inchaco',this)">💧 Inchaço</button><button class="sint-btn${selSintomas.includes('acne')?' on':''}" onclick="togSint('acne',this)">✨ Acne</button><button class="sint-btn${selSintomas.includes('insonia')?' on':''}" onclick="togSint('insonia',this)">😴 Insônia</button><button class="sint-btn${selSintomas.includes('apetite')?' on':''}" onclick="togSint('apetite',this)">🍫 Vontade de comer</button><button class="sint-btn${selSintomas.includes('seios')?' on':''}" onclick="togSint('seios',this)">⚡ Sensibilidade nos seios</button><button class="sint-btn${selSintomas.includes('bem')?' on':''}" onclick="togSint('bem',this)">💚 Me sentindo bem</button></div>`;
-  // Fase info
-  html+=`<div class="fase-card"><div class="fase-hdr"><span class="fase-icon">${fi.em}</span><div><div class="fase-tit">${fi.nome}</div><div class="fase-sub2">${fi.dias} · Próxima menstruação em ${proxMens} dias</div></div></div><div class="fase-desc">${fi.desc}</div><div class="fase-tips-t">Dicas para hoje</div>${fi.dicas.map(d=>`<div class="fase-tip"><div class="fase-tip-dot"></div><span>${d}</span></div>`).join('')}<div style="margin-top:11px;padding-top:11px;border-top:1px solid rgba(255,255,255,.08);"><div class="fase-tips-t">Ciclo e relacionamento</div><div style="font-size:12px;color:#FFBFD0;line-height:1.6;">${fi.rel}</div></div></div>`;
-  // Config
-  html+=`<div class="slbl">Configurações do ciclo</div><div class="ciclo-cfg"><div class="cfg-row"><div><div class="cfg-lbl">Duração do ciclo</div><div class="cfg-sub">Média: 28 dias</div></div><input type="number" class="cfg-in" id="cfgCiclo" value="${cfg.ciclo||28}" min="21" max="45"></div><div class="cfg-row"><div><div class="cfg-lbl">Duração da menstruação</div><div class="cfg-sub">Média: 5 dias</div></div><input type="number" class="cfg-in" id="cfgMens" value="${cfg.mens||5}" min="2" max="10"></div><div class="cfg-row"><div><div class="cfg-lbl">Última menstruação</div><div class="cfg-sub">Data de início</div></div><input type="date" id="cfgData" value="${cfg.data||''}" style="background:var(--s3);border:1px solid var(--bdr);border-radius:8px;padding:6px 8px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:var(--t);outline:none;-webkit-appearance:none;width:130px;"></div><button class="save-btn" onclick="salvarCiclo()">Salvar configurações</button></div>`;
+  html+=`<div class="ciclo-header"><div class="ciclo-h-top"><div class="c-phase-badge"><div class="c-phase-dot" style="background:${fi.cor}"></div><span class="c-phase-nm">${fi.nome}</span></div><span class="c-day-n">Dia ${diaNo}</span></div><div class="ciclo-cal" id="cicloCal"></div></div>`;
+  html+=`<div class="slbl" style="padding:0 0 0 2px;">Como você está hoje?</div><div class="humor-row">${['feliz','irritada','ansiosa','triste','cansada','energica'].map(h=>`<button class="humor-btn${selHumorVal===h?' on':''}" onclick="selHumor('${h}',this)">${{feliz:'😊 Feliz',irritada:'😤 Irritada',ansiosa:'😰 Ansiosa',triste:'😢 Triste',cansada:'😴 Cansada',energica:'💪 Energia'}[h]}</button>`).join('')}</div>`;
+  html+=`<div class="slbl" style="padding:0 0 0 2px;">Sintomas de hoje</div><div class="sint-grid">${[['colica','🩸 Cólica'],['dor','🤕 Dor de cabeça'],['inchaco','💧 Inchaço'],['acne','✨ Acne'],['insonia','😴 Insônia'],['apetite','🍫 Comer'],['seios','⚡ Sensibilidade'],['bem','💚 Me sentindo bem']].map(([v,l])=>`<button class="sint-btn${selSintomas.includes(v)?' on':''}" onclick="togSint('${v}',this)">${l}</button>`).join('')}</div>`;
+  html+=`<div class="fase-card"><div class="fase-hdr"><span class="fase-icon">${fi.em}</span><div><div class="fase-tit">${fi.nome}</div><div class="fase-sub2">${fi.dias} · Próxima menstruação em ${proxMens} dias</div></div></div><div class="fase-desc">${fi.desc}</div><div class="fase-tips-t">Dicas para hoje</div>${fi.dicas.map(d=>`<div class="fase-tip"><div class="fase-tip-dot"></div><span>${d}</span></div>`).join('')}<div style="margin-top:11px;padding-top:11px;border-top:1px solid rgba(255,255,255,.08);"><div class="fase-tips-t">Ciclo e amor</div><div style="font-size:12px;color:#FFBFD0;line-height:1.6;">${fi.rel}</div></div></div>`;
+  html+=`<div class="slbl" style="padding:0 0 0 2px;">Configurações</div><div class="ciclo-cfg"><div class="cfg-row"><div><div class="cfg-lbl">Duração do ciclo</div><div class="cfg-sub">Média: 28 dias</div></div><input type="number" class="cfg-in" id="cfgCiclo" value="${cfg.ciclo||28}" min="21" max="45"></div><div class="cfg-row"><div><div class="cfg-lbl">Duração da menstruação</div><div class="cfg-sub">Média: 5 dias</div></div><input type="number" class="cfg-in" id="cfgMens" value="${cfg.mens||5}" min="2" max="10"></div><div class="cfg-row"><div><div class="cfg-lbl">Última menstruação</div><div class="cfg-sub">Data de início</div></div><input type="date" id="cfgData" value="${cfg.data||''}" style="background:var(--s3);border:1px solid var(--bdr);border-radius:8px;padding:6px 8px;font-family:'Nunito',sans-serif;font-size:11px;color:var(--t);outline:none;-webkit-appearance:none;width:130px;"></div><button class="save-btn" onclick="saveCiclo()">Salvar configurações</button></div>`;
   document.getElementById('cicloContent').innerHTML=html;
-  // Render calendar
+  // Cal
   const cal=document.getElementById('cicloCal');
   if(cal){
-    const dnms=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+    const dn=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
     const hoje=new Date(),start=new Date(cfg.data);
     for(let i=0;i<35;i++){
       const d=new Date(start);d.setDate(start.getDate()+i);
@@ -975,293 +1173,122 @@ function renderCiclo(){
       else if(dc>=11&&dc<=13)cls='fertil';
       const isT=d.toDateString()===hoje.toDateString(),isSel=dc===diaNo;
       const el=document.createElement('div');
-      el.className=`ciclo-day${cls?' '+cls:''}${isT?' today':''}${isSel?' sel':''}`;
-      el.innerHTML=`<span class="ciclo-day-name">${dnms[d.getDay()]}</span><span class="ciclo-day-num2">${d.getDate()}</span>`;
+      el.className=`c-day${cls?' '+cls:''}${isT?' today':''}${isSel?' sel':''}`;
+      el.innerHTML=`<span class="c-day-name">${dn[d.getDay()]}</span><span class="c-day-num">${d.getDate()}</span>`;
       cal.appendChild(el);
     }
-    const selEl=cal.querySelector('.sel');
-    if(selEl)setTimeout(()=>selEl.scrollIntoView({inline:'center',block:'nearest'}),100);
-  }
-  // Home ciclo info
-  const che=document.getElementById('cicloHomeSub');
-  if(che)che.textContent=`${fi.nome} · Dia ${diaNo}${isPreg?' · Possível atraso ⚠️':''}`;
-}
-function salvarCiclo(){const cfg={ciclo:parseInt(document.getElementById('cfgCiclo')?.value)||28,mens:parseInt(document.getElementById('cfgMens')?.value)||5,data:document.getElementById('cfgData')?.value||null};LS('mi_ciclo',cfg);renderCiclo();toast('Ciclo salvo! 🌸');}
-function selHumor(v,btn){selHumorVal=v;document.querySelectorAll('.humor-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');const data=LS('mi_ciclo_data')||{};data[new Date().toDateString()]={humor:v,sintomas:selSintomas};LS('mi_ciclo_data',data);toast('Humor registrado!');}
-function togSint(v,btn){btn.classList.toggle('on');if(selSintomas.includes(v))selSintomas=selSintomas.filter(s=>s!==v);else selSintomas.push(v);const data=LS('mi_ciclo_data')||{};data[new Date().toDateString()]={humor:selHumorVal,sintomas:selSintomas};LS('mi_ciclo_data',data);}
-
-/* ════════ CARTA DO DIA ════════════════════════ */
-let cartaDrawn=false,cartaAnimating=false;
-function buildDeck(){
-  const wrap=document.getElementById('deckWrap');
-  if(!wrap)return;
-  wrap.innerHTML='';
-  const total=9,spread=120;
-  for(let i=0;i<total;i++){
-    const card=document.createElement('div');
-    card.className='deck-card';
-    const angle=-spread/2+(i/(total-1))*spread;
-    const tz=-Math.abs(angle)*0.7;
-    card.style.cssText=`transform:rotate(${angle}deg) translateY(${tz}px);z-index:${i};`;
-    card.innerHTML=`<div class="card-face card-back"><div class="card-back-pattern"></div><div class="card-back-logo">💌</div></div><div class="card-face card-front"></div>`;
-    card.addEventListener('click',()=>drawCard(card));
-    wrap.appendChild(card);
+    setTimeout(()=>{const s=cal.querySelector('.sel');if(s)s.scrollIntoView({inline:'center',block:'nearest'});},80);
   }
 }
-function drawCard(cardEl){
-  if(cartaDrawn||cartaAnimating)return;
-  const today=new Date().toDateString();
-  const drawnToday=LS('mi_carta_today');
-  let idx;
-  if(drawnToday&&drawnToday.date===today){idx=drawnToday.idx;}
-  else{idx=Math.floor(Math.random()*CARTAS_BARALHO.length);LS('mi_carta_today',{date:today,idx});}
-  const carta=CARTAS_BARALHO[idx];
-  // Fill front
-  cardEl.querySelector('.card-front').innerHTML=`<div class="cf-symbol">${carta.sym}</div><div class="cf-name">${carta.nome}</div><div class="cf-divider"></div><div class="cf-phrase">${carta.frase}</div>`;
-  cartaAnimating=true;
-  // Animate cards away
-  const wrap=document.getElementById('deckWrap');
-  const cards=wrap.querySelectorAll('.deck-card');
-  cards.forEach((c,i)=>{
-    if(c!==cardEl){
-      setTimeout(()=>{
-        const dir=i%2===0?-1:1;
-        c.style.transition='transform .3s ease, opacity .3s';
-        c.style.transform=`translateX(${dir*300}px) rotate(${dir*30}deg)`;
-        c.style.opacity='0';
-      },i*30);
-    }
-  });
-  setTimeout(()=>{
-    cardEl.style.transition='transform .6s cubic-bezier(.16,1,.3,1)';
-    cardEl.classList.add('flip');
-    setTimeout(()=>{
-      cartaDrawn=true;cartaAnimating=false;
-      showRevealedCarta(carta,idx);
-    },700);
-  },300);
-}
-function showRevealedCarta(carta,idx){
-  const rev=document.getElementById('cartaRevealed');
-  rev.innerHTML=`<div class="cr-symbol">${carta.sym}</div><div class="cr-name">${carta.nome}</div><div class="cf-divider" style="width:60px;margin:0 auto 16px;"></div><div class="cr-phrase">"${carta.frase}"</div><div class="cr-msg">${carta.msg}</div><button class="cr-btn" onclick="cp(${JSON.stringify(carta.frase)})">📋 Copiar frase</button>`;
-  rev.classList.add('on');
-  const nc=document.getElementById('novaCarta');if(nc)nc.style.display='block';
-  const ci=document.getElementById('cartaInfo');if(ci){ci.textContent=`Carta ${idx+1} de ${CARTAS_BARALHO.length} · ${new Date().toLocaleDateString('pt-BR',{day:'numeric',month:'long'})}`;ci.style.display='block';}
-  document.getElementById('cartaDrawnArea').style.display='none';
-  const hs=document.getElementById('cartaHomeSub');if(hs)hs.textContent=`${carta.nome} — ${carta.frase.substring(0,30)}...`;
-}
-function resetCarta(){
-  cartaDrawn=false;cartaAnimating=false;
-  const rev=document.getElementById('cartaRevealed');if(rev)rev.classList.remove('on');
-  const nc=document.getElementById('novaCarta');if(nc)nc.style.display='none';
-  const ci=document.getElementById('cartaInfo');if(ci)ci.style.display='none';
-  const da=document.getElementById('cartaDrawnArea');if(da)da.style.display='block';
-  buildDeck();
-}
+function saveCiclo(){const cfg={ciclo:parseInt(document.getElementById('cfgCiclo')?.value)||28,mens:parseInt(document.getElementById('cfgMens')?.value)||5,data:document.getElementById('cfgData')?.value||null};LS('mi_ciclo',cfg);renderCiclo();toast('Ciclo salvo! 🌸');}
+function selHumor(v,btn){selHumorVal=v;document.querySelectorAll('.humor-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');toast('Humor registrado!');}
+function togSint(v,btn){btn.classList.toggle('on');if(selSintomas.includes(v))selSintomas=selSintomas.filter(s=>s!==v);else selSintomas.push(v);}
 
-/* ════════ SIGNOS ══════════════════════════════ */
-function renderSignoCard(key){
-  const s=SIGNOS[key];if(!s)return;
-  const el=document.getElementById('signoCard');if(!el)return;
-  el.style.display='block';
-  el.innerHTML=`<div class="signo-big">${s.em}</div><div class="signo-nome">${s.nome}</div><div class="signo-datas">${s.datas}</div><div class="signo-desc">${s.desc}</div><div class="signo-aff">"${s.aff}"</div>`;
-}
-
-/* ════════ PARCEIRO ════════════════════════════ */
-function renderParceiroForm(){
-  const saved=LS('mi_parceiro')||{};
-  const campos=[
-    {key:'tipo',lbl:'Tipo de pessoa',opts:['Romântico','Prático','Aventureiro','Caseiro','Ambicioso','Despojado']},
-    {key:'valor',lbl:'Valor mais importante',opts:['Lealdade','Liberdade','Companheirismo','Ambição','Sensibilidade','Humor']},
-    {key:'personalidade',lbl:'Personalidade',opts:['Extrovertido','Introvertido','Intenso','Leve','Misterioso','Transparente']},
-  ];
-  document.getElementById('parceiroForm').innerHTML=campos.map(c=>`
-    <div><label class="pf-label">${c.lbl}</label><div class="pf-opts">${c.opts.map(o=>`<button class="pf-opt${(saved[c.key]||[]).includes(o)?' on':''}" onclick="togParceiro('${c.key}','${o}',this)">${o}</button>`).join('')}</div></div>
-  `).join('')+`<div><label class="pf-label">O que mais importa para você em um parceiro?</label><textarea class="pf-textarea" id="parceiroTxt" placeholder="Escreva livremente...">${saved.texto||''}</textarea></div>`;
-}
-function togParceiro(key,val,btn){
-  const saved=LS('mi_parceiro')||{};
-  if(!saved[key])saved[key]=[];
-  if(saved[key].includes(val)){saved[key]=saved[key].filter(v=>v!==val);btn.classList.remove('on');}
-  else{saved[key].push(val);btn.classList.add('on');}
-  LS('mi_parceiro',saved);
-}
-function salvarParceiro(){
-  const saved=LS('mi_parceiro')||{};
-  saved.texto=document.getElementById('parceiroTxt')?.value||'';
-  LS('mi_parceiro',saved);
-  toast('Perfil ideal salvo! 💘');
-}
-
-/* ════════ STATE ════════════════════════════════ */
-let prof=null,favs=[],days=[false,false,false,false,false,false,false],streak=1;
-let curMC='all',curDC='beleza',curModal=null;
-let chatAI=null,chatH=[];
-let obD={},obStep=1;
-let curDmMsg=null;
-
-function LS(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-function toast(t){const e=document.getElementById('tst');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2200);}
-function cp(txt){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).catch(()=>cpFb(txt));}else{cpFb(txt);}toast('✅ Copiado!');}
-function cpFb(t){const el=document.createElement('textarea');el.value=t;el.style.cssText='position:fixed;opacity:0;';document.body.appendChild(el);el.focus();el.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(el);}
-function nt(){const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
-function di(){return new Date().getDay();}
-
-/* ═══ PWA ══════════════════════════════════════ */
-(function(){
-  const mf={name:'Mulher Inesquecível',short_name:'Inesquecível',start_url:'.',display:'standalone',background_color:'#0F0608',theme_color:'#0F0608',icons:[{src:`data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" rx="22" fill="#C8174A"/><text y="68" x="48" text-anchor="middle" font-size="54">💌</text></svg>')}`,sizes:'any',type:'image/svg+xml',purpose:'any maskable'}]};
-  const b=new Blob([JSON.stringify(mf)],{type:'application/json'});
-  document.getElementById('mf').href=URL.createObjectURL(b);
-  if('serviceWorker' in navigator){const sw=`self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});`;const swb=new Blob([sw],{type:'application/javascript'});navigator.serviceWorker.register(URL.createObjectURL(swb)).catch(()=>{});}
-})();
-
-/* ═══ ONBOARDING ════════════════════════════════ */
-function chkOb1(){document.getElementById('ob1btn').disabled=document.getElementById('obNome').value.trim().length<2;}
-function selOb(k,v,el){obD[k]=v;el.closest('.ob-opts').querySelectorAll('.ob-opt').forEach(b=>b.classList.remove('on'));el.classList.add('on');const btn=document.getElementById(`ob${obStep}btn`);if(btn)btn.disabled=false;}
-function selSigno(key,el){obD.signo=key;document.querySelectorAll('.signo-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');document.getElementById('ob5btn').disabled=false;}
-function nextOb(step){
-  document.getElementById(`ob${obStep}`).classList.remove('on');
-  obStep=step;
-  document.getElementById(`ob${obStep}`).classList.add('on');
-  // Update dots
-  const dots=document.querySelectorAll(`#ob${obStep} .ob-dot`);
-  if(dots.length)dots.forEach((d,i)=>{d.classList.toggle('on',i===step-1);});
-  // Check if step btn should be enabled
-  const btn=document.getElementById(`ob${step}btn`);
-  if(btn){
-    if(step===3||step===4||step===6)btn.disabled=!obD[{3:'genero',4:'orient',6:'sit'}[step]];
-    else if(step===5)btn.disabled=!obD.signo;
+/* ════════ PERFIL ════════════════════════════════ */
+async function renderProfile(){
+  const el=document.getElementById('profileContent');
+  const p=prof||{nome:'Usuária',obj:'eu',signo:'libra',bio:''};
+  const myPosts=[];
+  if(db&&!demoMode){
+    try{const snap=await db.collection('posts').where('uid','==',uid()).orderBy('createdAt','desc').limit(10).get();snap.forEach(d=>myPosts.push({id:d.id,...d.data()}));}catch(e){}
   }
-}
-function finishOb(){
-  prof={nome:document.getElementById('obNome').value.trim()||'Você',obj:obD.obj||'eu',genero:obD.genero||'livre',orient:obD.orient||'livre',signo:obD.signo||null,sit:obD.sit||'eu'};
-  LS('mi_p',prof);LS('mi_f',[]);LS('mi_d',[false,false,false,false,false,false,false]);LS('mi_s',1);
-  document.getElementById('OB').style.display='none';
-  startApp();
+  const SIGNOS_EM={aries:'♈',touro:'♉',gemeos:'♊',cancer:'♋',leao:'♌',virgem:'♍',libra:'♎',escorpiao:'♏',sagitario:'♐',capricornio:'♑',aquario:'♒',peixes:'♓'};
+  const sig=p.signo?`${SIGNOS_EM[p.signo]||'✨'} ${p.signo.charAt(0).toUpperCase()+p.signo.slice(1)}`:'';
+  el.innerHTML=`
+    <div class="profile-cover"></div>
+    <div class="profile-info">
+      <div class="profile-av-big">${getAvatar()}</div>
+      <div class="profile-name">${p.nome||'Usuária'}</div>
+      <div class="profile-badges">
+        ${sig?`<span class="prof-badge pb-p">${sig}</span>`:''}
+        <span class="prof-badge pb-r">${{reconciliacao:'Reconquista 💔',relacionamento:'Novo Amor ✨',manter:'Fortalecendo 💑',eu:'Autoconhecimento 👑'}[p.obj]||''}</span>
+      </div>
+      ${p.bio?`<div style="font-size:13px;color:var(--t2);margin-bottom:14px;line-height:1.5;">${escHtml(p.bio)}</div>`:''}
+      <div class="profile-stats">
+        <div class="pstat"><span class="pstat-n">${myPosts.length}</span><span class="pstat-l">Publicações</span></div>
+        <div class="pstat"><span class="pstat-n">${myPosts.reduce((a,p)=>a+(p.likeCount||0),0)}</span><span class="pstat-l">Curtidas</span></div>
+        <div class="pstat"><span class="pstat-n">${myPosts.reduce((a,p)=>a+(p.commentCount||0),0)}</span><span class="pstat-l">Comentários</span></div>
+      </div>
+      <div style="padding:0 2px 12px;"><div class="my-posts-title">Minhas publicações</div>
+        ${myPosts.length?myPosts.map(p=>`<div class="post-card" style="border-radius:12px;margin-bottom:8px;border:1px solid var(--bdr);"><div class="post-text" style="margin-bottom:8px;">${escHtml(p.text)}</div><div style="display:flex;gap:14px;font-size:11px;color:var(--t3);">${TAG_LABELS[p.tag]||''} · ❤️ ${p.likeCount||0} · 💬 ${p.commentCount||0} · ${timeAgo(p.createdAt)}</div></div>`).join(''):`<div style="text-align:center;padding:28px 0;color:var(--t3);font-size:13px;">Nenhuma publicação ainda. Compartilhe algo com a comunidade!</div>`}
+      </div>
+      <button style="display:block;width:100%;background:transparent;border:1px solid var(--bdr);border-radius:50px;padding:12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--t2);cursor:pointer;margin-top:4px;" onclick="if(confirm('Sair e redefinir perfil?')){localStorage.clear();location.reload();}">Sair / Redefinir perfil</button>
+    </div>
+  `;
 }
 
-/* ═══ APP START ═════════════════════════════════ */
-function startApp(){
-  prof=LS('mi_p');favs=LS('mi_f')||[];days=LS('mi_d')||[false,false,false,false,false,false,false];streak=LS('mi_s')||1;
-  chatAI=new ChatIA(prof);
-  const n=prof?.nome||'Você',h=new Date().getHours();
-  const g=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
-  document.getElementById('hNm').textContent=`${g}, ${n} 👋`;
-  document.getElementById('hSb').textContent=sitL();
-  document.getElementById('hStk').textContent=`🔥 ${streak} dia${streak>1?'s':''}`;
-  document.getElementById('gAv').textContent=avE();
-  document.getElementById('gNm').textContent=`${n}!`;
-  const i=di();
-  const dm=MSGS_DIA[i%MSGS_DIA.length];curDmMsg=dm;
-  document.getElementById('dmTxt').textContent=dm.msg;
-  updDF(dm.msg);
-  const tip=DICAS_DIA[i%DICAS_DIA.length];
-  document.getElementById('tipTag').textContent=tip.tag;
-  document.getElementById('tipTxt').textContent=tip.txt;
-  const ref=REFS[i%REFS.length];
-  document.getElementById('refTxt').textContent=ref.txt;
-  renderDots();renderMC();renderMs();renderDC();renderDs();renderPl();renderFavs();initChat();renderCiclo();buildDeck();
-  // Carta do dia check
-  const drawnToday=LS('mi_carta_today');
-  if(drawnToday&&drawnToday.date===new Date().toDateString()){
-    const carta=CARTAS_BARALHO[drawnToday.idx];
-    document.getElementById('cartaHomeSub').textContent=`${carta.nome} — ${carta.frase.substring(0,28)}...`;
-    const da=document.getElementById('cartaDrawnArea');if(da)da.style.display='none';
-    showRevealedCarta(carta,drawnToday.idx);
-  }
-  document.getElementById('APP').style.display='flex';
-}
-function sitL(){const map={reconciliacao:'Reconquistando 💔',relacionamento:'Encontrando o amor ✨',manter:'Melhorando relação 💑',eu:'Foco em mim 👑',reconquista:'Reconquistando 💔',atrair:'Atraindo alguém ✨'};return map[prof?.obj]||map[prof?.sit]||'Bem-vinda!';}
-function avE(){const m={romantica:'🌹',pratica:'⚡',timida:'🌸',independente:'🦋',mulher:'🌸',homem:'⚡',trans:'🦋',livre:'💌'};return m[prof?.tipo]||m[prof?.genero]||'💌';}
+/* ════════ ADMIN PANEL ════════════════════════════ */
+const ADMIN_PWD = 'admin@123'; // TROQUE ESTA SENHA!
 
-/* ═══ NAV ════════════════════════════════════════ */
-function goPage(name){
-  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
-  document.getElementById('pg-chat').classList.remove('on');
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  const nb=document.getElementById('nb-'+name);if(nb)nb.classList.add('on');
-  if(name==='chat'){document.getElementById('pg-chat').classList.add('on');setTimeout(()=>{const e=document.getElementById('chatMsgs');e.scrollTop=e.scrollHeight;},80);}
-  else{const pg=document.getElementById('pg-'+name);if(pg)pg.classList.add('on');
-    if(name==='favs')renderFavs();
-    if(name==='menu'){renderMenu();renderParceiroForm();if(prof?.signo)renderSignoCard(prof.signo);}
-    if(name==='ciclo')renderCiclo();
-    if(name==='carta'&&!cartaDrawn)buildDeck();
+function openAdmin(){document.getElementById('ADMIN').style.display='block';if(!adminLoggedIn){document.getElementById('adminLogin').style.display='block';document.getElementById('adminDash').style.display='none';}}
+function closeAdmin(){document.getElementById('ADMIN').style.display='none';}
+
+function loginAdmin(){
+  const pwd=document.getElementById('adminPwd').value;
+  if(pwd===ADMIN_PWD){
+    adminLoggedIn=true;
+    document.getElementById('adminLogin').style.display='none';
+    document.getElementById('adminDash').style.display='block';
+    loadAdminData();
+  }else{
+    toast('Senha incorreta');
   }
 }
 
-/* ═══ MOOD ══════════════════════════════════════ */
-function setMood(k,em,lbl,btn){
-  document.querySelectorAll('.mrow .mbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-  document.getElementById('gMood').textContent=lbl;document.getElementById('gAv').textContent=em;
-  const tips={triste:'Tudo bem sentir. Sua dor hoje é sua força amanhã. Respira.',ansiosa:'Ansiedade é energia mal direcionada. Cuide de você agora.',bem:'Aproveite esse estado! Energia positiva é o melhor momento para tomar atitudes.',forte:'Você está no seu melhor. É hora de agir com confiança.'};
-  document.getElementById('tipTxt').textContent=tips[k]||document.getElementById('tipTxt').textContent;
+async function loadAdminData(){
+  if(demoMode||!db){
+    document.getElementById('adminStats').innerHTML=`<div class="ast"><span class="ast-n">Demo</span><span class="ast-l">Modo Demo</span></div><div class="ast"><span class="ast-n">0</span><span class="ast-l">Posts</span></div>`;
+    document.getElementById('adminUserList').innerHTML='<div style="padding:12px 0;color:var(--t3);font-size:12px;">Disponível no modo conectado</div>';
+    document.getElementById('adminPostList').innerHTML='<div style="padding:12px 0;color:var(--t3);font-size:12px;">Disponível no modo conectado</div>';
+    return;
+  }
+  try{
+    // Stats
+    const [usersSnap,postsSnap]=await Promise.all([
+      db.collection('users').get(),
+      db.collection('posts').get(),
+    ]);
+    document.getElementById('adminStats').innerHTML=`
+      <div class="ast"><span class="ast-n">${usersSnap.size}</span><span class="ast-l">Usuárias</span></div>
+      <div class="ast"><span class="ast-n">${postsSnap.size}</span><span class="ast-l">Publicações</span></div>
+    `;
+    // Users
+    const users=[];usersSnap.forEach(d=>users.push({id:d.id,...d.data()}));
+    document.getElementById('adminUserList').innerHTML=users.slice(0,20).map(u=>`
+      <div class="user-row">
+        <div class="ur-av">${u.avatar||'🌸'}</div>
+        <div class="ur-info"><div class="ur-name">${u.nome||'Anônima'}</div><div class="ur-meta">${u.signo||''} · ${u.obj||''}</div></div>
+      </div>`).join('')||'<div style="padding:12px 0;color:var(--t3);font-size:12px;">Nenhuma usuária cadastrada ainda</div>';
+    // Recent posts
+    const posts=[];postsSnap.forEach(d=>posts.push({id:d.id,...d.data()}));
+    posts.sort((a,b)=>b.createdAt-a.createdAt);
+    document.getElementById('adminPostList').innerHTML=posts.slice(0,10).map(p=>`
+      <div style="padding:10px 0;border-bottom:1px solid var(--bdr);">
+        <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:3px;">${p.userName||'Anônima'} · ${timeAgo(p.createdAt)}</div>
+        <div style="font-size:13px;color:var(--t);margin-bottom:5px;">${escHtml((p.text||'').substring(0,80))}${p.text?.length>80?'...':''}</div>
+        <button style="font-size:11px;color:var(--r);background:none;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;" onclick="adminDeletePost('${p.id}')">🗑️ Apagar</button>
+      </div>`).join('')||'<div style="padding:12px 0;color:var(--t3);font-size:12px;">Nenhuma publicação ainda</div>';
+  }catch(e){toast('Erro ao carregar dados admin');}
 }
 
-/* ═══ MENSAGENS ══════════════════════════════════ */
-function renderMC(){document.getElementById('mCats').innerHTML=MCATS.map(c=>`<button class="pill${c.id===curMC?' on':''}" onclick="sMC('${c.id}',this)">${c.l}</button>`).join('');}
-function sMC(id,el){curMC=id;document.querySelectorAll('#mCats .pill').forEach(p=>p.classList.remove('on'));el.classList.add('on');renderMs();}
-function renderMs(){const list=curMC==='all'?MSGS:MSGS.filter(m=>m.cat===curMC);document.getElementById('mList').innerHTML=list.map(m=>{const f=favs.includes(m.msg);return`<div class="mc" onclick="openModal(${m.id})"><div class="mc-sit">${m.sit}</div><div class="mc-txt">${m.msg}</div><div class="mc-foot"><span class="mc-hint">Toque para ver a dica completa</span><div class="mc-btns"><button class="fvb" onclick="event.stopPropagation();togFM(${m.id},this)">${f?'💛':'🤍'}</button><button class="cpb" onclick="event.stopPropagation();cp(${JSON.stringify(m.msg)})">Copiar</button></div></div></div>`;}).join('');}
-function togFM(id,btn){const m=MSGS.find(x=>x.id===id);if(!m)return;const i=favs.indexOf(m.msg);if(i===-1){favs.push(m.msg);btn.textContent='💛';toast('Salvo!');}else{favs.splice(i,1);btn.textContent='🤍';}LS('mi_f',favs);renderFavs();}
-function togHomeFav(){const msg=curDmMsg?.msg;if(!msg)return;const i=favs.indexOf(msg);if(i===-1){favs.push(msg);toast('💛 Salvo!');}else{favs.splice(i,1);}LS('mi_f',favs);updDF(msg);renderFavs();}
-function updDF(msg){document.getElementById('dmFv').textContent=favs.includes(msg)?'💛':'🤍';}
-function openDmModal(){if(!curDmMsg)return;curModal={sit:'Mensagem do dia',msg:curDmMsg.msg,tip:'Esta mensagem foi selecionada especialmente para você hoje.',when:'Use quando sentir que o momento é certo.'};document.getElementById('mSit').textContent=curModal.sit;document.getElementById('mMsg').textContent=curModal.msg;document.getElementById('mDica').textContent=curModal.tip;document.getElementById('mWhen').textContent=curModal.when;document.getElementById('modal').classList.add('on');}
-
-/* ═══ MODAL ══════════════════════════════════════ */
-function openModal(id){const m=MSGS.find(x=>x.id===id);if(!m)return;curModal=m;document.getElementById('mSit').textContent=m.sit;document.getElementById('mMsg').textContent=m.msg;document.getElementById('mDica').textContent=m.tip;document.getElementById('mWhen').textContent=m.when;document.getElementById('modal').classList.add('on');}
-function closeModal(){document.getElementById('modal').classList.remove('on');}
-document.getElementById('mCpBtn').onclick=()=>{if(curModal)cp(curModal.msg);};
-
-/* ═══ FAVORITOS ══════════════════════════════════ */
-function renderFavs(){const em=document.getElementById('favEm'),list=document.getElementById('favList');if(!favs.length){list.innerHTML='';em.style.display='block';return;}em.style.display='none';list.innerHTML=favs.map((msg,i)=>`<div class="mc"><div class="mc-txt">${msg}</div><div class="mc-foot"><span></span><div class="mc-btns"><button class="fvb" onclick="favs.splice(${i},1);LS('mi_f',favs);renderFavs();toast('Removido')">🗑️</button><button class="cpb" onclick="cp(${JSON.stringify(msg)})">Copiar</button></div></div></div>`).join('');}
-
-/* ═══ DICAS ══════════════════════════════════════ */
-function renderDC(){document.getElementById('dCats').innerHTML=DCATS.map(c=>`<button class="pill${c.id===curDC?' on':''}" onclick="sDC('${c.id}',this)">${c.l}</button>`).join('');}
-function sDC(id,el){curDC=id;document.querySelectorAll('#dCats .pill').forEach(p=>p.classList.remove('on'));el.classList.add('on');renderDs();}
-function renderDs(){const list=DICAS_DB[curDC]||[];document.getElementById('dList').innerHTML=list.map((d,i)=>`<div class="tip-c" id="tc-${curDC}-${i}"><div class="tip-hdr" onclick="togT('${curDC}',${i})"><div class="tip-ic" style="background:${d.c}18;">${d.i}</div><div class="tip-in"><strong>${d.t}</strong><span>${d.p.length} dicas práticas</span></div><span class="tip-ar">›</span></div><div class="tip-bd">${d.p.map((p,n)=>`<div class="tip-s"><span class="tip-n">${n+1}</span>${p}</div>`).join('')}</div></div>`).join('');}
-function togT(cat,i){document.getElementById(`tc-${cat}-${i}`).classList.toggle('op');}
-
-/* ═══ PLANO ══════════════════════════════════════ */
-function renderDots(){const dn=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],done=days.filter(Boolean).length;document.getElementById('dotsRow').innerHTML=days.map((d,i)=>{const c=d?'done':(i===done?'tod':'');return`<div class="dot-w"><div class="dot-c ${c}">${d?'✓':i+1}</div><div class="dot-lbl">${dn[i]}</div></div>`;}).join('');const pct=Math.round((done/7)*100);document.getElementById('pFil').style.width=pct+'%';document.getElementById('pPct').textContent=pct+'%';document.getElementById('progT').textContent=`Dia ${Math.min(done,6)+1} — ${PLANO[Math.min(done,6)].t}`;}
-function renderPl(){const done=days.filter(Boolean).length;document.getElementById('plList').innerHTML=PLANO.map((d,i)=>{const isDone=days[i],isT=i===done;return`<div class="pl-c${isDone?' done':''}${isT?' tod2':''}" id="pc${i}"><div class="pl-hdr" onclick="togP(${i})"><div class="pl-n">${isDone?'✓':d.d}</div><div class="pl-in"><strong>Dia ${d.d}: ${d.t}</strong><span>${d.s}</span></div></div><div class="pl-bd">${d.p.map(p=>`<div class="pl-s">${p}</div>`).join('')}<button class="pl-mk" onclick="markDay(${i})" ${isDone?'disabled':''}>${isDone?'✓ Concluído':'Marcar como concluído'}</button></div></div>`;}).join('');}
-function togP(i){document.getElementById('pc'+i).classList.toggle('op');}
-function markDay(i){days[i]=true;LS('mi_d',days);renderDots();renderPl();toast(`🎉 Dia ${i+1} concluído!`);}
-
-/* ═══ CHAT ═══════════════════════════════════════ */
-const QRS=['Ele me traiu, o que faço?','Ela ficou com o amigo dele','Ele sumiu do nada','Me ajuda a reconquistar','Quero mensagem de saudade','Primeiro encontro, dicas?','Ele não quer assumir','Minha menstruação atrasou'];
-function initChat(){chatH=[{role:'ai',content:`Oi, ${prof?.nome||'linda'}! 🌸 Que bom ter você aqui.\n\nPode me contar tudo — o que está sentindo, o que aconteceu, o que quer fazer. Sem julgamento, sem pressa.\n\nO que está rolando hoje?`}];renderChat();document.getElementById('qrRow').innerHTML=QRS.map(q=>`<button class="qr" onclick="sendQR('${q}')">${q}</button>`).join('');document.getElementById('chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});}
-function renderChat(){const el=document.getElementById('chatMsgs');el.innerHTML=chatH.map(m=>`<div class="bw ${m.role}"><div class="bbl ${m.role}">${m.content.replace(/\n/g,'<br>')}</div><div class="bbl-t">${nt()}</div></div>`).join('');el.scrollTop=el.scrollHeight;}
-function addTyp(){const el=document.getElementById('chatMsgs');const d=document.createElement('div');d.id='typ';d.className='typing-bbl';d.innerHTML='<div class="td"></div><div class="td"></div><div class="td"></div>';el.appendChild(d);el.scrollTop=el.scrollHeight;}
-function rmTyp(){const e=document.getElementById('typ');if(e)e.remove();}
-function sendQR(txt){document.getElementById('chatIn').value=txt;sendChat();}
-async function sendChat(){const ta=document.getElementById('chatIn');const txt=ta.value.trim();if(!txt)return;ta.value='';ta.style.height='38px';document.getElementById('sndBtn').disabled=true;chatH.push({role:'usr',content:txt});renderChat();addTyp();await new Promise(r=>setTimeout(r,600+Math.random()*1200));rmTyp();const reply=chatAI.respond(txt);chatH.push({role:'ai',content:reply});renderChat();document.getElementById('sndBtn').disabled=false;}
-function autoH(el){el.style.height='38px';el.style.height=Math.min(el.scrollHeight,80)+'px';}
-
-/* ═══ MENU ═══════════════════════════════════════ */
-function renderMenu(){
-  document.getElementById('mAv').textContent=avE();document.getElementById('mNm').textContent=prof?.nome||'Usuária';document.getElementById('mSb').textContent=sitL();
-  const badges=[];
-  const sig=prof?.signo?SIGNOS[prof.signo]:null;if(sig)badges.push({t:`${sig.em} ${sig.nome}`,roxo:true});
-  const orMap={hetero:'Hétero',bi:'Bi',lesbica:'Lésbica',gay:'Gay',cachorra:'Cachorra 🐾',livre:'Livre'};
-  if(prof?.orient&&prof.orient!=='livre')badges.push({t:orMap[prof.orient]||prof.orient,roxo:false});
-  document.getElementById('mBgs').innerHTML=badges.map(b=>`<span class="pbg${b.roxo?' roxo':''}">${b.t}</span>`).join('');
-  const done=days.filter(Boolean).length;
-  document.getElementById('mStat').innerHTML=`<div class="sb"><span class="sn">${streak}</span><span class="sl">🔥 dias seguidos</span></div><div class="sb"><span class="sn">${done}/7</span><span class="sl">📅 dias do plano</span></div><div class="sb"><span class="sn">${favs.length}</span><span class="sl">🤍 favoritas</span></div><div class="sb"><span class="sn">${MSGS.length}</span><span class="sl">💬 mensagens</span></div>`;
-  document.getElementById('mFvSb').textContent=`${favs.length} mensagem${favs.length!==1?'s':''} salva${favs.length!==1?'s':''}`;
-  document.getElementById('mPlSb').textContent=`${done} de 7 dias concluídos`;
+async function adminDeletePost(postId){
+  if(!confirm('Apagar esta publicação?'))return;
+  try{await db.collection('posts').doc(postId).delete();toast('Publicação apagada');loadAdminData();}
+  catch(e){toast('Erro ao apagar');}
 }
 
-/* ═══ BOOT ═══════════════════════════════════════ */
-const lbls=['Carregando...','Preparando dicas...','Iniciando IA...','Quase lá...'];
-let prog=0,li=0;
-const iv=setInterval(()=>{
-  prog+=Math.random()*22+8;
-  if(prog>=100){prog=100;clearInterval(iv);setTimeout(()=>{
-    document.getElementById('SPL').style.display='none';
-    if(LS('mi_p')){startApp();}else{document.getElementById('OB').style.display='block';}
-  },300);}
-  document.getElementById('pb').style.width=Math.min(prog,100)+'%';
-  if(prog>li*25+25&&li<lbls.length-1){li++;document.getElementById('splP').textContent=lbls[li];}
-},90);
+async function sendAdminNotif(){
+  const title=document.getElementById('notifTitle').value.trim();
+  const body=document.getElementById('notifBody').value.trim();
+  if(!title||!body){toast('Preencha o título e a mensagem');return;}
+  if(demoMode||!db){toast('Notificações disponíveis no modo conectado');return;}
+  try{
+    await db.collection('notifications').add({title,body,createdAt:Date.now(),sentBy:'admin'});
+    document.getElementById('notifTitle').value='';
+    document.getElementById('notifBody').value='';
+    toast('Notificação enviada para todas as usuárias! 🔔',3000);
+  }catch(e){toast('Erro ao enviar notificação');}
+}
 </script>
 </body>
 </html>
