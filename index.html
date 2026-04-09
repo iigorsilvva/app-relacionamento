@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0F0608">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,88 +16,165 @@
   --v:#7B0D2A;--d:#C9932A;--dl:rgba(201,147,42,.1);
   --bg:#0F0608;--s1:#1C0C12;--s2:#261018;--s3:#32141e;
   --b:rgba(200,23,74,.18);--t:#F5ECF0;--t2:#C07888;--t3:#7A4055;
-  --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
+  --men:#8B2FC9;--menl:rgba(139,47,201,.15);
+  --st:env(safe-area-inset-top,44px);--sb:env(safe-area-inset-bottom,20px);
+  --sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px);
 }
-html,body{height:100%;overflow:hidden;background:var(--bg);}
-body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;margin:0 auto;-webkit-font-smoothing:antialiased;}
+html{height:100%;height:-webkit-fill-available;overflow:hidden;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--t);
+  background:var(--bg);
+  height:100vh;
+  height:-webkit-fill-available;
+  overflow:hidden;
+  width:100%;
+  max-width:100%;
+  -webkit-font-smoothing:antialiased;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+}
 
 /* SPLASH */
-#splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;padding:40px 28px;text-align:center;}
-.sp-logo{width:96px;height:96px;border-radius:26px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:46px;margin:0 auto 24px;box-shadow:0 16px 50px rgba(200,23,74,.5);}
-.sp-h{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1.2;margin-bottom:8px;}
+#splash{
+  position:fixed;inset:0;
+  background:var(--bg);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:1000;
+  padding:max(var(--st),40px) 28px max(var(--sb),28px);
+  text-align:center;
+}
+.sp-logo{width:90px;height:90px;border-radius:24px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:42px;margin:0 auto 22px;box-shadow:0 16px 50px rgba(200,23,74,.5);}
+.sp-h{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;line-height:1.2;margin-bottom:8px;}
 .sp-h em{color:var(--r);font-style:italic;}
-.sp-p{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:40px;}
+.sp-p{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:36px;}
 .pb-w{width:100%;background:rgba(255,255,255,.07);border-radius:50px;height:5px;overflow:hidden;}
 .pb{height:100%;background:var(--r);border-radius:50px;width:0;transition:width .08s linear;}
 
 /* ONBOARDING */
-#ob{position:fixed;inset:0;background:var(--bg);z-index:900;display:none;overflow-y:auto;padding:calc(var(--st)+28px) 22px calc(var(--sb)+28px);}
-.ob-logo{width:68px;height:68px;border-radius:18px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 18px;box-shadow:0 12px 36px rgba(200,23,74,.45);}
-.ob-h{font-family:'Playfair Display',serif;font-size:25px;font-weight:700;text-align:center;line-height:1.3;margin-bottom:6px;}
+#ob{
+  position:fixed;inset:0;
+  background:var(--bg);z-index:900;
+  display:none;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:max(var(--st),44px) 20px max(var(--sb),28px);
+}
+.ob-logo{width:62px;height:62px;border-radius:16px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;box-shadow:0 12px 36px rgba(200,23,74,.45);}
+.ob-h{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;text-align:center;line-height:1.3;margin-bottom:5px;}
 .ob-h em{color:var(--r);font-style:italic;}
-.ob-s{font-size:13px;color:var(--t2);text-align:center;line-height:1.6;margin-bottom:22px;}
+.ob-s{font-size:13px;color:var(--t2);text-align:center;line-height:1.6;margin-bottom:20px;}
 .ob-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t2);margin-bottom:6px;display:block;}
-.ob-in{width:100%;background:var(--s2);border:1.5px solid var(--b);border-radius:12px;padding:13px 16px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:var(--t);outline:none;margin-bottom:12px;}
+.ob-in{width:100%;background:var(--s2);border:1.5px solid var(--b);border-radius:12px;padding:13px 16px;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:var(--t);outline:none;margin-bottom:12px;-webkit-appearance:none;}
 .ob-in::placeholder{color:var(--t3);}
 .ob-in:focus{border-color:var(--r);}
 .ob-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
-.ob-opt{background:var(--s2);border:1.5px solid var(--b);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:11px;cursor:pointer;text-align:left;}
+.ob-opt{background:var(--s2);border:1.5px solid var(--b);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:11px;cursor:pointer;text-align:left;-webkit-appearance:none;}
 .ob-opt.on{background:var(--rl);border-color:var(--r);}
-.ob-em{font-size:21px;flex-shrink:0;}
+.ob-em{font-size:20px;flex-shrink:0;}
 .ob-ot strong{display:block;font-size:13px;font-weight:700;color:var(--t);margin-bottom:1px;}
 .ob-ot span{font-size:11px;color:var(--t2);}
-.ob-btn{display:block;width:100%;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:800;padding:15px;border-radius:50px;border:none;cursor:pointer;text-align:center;box-shadow:0 8px 26px rgba(200,23,74,.4);margin-top:18px;}
+.ob-btn{display:block;width:100%;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:800;padding:16px;border-radius:50px;border:none;cursor:pointer;text-align:center;box-shadow:0 8px 26px rgba(200,23,74,.4);margin-top:18px;-webkit-appearance:none;}
 .ob-btn:disabled{opacity:.35;pointer-events:none;}
 
-/* APP */
-#app{display:none;height:100vh;height:100dvh;flex-direction:column;}
+/* APP CONTAINER */
+#app{
+  display:none;
+  position:fixed;
+  inset:0;
+  flex-direction:column;
+  overflow:hidden;
+}
 
 /* HEADER */
-.hdr{padding:calc(var(--st)+10px) 15px 10px;background:var(--s1);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--b);flex-shrink:0;}
-.hdr-ic{width:33px;height:33px;border-radius:9px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.hdr{
+  padding-top:max(var(--st),44px);
+  padding-left:max(var(--sl),15px);
+  padding-right:max(var(--sr),15px);
+  padding-bottom:10px;
+  background:var(--s1);
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--b);
+  flex-shrink:0;
+}
+.hdr-ic{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
 .hdr-tx{flex:1;min-width:0;}
 .hdr-tx strong{display:block;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hdr-tx span{font-size:10px;color:var(--t2);}
 .hdr-stk{background:var(--dl);border:1px solid rgba(201,147,42,.28);border-radius:50px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--d);white-space:nowrap;flex-shrink:0;}
 
-/* CONTENT */
-.cwrap{flex:1;overflow:hidden;position:relative;}
-.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:14px 14px calc(74px + var(--sb));display:none;}
+/* CONTENT AREA */
+.cwrap{flex:1;overflow:hidden;position:relative;min-height:0;}
+.page{
+  position:absolute;inset:0;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:14px 15px calc(80px + max(var(--sb),20px));
+  display:none;
+}
 .page.on{display:block;}
-.chatpg{position:absolute;inset:0;display:none;flex-direction:column;}
+.chatpg{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;}
 .chatpg.on{display:flex;}
 
-/* NAV */
-.nav{padding:3px 4px calc(var(--sb)+3px);background:var(--s1);border-top:1px solid var(--b);display:flex;flex-shrink:0;}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:7px 3px 6px;border:none;background:transparent;cursor:pointer;gap:2px;}
-.ni{font-size:18px;transition:transform .18s;}
-.nl{font-size:8px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--t3);}
+/* BOTTOM NAV */
+.nav{
+  padding-top:4px;
+  padding-bottom:max(var(--sb),8px);
+  padding-left:max(var(--sl),0px);
+  padding-right:max(var(--sr),0px);
+  background:var(--s1);
+  border-top:1px solid var(--b);
+  display:flex;
+  flex-shrink:0;
+}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 2px 4px;border:none;background:transparent;cursor:pointer;gap:2px;min-width:0;}
+.ni{font-size:20px;transition:transform .18s;line-height:1.2;}
+.nl{font-size:8px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--t3);white-space:nowrap;}
 .nb.on .nl{color:var(--r);}
 .nb.on .ni{transform:scale(1.1);}
 
-/* SHARED */
+/* SHARED COMPONENTS */
 .slbl{font-size:9px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--t3);margin-bottom:8px;}
 .pills{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:11px;scrollbar-width:none;}
 .pills::-webkit-scrollbar{display:none;}
 .pill{flex-shrink:0;padding:6px 13px;border-radius:50px;border:1.5px solid var(--b);font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;background:transparent;white-space:nowrap;}
 .pill.on{background:var(--r);border-color:var(--r);color:#fff;}
 
-/* HOME CARDS */
-.gc{background:linear-gradient(130deg,var(--v),#3A0D1C);border-radius:15px;padding:15px;margin-bottom:10px;}
-.gtop{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.gav{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
-.gtx strong{display:block;font-size:14px;font-weight:800;}
-.gtx span{font-size:11px;color:rgba(255,200,220,.8);}
+/* HOME REDESIGNED */
+.home-hero{
+  background:linear-gradient(130deg,var(--v),#2A0A14);
+  border-radius:18px;padding:18px;margin-bottom:12px;
+  position:relative;overflow:hidden;
+}
+.home-hero::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(200,23,74,.3),transparent);border-radius:50%;}
+.hero-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.hero-av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--v));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 16px rgba(200,23,74,.4);}
+.hero-tx strong{display:block;font-size:16px;font-weight:800;margin-bottom:1px;}
+.hero-tx span{font-size:11px;color:rgba(255,200,220,.8);}
+.mood-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,200,220,.6);margin-bottom:8px;}
 .mrow{display:flex;gap:6px;flex-wrap:wrap;}
-.mbtn{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);border-radius:50px;padding:5px 10px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);cursor:pointer;}
+.mbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:50px;padding:6px 11px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.75);cursor:pointer;}
 .mbtn.on{background:var(--r);border-color:var(--r);color:#fff;}
+
+/* HOME CARDS GRID */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
+.hgc{border-radius:14px;padding:13px;cursor:pointer;position:relative;overflow:hidden;}
+.hgc-icon{font-size:22px;margin-bottom:8px;}
+.hgc-title{font-size:12px;font-weight:800;margin-bottom:3px;}
+.hgc-sub{font-size:10px;opacity:.7;}
+.hgc-a{background:linear-gradient(135deg,#C8174A,#7B0D2A);}
+.hgc-b{background:linear-gradient(135deg,#2A4A8E,#1A2D62);}
+.hgc-c{background:linear-gradient(135deg,#1D8E4A,#0D5B2E);}
+.hgc-d{background:linear-gradient(135deg,#8B2FC9,#5A1A8A);}
+
+/* DAILY CARDS */
 .dmc{background:linear-gradient(135deg,var(--r),var(--rd));border-radius:15px;padding:15px;margin-bottom:10px;position:relative;overflow:hidden;}
 .dmc::after{content:'✨';position:absolute;right:11px;top:11px;font-size:20px;opacity:.18;}
 .dmcat{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:5px;}
 .dmtxt{font-size:14px;font-weight:700;line-height:1.5;color:#fff;margin-bottom:11px;position:relative;z-index:1;}
 .dmrow{display:flex;gap:7px;}
 .wb{background:rgba(255,255,255,.18);border:none;border-radius:50px;padding:7px 14px;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:#fff;cursor:pointer;}
-.wb:active{background:rgba(255,255,255,.28);}
 .wsm{background:rgba(255,255,255,.1);border:none;border-radius:50px;padding:7px 10px;font-size:14px;cursor:pointer;}
 .goldc{background:var(--dl);border:1px solid rgba(201,147,42,.22);border-radius:12px;padding:12px;margin-bottom:10px;}
 .goldt{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--d);margin-bottom:5px;}
@@ -109,7 +186,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
 .progtt{font-size:11px;font-weight:700;margin-bottom:8px;}
 .dots{display:flex;gap:3px;justify-content:space-between;margin-bottom:7px;}
 .dot{flex:1;text-align:center;}
-.dcc{width:27px;height:27px;border-radius:50%;border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin:0 auto 3px;color:var(--t3);transition:all .3s;}
+.dcc{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin:0 auto 3px;color:var(--t3);transition:all .3s;}
 .dcc.done{background:var(--r);border-color:var(--r);color:#fff;}
 .dcc.tod{border-color:var(--d);color:var(--d);}
 .dlab{font-size:8px;color:var(--t3);font-weight:600;}
@@ -130,7 +207,6 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
 .fvb{background:none;border:none;font-size:15px;cursor:pointer;padding:2px;transition:transform .15s;}
 .fvb:active{transform:scale(1.3);}
 .cpb{background:var(--rl);border:1px solid rgba(200,23,74,.28);border-radius:50px;padding:4px 12px;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:var(--r);cursor:pointer;}
-.cpb:active{background:rgba(200,23,74,.22);}
 
 /* DICAS */
 .tipc{background:var(--s2);border:1.5px solid var(--b);border-radius:12px;margin-bottom:9px;overflow:hidden;}
@@ -171,11 +247,11 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
 .favem p{font-size:12px;color:var(--t2);line-height:1.6;}
 
 /* CHAT */
-.chatmsgs{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch;}
+.chatmsgs{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch;min-height:0;}
 .bw{display:flex;flex-direction:column;}
 .bw.ai{align-items:flex-start;}
 .bw.usr{align-items:flex-end;}
-.bbl{max-width:85%;padding:10px 13px;border-radius:16px;font-size:13px;line-height:1.55;}
+.bbl{max-width:85%;padding:10px 13px;border-radius:16px;font-size:13px;line-height:1.55;word-break:break-word;}
 .ai .bbl{background:var(--s3);border:1px solid var(--b);color:#FFBFD0;border-bottom-left-radius:3px;}
 .usr .bbl{background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;border-bottom-right-radius:3px;}
 .bbt{font-size:9px;color:var(--t3);margin-top:2px;padding:0 3px;}
@@ -185,24 +261,30 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
 .td:nth-child(2){animation-delay:.2s;}
 .td:nth-child(3){animation-delay:.4s;}
 @keyframes tdot{0%,100%{opacity:.25;transform:scale(.8);}50%{opacity:1;transform:scale(1);}}
-.qrrow{display:flex;gap:6px;overflow-x:auto;padding:6px 12px 0;flex-shrink:0;scrollbar-width:none;}
+.qrrow{display:flex;gap:6px;overflow-x:auto;padding:6px 12px;flex-shrink:0;scrollbar-width:none;}
 .qrrow::-webkit-scrollbar{display:none;}
-.qr{flex-shrink:0;background:var(--s2);border:1px solid var(--b);border-radius:50px;padding:5px 12px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--t2);cursor:pointer;white-space:nowrap;}
+.qr{flex-shrink:0;background:var(--s2);border:1px solid var(--b);border-radius:50px;padding:6px 13px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--t2);cursor:pointer;white-space:nowrap;}
 .qr:active{background:var(--rl);border-color:var(--r);color:var(--r);}
-.chatbar{padding:8px 12px calc(8px + var(--sb));background:var(--s1);border-top:1px solid var(--b);display:flex;gap:7px;align-items:flex-end;flex-shrink:0;}
-.cta{flex:1;background:var(--s2);border:1.5px solid var(--b);border-radius:18px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--t);outline:none;resize:none;max-height:80px;min-height:38px;line-height:1.45;}
+.chatbar{
+  padding:8px 12px;
+  padding-bottom:max(8px,calc(var(--sb) - 4px));
+  background:var(--s1);
+  border-top:1px solid var(--b);
+  display:flex;gap:7px;align-items:flex-end;
+  flex-shrink:0;
+}
+.cta{flex:1;background:var(--s2);border:1.5px solid var(--b);border-radius:18px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:16px;color:var(--t);outline:none;resize:none;max-height:80px;min-height:38px;line-height:1.45;-webkit-appearance:none;}
 .cta::placeholder{color:var(--t3);}
 .cta:focus{border-color:var(--r);}
-.sndbtn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--rd));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;box-shadow:0 3px 14px rgba(200,23,74,.4);}
-.sndbtn:active{transform:scale(.93);}
-.sndbtn:disabled{opacity:.4;pointer-events:none;}
+.sndbtn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--r),var(--rd));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 3px 14px rgba(200,23,74,.4);}
+.sndbtn:disabled{opacity:.4;}
 
 /* LUGARES */
 .lugmood{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
 .lmb{background:var(--s2);border:1.5px solid var(--b);border-radius:50px;padding:7px 13px;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;}
 .lmb.on{background:var(--r);border-color:var(--r);color:#fff;}
 .lugsrc{display:flex;gap:7px;margin-bottom:13px;}
-.lugin{flex:1;background:var(--s2);border:1.5px solid var(--b);border-radius:50px;padding:11px 15px;font-family:'Inter',sans-serif;font-size:13px;color:var(--t);outline:none;}
+.lugin{flex:1;background:var(--s2);border:1.5px solid var(--b);border-radius:50px;padding:11px 15px;font-family:'Inter',sans-serif;font-size:16px;color:var(--t);outline:none;-webkit-appearance:none;}
 .lugin::placeholder{color:var(--t3);}
 .lugin:focus{border-color:var(--r);}
 .bkbtn{background:linear-gradient(135deg,var(--r),var(--rd));border:none;border-radius:50px;padding:11px 16px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap;}
@@ -242,10 +324,62 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
 .miin span{font-size:10px;color:var(--t2);}
 .miar{font-size:14px;color:var(--t3);}
 
+/* MENSTRUAÇÃO */
+.men-hero{background:linear-gradient(135deg,#8B2FC9,#5A1A8A);border-radius:16px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
+.men-hero::after{content:'🌙';position:absolute;right:14px;top:12px;font-size:28px;opacity:.25;}
+.men-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;}
+.men-status{font-size:20px;font-weight:800;color:#fff;margin-bottom:4px;}
+.men-sub{font-size:12px;color:rgba(255,255,255,.75);}
+.men-days-row{display:flex;gap:6px;margin-top:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.men-days-row::-webkit-scrollbar{display:none;}
+.men-day{flex-shrink:0;width:36px;text-align:center;}
+.men-day-num{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);margin:0 auto 4px;cursor:pointer;transition:all .2s;}
+.men-day-num.mens{background:#C8174A;border-color:#C8174A;color:#fff;}
+.men-day-num.fertil{background:rgba(139,47,201,.5);border-color:#8B2FC9;color:#fff;}
+.men-day-num.ovulacao{background:#FFD700;border-color:#FFD700;color:#000;}
+.men-day-num.today{border-color:#fff;color:#fff;}
+.men-day-label{font-size:8px;color:rgba(255,255,255,.5);}
+.men-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.men-card{background:var(--s2);border:1.5px solid var(--b);border-radius:13px;padding:13px;}
+.men-card-icon{font-size:20px;margin-bottom:7px;}
+.men-card-title{font-size:11px;font-weight:700;margin-bottom:3px;}
+.men-card-val{font-size:22px;font-weight:800;color:var(--r);}
+.men-card-sub{font-size:10px;color:var(--t2);}
+.men-card.purple .men-card-val{color:#8B2FC9;}
+.men-card.gold .men-card-val{color:var(--d);}
+.men-card.green .men-card-val{color:#1D9E75;}
+.men-setup{background:var(--s2);border:1.5px solid var(--b);border-radius:14px;padding:16px;margin-bottom:12px;}
+.men-setup h3{font-size:14px;font-weight:700;margin-bottom:4px;}
+.men-setup p{font-size:11px;color:var(--t2);margin-bottom:14px;}
+.men-input-row{display:flex;gap:8px;margin-bottom:10px;}
+.men-input-label{font-size:10px;font-weight:700;color:var(--t2);margin-bottom:5px;}
+.men-input{width:100%;background:var(--bg);border:1.5px solid var(--b);border-radius:10px;padding:10px 13px;font-family:'Inter',sans-serif;font-size:15px;color:var(--t);outline:none;-webkit-appearance:none;}
+.men-input:focus{border-color:var(--r);}
+.men-btn{width:100%;background:linear-gradient(135deg,#8B2FC9,#5A1A8A);color:#fff;border:none;border-radius:50px;padding:13px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.men-tip-card{background:var(--menl);border:1px solid rgba(139,47,201,.25);border-radius:13px;padding:14px;margin-bottom:9px;}
+.men-tip-phase{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#8B2FC9;margin-bottom:5px;}
+.men-tip-text{font-size:13px;color:#E8D0FF;line-height:1.6;margin-bottom:8px;}
+.men-tip-more{font-size:11px;color:rgba(139,47,201,.8);font-style:italic;}
+.men-phase-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(139,47,201,.2);border:1px solid rgba(139,47,201,.3);border-radius:50px;padding:4px 10px;font-size:11px;font-weight:700;color:#C9A0FF;margin-top:8px;}
+.men-log-btn{display:flex;align-items:center;gap:8px;background:var(--s2);border:1.5px solid var(--b);border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer;width:100%;}
+.men-log-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.men-log-tx strong{display:block;font-size:12px;font-weight:700;margin-bottom:1px;}
+.men-log-tx span{font-size:10px;color:var(--t2);}
+
 /* MODAL */
 .modov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:800;align-items:flex-end;justify-content:center;}
 .modov.on{display:flex;}
-.modsh{background:var(--s2);border-radius:20px 20px 0 0;padding:17px 17px calc(26px + var(--sb));width:100%;max-width:430px;max-height:88vh;overflow-y:auto;animation:sUp .22s ease;}
+.modsh{
+  background:var(--s2);
+  border-radius:20px 20px 0 0;
+  padding:17px 17px;
+  padding-bottom:max(26px,calc(var(--sb) + 10px));
+  width:100%;max-width:100%;
+  max-height:88vh;
+  overflow-y:auto;
+  animation:sUp .22s ease;
+  -webkit-overflow-scrolling:touch;
+}
 @keyframes sUp{from{transform:translateY(36px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 .mhdl{width:32px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto 15px;}
 .msit{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--d);margin-bottom:6px;}
@@ -256,7 +390,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
 .mcp{display:block;width:100%;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:13px;border-radius:50px;border:none;cursor:pointer;text-align:center;box-shadow:0 5px 18px rgba(200,23,74,.4);}
 .mcl{display:block;width:100%;background:transparent;color:var(--t2);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:11px;border-radius:50px;border:1px solid var(--b);cursor:pointer;text-align:center;margin-top:7px;}
 
-.tst{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(8px);background:#fff;color:#1A0A10;font-size:12px;font-weight:700;padding:9px 20px;border-radius:50px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:999;white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.25);}
+.tst{position:fixed;bottom:calc(75px + var(--sb));left:50%;transform:translateX(-50%) translateY(8px);background:#fff;color:#1A0A10;font-size:12px;font-weight:700;padding:9px 20px;border-radius:50px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:999;white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.25);}
 .tst.on{opacity:1;transform:translateX(-50%) translateY(0);}
 .emptyi{padding:46px 20px;text-align:center;}
 .emptyi .ei{font-size:42px;margin-bottom:12px;}
@@ -278,7 +412,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
   <h1 class="ob-h">Vamos te<br><em>conhecer</em></h1>
   <p class="ob-s">Personalize tudo em 1 minuto.</p>
   <label class="ob-lbl">Seu nome</label>
-  <input class="ob-in" id="obNome" type="text" placeholder="Como posso te chamar?" maxlength="30" oninput="chkOb()">
+  <input class="ob-in" id="obNome" type="text" placeholder="Como posso te chamar?" maxlength="30" oninput="chkOb()" autocomplete="off">
   <label class="ob-lbl">Sua situação agora</label>
   <div class="ob-opts" id="obSit">
     <button class="ob-opt" onclick="selOb('sit','reconquista',this)"><span class="ob-em">💔</span><div class="ob-ot"><strong>Quero reconquistar ele</strong><span>Término ou afastamento</span></div></button>
@@ -306,9 +440,12 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
 
     <!-- HOME -->
     <div class="page on" id="pg-home">
-      <div class="slbl">Como você está hoje?</div>
-      <div class="gc">
-        <div class="gtop"><div class="gav" id="gAv">🌸</div><div class="gtx"><strong id="gNm">Olá!</strong><span id="gMood">Selecione seu humor</span></div></div>
+      <div class="home-hero">
+        <div class="hero-top">
+          <div class="hero-av" id="gAv">🌸</div>
+          <div class="hero-tx"><strong id="gNm">Olá!</strong><span id="gMood">Como você está hoje?</span></div>
+        </div>
+        <div class="mood-label">Como você está?</div>
         <div class="mrow">
           <button class="mbtn" onclick="setMood('triste','😢','Dia difícil',this)">😢 Triste</button>
           <button class="mbtn" onclick="setMood('ansiosa','😰','Ansiosa',this)">😰 Ansiosa</button>
@@ -316,12 +453,36 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
           <button class="mbtn" onclick="setMood('forte','💪','Me sentindo forte',this)">💪 Forte</button>
         </div>
       </div>
-      <div class="slbl">Reflexão do dia</div>
-      <div class="refc"><div class="reft" id="refTag">Reflexão</div><div class="refx" id="refTxt"></div></div>
+
+      <div class="home-grid">
+        <div class="hgc hgc-a" onclick="goPage('chat')">
+          <div class="hgc-icon">🤖</div>
+          <div class="hgc-title">Falar com IA</div>
+          <div class="hgc-sub">Conselho agora</div>
+        </div>
+        <div class="hgc hgc-d" onclick="goPage('menstruacao')">
+          <div class="hgc-icon">🌙</div>
+          <div class="hgc-title">Ciclo</div>
+          <div class="hgc-sub" id="homeMenuStatusCiclo">Acompanhar</div>
+        </div>
+        <div class="hgc hgc-b" onclick="goPage('msgs')">
+          <div class="hgc-icon">💬</div>
+          <div class="hgc-title">Mensagens</div>
+          <div class="hgc-sub">Prontas pra usar</div>
+        </div>
+        <div class="hgc hgc-c" onclick="goPage('dicas')">
+          <div class="hgc-icon">✨</div>
+          <div class="hgc-title">Dicas</div>
+          <div class="hgc-sub">Beleza e estilo</div>
+        </div>
+      </div>
+
       <div class="slbl">Mensagem do dia</div>
       <div class="dmc"><div class="dmcat" id="dmCat">Categoria</div><div class="dmtxt" id="dmTxt"></div><div class="dmrow"><button class="wb" id="dmCp">📋 Copiar</button><button class="wsm" id="dmFv">🤍</button></div></div>
       <div class="slbl">Dica do dia</div>
       <div class="goldc"><div class="goldt" id="tipTag">Dica</div><div class="goldx" id="tipTxt"></div></div>
+      <div class="slbl">Reflexão do dia</div>
+      <div class="refc"><div class="reft" id="refTag">Reflexão</div><div class="refx" id="refTxt"></div></div>
       <div class="slbl">Plano de 7 dias</div>
       <div class="progc">
         <div class="progtt" id="progT">Dia 1 — Silêncio poderoso</div>
@@ -358,10 +519,15 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
       <div class="lugmood" id="lugMood"></div>
       <div class="slbl">Qual cidade você está?</div>
       <div class="lugsrc">
-        <input class="lugin" id="lugCity" placeholder="Ex: Rio de Janeiro, São Paulo...">
+        <input class="lugin" id="lugCity" placeholder="Ex: São Paulo, Rio...">
         <button class="bkbtn" id="lugBtn" onclick="buscarLugares()">Buscar</button>
       </div>
-      <div id="lugResult"><div class="emptyi"><div class="ei">🗺️</div><h3>Modo Viagem</h3><p>Selecione seu humor e a cidade para encontrar os melhores lugares para você!</p></div></div>
+      <div id="lugResult"><div class="emptyi"><div class="ei">🗺️</div><h3>Para onde você quer ir?</h3><p>Selecione seu humor e a cidade para encontrar os melhores lugares.</p></div></div>
+    </div>
+
+    <!-- MENSTRUAÇÃO -->
+    <div class="page" id="pg-menstruacao">
+      <div id="menContent"></div>
     </div>
 
     <!-- MENU -->
@@ -369,12 +535,13 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
       <div class="profc"><div class="profav" id="mAv">💌</div><div class="profnm" id="mNm"></div><div class="profsb" id="mSb"></div><div class="profbgs" id="mBgs"></div></div>
       <div class="mst" id="mStat"></div>
       <div class="msect">Funcionalidades</div>
-      <div class="mi" onclick="goPage('msgs')"><div class="miic" style="background:var(--rl);">💬</div><div class="miin"><strong>Mensagens prontas</strong><span>23 mensagens em 6 categorias</span></div><span class="miar">›</span></div>
+      <div class="mi" onclick="goPage('msgs')"><div class="miic" style="background:var(--rl);">💬</div><div class="miin"><strong>Mensagens prontas</strong><span>Para cada situação</span></div><span class="miar">›</span></div>
       <div class="mi" onclick="goPage('favs')"><div class="miic" style="background:var(--rl);">🤍</div><div class="miin"><strong>Favoritas</strong><span id="mFvSb">Suas mensagens salvas</span></div><span class="miar">›</span></div>
       <div class="mi" onclick="goPage('dicas')"><div class="miic" style="background:var(--rl);">✨</div><div class="miin"><strong>Dicas de beleza e estilo</strong><span>Guia completo passo a passo</span></div><span class="miar">›</span></div>
       <div class="mi" onclick="goPage('plano')"><div class="miic" style="background:var(--rl);">📅</div><div class="miin"><strong>Plano de 7 dias</strong><span id="mPlSb">Acompanhe seu progresso</span></div><span class="miar">›</span></div>
       <div class="mi" onclick="goPage('chat')"><div class="miic" style="background:var(--rl);">🤖</div><div class="miin"><strong>Chat com IA</strong><span>Converse e peça conselhos</span></div><span class="miar">›</span></div>
-      <div class="mi" onclick="goPage('lugares')"><div class="miic" style="background:var(--rl);">🗺️</div><div class="miin"><strong>Modo Viagem</strong><span>Lugares reais por cidade e humor</span></div><span class="miar">›</span></div>
+      <div class="mi" onclick="goPage('menstruacao')"><div class="miic" style="background:var(--menl);">🌙</div><div class="miin"><strong>Ciclo Menstrual</strong><span>Acompanhe seu ciclo</span></div><span class="miar">›</span></div>
+      <div class="mi" onclick="goPage('lugares')"><div class="miic" style="background:var(--rl);">🗺️</div><div class="miin"><strong>Onde ir?</strong><span>Lugares por humor e cidade</span></div><span class="miar">›</span></div>
       <div class="msect">Conta</div>
       <div class="mi" onclick="if(confirm('Reiniciar perfil e apagar dados?')){localStorage.clear();location.reload();}"><div class="miic" style="background:rgba(255,255,255,.06);">🔄</div><div class="miin"><strong>Reiniciar perfil</strong><span>Atualizar suas informações</span></div><span class="miar">›</span></div>
     </div>
@@ -386,16 +553,16 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--t);max-width:430px;mar
     <div class="chatmsgs" id="chatMsgs"></div>
     <div class="qrrow" id="qrRow"></div>
     <div class="chatbar">
-      <textarea class="cta" id="chatIn" placeholder="Desabafe, pergunte, peça uma mensagem..." rows="1" oninput="autoH(this)"></textarea>
+      <textarea class="cta" id="chatIn" placeholder="Pergunte qualquer coisa..." rows="1" oninput="autoH(this)"></textarea>
       <button class="sndbtn" id="sndBtn" onclick="sendChat()">➤</button>
     </div>
   </div>
 
   <nav class="nav">
     <button class="nb on" id="nb-home" onclick="goPage('home')"><span class="ni">🏠</span><span class="nl">Início</span></button>
-    <button class="nb" id="nb-msgs" onclick="goPage('msgs')"><span class="ni">💬</span><span class="nl">Msgs</span></button>
     <button class="nb" id="nb-chat" onclick="goPage('chat')"><span class="ni">🤖</span><span class="nl">IA</span></button>
-    <button class="nb" id="nb-lugares" onclick="goPage('lugares')"><span class="ni">🗺️</span><span class="nl">Sair</span></button>
+    <button class="nb" id="nb-menstruacao" onclick="goPage('menstruacao')"><span class="ni">🌙</span><span class="nl">Ciclo</span></button>
+    <button class="nb" id="nb-msgs" onclick="goPage('msgs')"><span class="ni">💬</span><span class="nl">Msgs</span></button>
     <button class="nb" id="nb-menu" onclick="goPage('menu');renderMenu()"><span class="ni">☰</span><span class="nl">Menu</span></button>
   </nav>
 </div>
@@ -507,225 +674,271 @@ const DICASDIA=[
   {tag:'Posicionamento',txt:'Demonstrar que você tem escolhas — mesmo sem dizer — é o maior gatilho de atração que existe.'},
 ];
 
-const MCATS=[{id:'all',l:'Todas'},{id:'reconquista',l:'💔 Reconquista'},{id:'atração',l:'✨ Atração'},{id:'reacao',l:'💭 Como reagir'},{id:'valorização',l:'👑 Me valorizar'},{id:'vacuo',l:'🔇 Silêncio'},{id:'primeiro',l:'📩 Retomar'}];
+const MCATS=[{id:'all',l:'Todas'},{id:'reconquista',l:'💔 Reconquista'},{id:'atração',l:'✨ Atração'},{id:'reacao',l:'💭 Reagir'},{id:'valorização',l:'👑 Me valorizar'},{id:'vacuo',l:'🔇 Silêncio'},{id:'primeiro',l:'📩 Retomar'}];
 const DCATS=[{id:'beleza',l:'💄 Beleza'},{id:'estilo',l:'👗 Estilo'},{id:'encontro',l:'💫 1º Encontro'},{id:'psicologia',l:'🧠 Psicologia'}];
 
-/* ═══════════ LUGARES REAIS DO BRASIL ═══════════ */
 const LUGARES={
   'rio de janeiro':{
-    romantica:[
-      {n:'Aprazível',t:'Restaurante',e:'🕯️',a:'Rua Aprazível 62, Santa Teresa',d:'Vista panorâmica do Rio, comida regional premiada e ambiente entre árvores centenárias. Um dos mais belos da cidade.',w:'Reserva com antecedência — vale cada minuto.',tags:['Vista panorâmica','Premiado','Romântico']},
-      {n:'Rio Scenarium',t:'Bar & Samba ao Vivo',e:'🎵',a:'Rua do Lavradio 20, Lapa',d:'Três andares de antiguidades com samba e choro ao vivo na histórica Lapa carioca. Atmosfera única.',w:'Um dos mais charmosos do Brasil para um encontro.',tags:['Samba','Lapa','Música ao vivo']},
-      {n:'Confeitaria Colombo',t:'Café Histórico',e:'☕',a:'Rua Gonçalves Dias 32, Centro',d:'Café histórico de 1894 com arquitetura art nouveau deslumbrante, chocolates artesanais e chás finos.',w:'Para uma tarde elegante e cheia de história.',tags:['1894','Art nouveau','Histórico']},
-      {n:'Olympe',t:'Alta Gastronomia',e:'🌟',a:'Rua Custódio Serrão 62, Lagoa',d:'Restaurante do chef Claude Troisgros com culinária franco-brasileira. Um dos mais premiados do Rio.',w:'Para uma ocasião especial inesquecível.',tags:['Premiado','Franco-brasileiro','Especial']},
-    ],
-    animada:[
-      {n:'Fosfobox',t:'Balada',e:'🎧',a:'Rua Siqueira Campos 143, Copacabana',d:'Balada icônica do Rio com música eletrônica, ambiente underground cult e noites inesquecíveis.',w:'Para quem quer dançar muito e curtir de verdade.',tags:['Eletrônico','Underground','Cult']},
-      {n:'Circo Voador',t:'Show House',e:'🎪',a:'Rua dos Arcos s/n, Lapa',d:'Espaço cult da Lapa com shows nacionais, festas temáticas e energia que só a Lapa tem.',w:'Para uma noite com artistas e muito balanço.',tags:['Shows','Lapa','Energia']},
-      {n:'The Week Rio',t:'Mega Balada',e:'🕺',a:'Rua Sacadura Cabral 154, Centro',d:'Uma das maiores baladas do Rio com pista enorme, DJs internacionais e festa até o sol raiar.',w:'Para soltar toda a energia sem limites.',tags:['Internacional','Grande','Noite']},
-      {n:'Clube dos Democráticos',t:'Baile Funk & Samba',e:'🥁',a:'Rua do Riachuelo 91, Centro',d:'Tradicional baile carioca na Lapa com funk, samba e toda a energia do Rio popular.',w:'Para uma experiência 100% carioca e autêntica.',tags:['Funk','Samba','Tradição']},
-    ],
-    tranquila:[
-      {n:'Parque Lage',t:'Parque & Café',e:'🌿',a:'Rua Jardim Botânico 414, Jardim Botânico',d:'Parque histórico com mansão neoclássica, café e natureza exuberante. Um refúgio no coração do Rio.',w:'Para respirar ar fresco e reorganizar os pensamentos.',tags:['Natureza','Gratuito','Histórico']},
-      {n:'Café do Alto',t:'Café com Vista',e:'☕',a:'Rua Progresso 104, Santa Teresa',d:'Café charmoso em Santa Teresa com terraço e vista para a cidade. Música suave, sem pressa.',w:'Para um café com calma e a vista mais linda de Santa Teresa.',tags:['Vista','Charme','Santa Teresa']},
-      {n:'Bar do Mineiro',t:'Boteco Tradicional',e:'🍺',a:'Rua Paschoal Carlos Magno 99, Santa Teresa',d:'Boteco autêntico com feijoada, tutu de feijão e o melhor da culinária mineira-carioca.',w:'Para uma refeição afetiva sem frescura.',tags:['Feijoada','Autêntico','Tradicional']},
-    ],
-    aventureira:[
-      {n:'Mirante do Leblon',t:'Bar com Vista',e:'🌃',a:'Final da Avenida Niemeyer, Leblon',d:'Pôr do sol mais bonito do Rio com vista para a praia do Leblon e drinks especiais.',w:'Para algo completamente diferente da rotina.',tags:['Pôr do sol','Vista','Drinks']},
-      {n:'Barra Beach Club',t:'Beach Club',e:'🏖️',a:'Praia da Barra da Tijuca',d:'Beach club com piscina, DJs, comida e o melhor da Barra. Sol, mar e muita energia.',w:'Para um dia de praia com estrutura completa.',tags:['Praia','Piscina','DJs']},
-    ],
-    triste:[
-      {n:'Parque Lage',t:'Parque Tranquilo',e:'🌳',a:'Rua Jardim Botânico 414, Jardim Botânico',d:'Parque histórico com natureza exuberante. Um refúgio gratuito para quem precisa respirar.',w:'Para caminhar, respirar e deixar a mente descansar.',tags:['Natureza','Gratuito','Tranquilo']},
-      {n:'Confeitaria Colombo',t:'Café Histórico',e:'☕',a:'Rua Gonçalves Dias 32, Centro',d:'Café histórico de 1894. A beleza do lugar abraça a alma sem precisar de mais nada.',w:'Para se sentir especial sozinha, sem precisar de ninguém.',tags:['Histórico','Acolhedor','Café']},
-    ],
+    romantica:[{n:'Aprazível',t:'Restaurante',e:'🕯️',a:'Rua Aprazível 62, Santa Teresa',d:'Vista panorâmica do Rio, comida regional premiada e ambiente entre árvores centenárias.',w:'Reserva com antecedência — vale cada minuto.',tags:['Vista panorâmica','Premiado','Romântico']},{n:'Rio Scenarium',t:'Bar & Samba',e:'🎵',a:'Rua do Lavradio 20, Lapa',d:'Três andares de antiguidades com samba ao vivo na histórica Lapa carioca.',w:'Um dos mais charmosos do Brasil para um encontro.',tags:['Samba','Lapa','Música']},{n:'Confeitaria Colombo',t:'Café Histórico',e:'☕',a:'Rua Gonçalves Dias 32, Centro',d:'Café histórico de 1894 com arquitetura art nouveau e chocolates artesanais.',w:'Para uma tarde elegante e cheia de história.',tags:['1894','Art nouveau','Histórico']}],
+    animada:[{n:'Fosfobox',t:'Balada',e:'🎧',a:'Rua Siqueira Campos 143, Copacabana',d:'Balada icônica do Rio com música eletrônica e ambiente underground cult.',w:'Para quem quer dançar muito.',tags:['Eletrônico','Underground','Cult']},{n:'Circo Voador',t:'Show House',e:'🎪',a:'Rua dos Arcos s/n, Lapa',d:'Espaço cult da Lapa com shows nacionais e festas temáticas.',w:'Para uma noite com artistas.',tags:['Shows','Lapa','Energia']}],
+    tranquila:[{n:'Parque Lage',t:'Parque & Café',e:'🌿',a:'Rua Jardim Botânico 414',d:'Parque histórico com mansão neoclássica, café e natureza exuberante.',w:'Para respirar ar fresco e reorganizar os pensamentos.',tags:['Natureza','Gratuito','Histórico']}],
+    aventureira:[{n:'Mirante do Leblon',t:'Bar com Vista',e:'🌃',a:'Final da Av. Niemeyer, Leblon',d:'Pôr do sol mais bonito do Rio com vista para a praia do Leblon.',w:'Para algo completamente diferente da rotina.',tags:['Pôr do sol','Vista','Drinks']}],
+    triste:[{n:'Parque Lage',t:'Parque Tranquilo',e:'🌳',a:'Rua Jardim Botânico 414',d:'Parque histórico com natureza exuberante. Um refúgio gratuito.',w:'Para caminhar, respirar e deixar a mente descansar.',tags:['Natureza','Gratuito','Tranquilo']}],
   },
   'sao paulo':{
-    romantica:[
-      {n:'Cantaloup',t:'Restaurante',e:'🍷',a:'Rua Jerônimo da Veiga 358, Itaim Bibi',d:'Culinária francesa e brasileira em ambiente elegante. Vinho excelente e atmosfera sofisticada.',w:'Para um jantar especial e memorável em São Paulo.',tags:['Sofisticado','Vinho','Especial']},
-      {n:'Spot',t:'Restaurante',e:'🌟',a:'Alameda Ministro Rocha Azevedo 72, Jardins',d:'Clássico dos Jardins frequentado por artistas e famosos. Comida consistente, ambiente chique-descontraído.',w:'Para se sentir especial em um lugar com história.',tags:['Clássico','Jardins','Referência']},
-      {n:'Bar Brahma',t:'Bar Histórico',e:'🎷',a:'Avenida São João 677, Centro',d:'Bar histórico de 1948 com música ao vivo, chope gelado e arquitetura que é patrimônio de SP.',w:'Para uma noite com muita personalidade e nostalgia.',tags:['1948','Música ao vivo','Histórico']},
-    ],
-    animada:[
-      {n:'D-Edge',t:'Club',e:'🎧',a:'Avenida Olga 170, Barra Funda',d:'Considerada uma das melhores baladas do Brasil com sistema de som premium e DJs internacionais.',w:'Para uma noite inesquecível de eletrônico de qualidade.',tags:['Eletrônico','Internacional','Premium']},
-      {n:'Cine Jóia',t:'Balada em Cinema Art Déco',e:'🎬',a:'Praça Carlos Gomes 82, Liberdade',d:'Balada em cinema art déco histórico com pista em frente à tela gigante. Atmosfera completamente única.',w:'Para uma experiência diferente de tudo que já viveu.',tags:['Art déco','Único','Shows']},
-      {n:'Clash Club',t:'Balada',e:'🕺',a:'Rua Padre João Manuel 1159, Pinheiros',d:'Balada cult de Pinheiros com boa música, ambiente acolhedor e público com personalidade.',w:'Para curtir sem frescura com gente interessante.',tags:['Pinheiros','Alternativo','Cult']},
-      {n:'Outs Club',t:'Balada',e:'🎶',a:'Rua Augusta 2500, Consolação',d:'Balada da Augusta com vários ambientes, DJs residentes e energia da noite paulistana.',w:'Para a clássica noite de sábado na Augusta.',tags:['Augusta','Balada','Noite']},
-    ],
-    tranquila:[
-      {n:'Empório Pinheiros',t:'Bar & Queijos',e:'🧀',a:'Rua Deputado Lacerda Franco 258, Pinheiros',d:'Bar clássico de Pinheiros com tábua de frios impecável, vinhos selecionados e sem pressa.',w:'Para uma tarde tranquila com boa comida e boa companhia.',tags:['Pinheiros','Vinho','Tranquilo']},
-      {n:'MASP',t:'Museu & Café',e:'🎨',a:'Avenida Paulista 1578, Bela Vista',d:'O icônico museu da Paulista com exposições de arte renovadas e café com vista única.',w:'Para se inspirar e se sentir cultivada.',tags:['Arte','Paulista','Cultura']},
-      {n:'Livraria Travessa Pinheiros',t:'Café & Livraria',e:'📚',a:'Rua Mourato Coelho 1078, Pinheiros',d:'Livraria encantadora com café integrado, música suave e atmosfera que convida a ficar.',w:'Para se aconchegar com um bom livro e café quente.',tags:['Livros','Café','Aconchegante']},
-    ],
-    aventureira:[
-      {n:'Beco do Batman',t:'Arte de Rua',e:'🎨',a:'Rua Gonçalo Afonso, Vila Madalena',d:'Beco repleto de grafites incríveis e street art com vibe criativa da Vila Madalena.',w:'Para se inspirar, explorar e sair com fotos incríveis.',tags:['Arte','Grafite','Fotos']},
-      {n:'Mercadão de São Paulo',t:'Mercado Municipal',e:'🏛️',a:'Rua da Cantareira 306, Centro',d:'Mercado Municipal histórico com o lendário sanduíche de mortadela e produtos de todo o Brasil.',w:'Para explorar algo diferente e autenticamente paulistano.',tags:['Histórico','Gastronomia','Único']},
-    ],
-    triste:[
-      {n:'Parque Ibirapuera',t:'Parque',e:'🌳',a:'Avenida Pedro Álvares Cabral, Vila Mariana',d:'O maior parque urbano de SP com lagos, jardins e espaço enorme para caminhar e respirar.',w:'Para arejar a cabeça e recuperar as energias.',tags:['Natureza','Caminhada','Gratuito']},
-      {n:'Livraria Travessa Pinheiros',t:'Café & Livraria',e:'📚',a:'Rua Mourato Coelho 1078, Pinheiros',d:'Livraria com café integrado e ambiente que abraça. Música suave e sem pressa.',w:'Para um refúgio silencioso e acolhedor.',tags:['Livros','Acolhedor','Tranquilo']},
-    ],
-  },
-  'belo horizonte':{
-    romantica:[
-      {n:'Glouton',t:'Restaurante',e:'🍽️',a:'Rua Gonçalves Dias 874, Funcionários',d:'Restaurante do chef Onildo Rocha, premiado, com cozinha criativa e ambiente intimista.',w:'Para um jantar romântico e verdadeiramente inesquecível.',tags:['Premiado','Íntimo','Alta gastronomia']},
-      {n:'Xapuri',t:'Culinária Mineira',e:'🌿',a:'Rua Mandacaru 260, Pampulha',d:'Comida mineira autêntica em ambiente rústico com varanda. Um dos mais queridos de BH.',w:'Para uma experiência afetiva e gastronômica de Minas.',tags:['Comida mineira','Rústico','Autêntico']},
-      {n:'Taste Wine',t:'Wine Bar',e:'🍷',a:'Rua Alagoas 1314, Savassi',d:'Wine bar sofisticado na Savassi com seleção de rótulos importados e ambiente intimista.',w:'Para uma noite elegante com boas conversas.',tags:['Vinho','Sofisticado','Íntimo']},
-    ],
-    animada:[
-      {n:'Bar do Museu',t:'Bar com Vista',e:'🎨',a:'Avenida Otacílio Negrão de Lima, Pampulha',d:'Bar no Museu de Arte com vista para a Lagoa da Pampulha. Drinks e petiscos com arte.',w:'Para uma saída diferente com muito estilo.',tags:['Arte','Vista lagoa','Cultural']},
-      {n:'Chopão da Savassi',t:'Bar Popular',e:'🍺',a:'Rua Pernambuco 1200, Savassi',d:'Bar icônico da Savassi com muito chope, comida de boteco e a energia dos fins de semana.',w:'Para soltar o peso e se divertir sem pressão.',tags:['Savassi','Chope','Animado']},
-      {n:'Rua da Bahia',t:'Polo de Bares',e:'🎶',a:'Rua da Bahia, Centro, Belo Horizonte',d:'Polo boêmio no Centro com bares ao ar livre, música ao vivo e movimentada vida noturna.',w:'Para uma noite animada no coração histórico de BH.',tags:['Boêmio','Música ao vivo','Centro']},
-    ],
-    tranquila:[
-      {n:'Café com Letras',t:'Café & Livraria',e:'☕',a:'Rua Antônio de Albuquerque 781, Savassi',d:'Café charmoso na Savassi integrado a uma livraria. Música suave e brunchs deliciosos.',w:'Para uma tarde leve, acolhedora e sem pressa.',tags:['Savassi','Café','Livros']},
-      {n:'Lagoa da Pampulha',t:'Orla & Parque',e:'🌊',a:'Avenida Otacílio Negrão de Lima, Pampulha',d:'Orla com ciclovia, restaurantes, museus e o pôr do sol mais bonito de BH.',w:'Para caminhar, respirar e se sentir renovada.',tags:['Pampulha','Vista','Natureza']},
-    ],
-    aventureira:[
-      {n:'Mercado Central de BH',t:'Mercado',e:'🏛️',a:'Avenida Augusto de Lima 744, Centro',d:'Mercado animado com mais de 400 lojas, queijos mineiros, cachaças e gastronomia autêntica.',w:'Para explorar sabores e culturas regionais de Minas Gerais.',tags:['Gastronomia','Cultura','Explorar']},
-    ],
-    triste:[
-      {n:'Parque das Mangabeiras',t:'Parque',e:'🌳',a:'Avenida José do Patrocínio Pontes, Serra Verde',d:'Parque enorme na Serra com visual de toda a cidade, trilhas e silêncio para reorganizar.',w:'Para se sentir acolhida pela natureza e pela vista da cidade.',tags:['Natureza','Vista','Silêncio']},
-    ],
-  },
-  'curitiba':{
-    romantica:[
-      {n:'Durski',t:'Restaurante Ucraniano',e:'🥩',a:'Rua Jaime Reis 254, Água Verde',d:'Restaurante de carnes com culinária ucraniana. Único no Brasil, premiado e aconchegante.',w:'Para surpreender com uma experiência gastronômica completamente diferente.',tags:['Ucraniano','Premiado','Único']},
-      {n:'Família Fadanelli',t:'Restaurante Italiano',e:'🍝',a:'Rua Brigadeiro Franco 2924, São Francisco',d:'Tradicional restaurante italiano com massas artesanais, ambiente familiar e muito aconchegante.',w:'Para um jantar italiano autêntico com alma curitibana.',tags:['Italiano','Artesanal','Aconchegante']},
-      {n:'Le Manjue Orgânico',t:'Restaurante Orgânico',e:'🌱',a:'Rua Padre Agostinho 2963, Mercês',d:'Restaurante com culinária orgânica e saudável em ambiente romântico e bem cuidado.',w:'Para quem quer algo diferente com muito charme.',tags:['Orgânico','Saudável','Charmoso']},
-    ],
-    animada:[
-      {n:'Divina Comédia',t:'Bar & Música',e:'🎸',a:'Rua Presidente Faria 34, Centro',d:'Bar cult do centro com shows de rock independente, ambiente alternativo e cerveja artesanal.',w:'Para curtir música boa em um ambiente com muita personalidade.',tags:['Rock','Shows','Alternativo']},
-      {n:'Batel Soho',t:'Polo Gastronômico',e:'🍹',a:'Rua Comendador Araújo, Batel',d:'Polo de bares e restaurantes no Batel com opções para todos os gostos e muita vida noturna.',w:'Para uma noite animada com várias opções ao redor.',tags:['Batel','Bares','Noite']},
-      {n:'UP Bar Rooftop',t:'Rooftop Bar',e:'🌃',a:'Rua Desembargador Motta 1110, Batel',d:'Rooftop com vista para a cidade, drinks especiais e música boa. O melhor de Curitiba lá de cima.',w:'Para uma noite com vista e clima especial.',tags:['Rooftop','Vista','Drinks']},
-    ],
-    tranquila:[
-      {n:'Jardim Botânico de Curitiba',t:'Parque',e:'🌸',a:'Rua Engenheiro Ostoja Roguski, Jardim Botânico',d:'O parque mais fotografado do Brasil com estufa art nouveau francesa e jardins impecáveis.',w:'Para caminhar, respirar e se sentir renovada.',tags:['Art nouveau','Natureza','Famoso']},
-      {n:'Ópera de Arame',t:'Teatro & Parque',e:'🎭',a:'Rua João Gava, Pilarzinho',d:'Teatro único no mundo, todo em estrutura de aço transparente em meio ao Parque das Pedreiras.',w:'Para uma tarde de cultura e natureza genuinamente curitibana.',tags:['Teatro','Natureza','Único']},
-    ],
-    aventureira:[
-      {n:'Feirão do Largo da Ordem',t:'Feira Histórica',e:'🎨',a:'Largo da Ordem, São Francisco',d:'Feira histórica de domingo com artesanato, antiguidades, gastronomia e muita cultura local.',w:'Para explorar a cidade mais autenticamente aos domingos.',tags:['Feira','Domingo','Cultura']},
-    ],
-    triste:[
-      {n:'Bosque Alemão',t:'Bosque & Trilha',e:'🌲',a:'Rua Engenheiro Gutemberg 640, Bacacheri',d:'Bosque com trilha da Chapeuzinho Vermelho, biblioteca entre as árvores e silêncio necessário.',w:'Para descansar a mente em meio à natureza.',tags:['Bosque','Trilha','Calmo']},
-    ],
-  },
-  'florianopolis':{
-    romantica:[
-      {n:'Toca da Garoupa',t:'Frutos do Mar',e:'🦞',a:'Servidão dos Coroas 75, Ingleses',d:'Restaurante premiado com frutos do mar frescos, vista para o mar e clima intimista de ilha.',w:'Para um jantar especial com sabor de Floripa.',tags:['Frutos do mar','Premiado','Vista mar']},
-      {n:'Ostradamus',t:'Restaurante',e:'🦪',a:'Rodovia Baldicero Filomeno 7640, Ribeirão da Ilha',d:'Especializado em ostras e mariscos cultivados localmente, com visual de tirar o fôlego.',w:'Para uma experiência gastronômica única da ilha.',tags:['Ostras','Local','Vista']},
-    ],
-    animada:[
-      {n:'Green Valley',t:'Club Internacional',e:'🎧',a:'Jurerê Internacional, Florianópolis',d:'Considerada uma das melhores baladas do mundo pela DJ Mag. Arena ao ar livre com DJs mundiais.',w:'Para uma experiência de club de nível absolutamente mundial.',tags:['Eletrônico','Mundial','Arena']},
-      {n:'Pacha Florianópolis',t:'Balada',e:'🕺',a:'Avenida Luiz Boiteux Piazza, Jurerê',d:'Filial brasileira da famosa rede ibizenca com DJs internacionais e festas inesquecíveis.',w:'Para uma noite de balada com qualidade internacional.',tags:['Internacional','Ibiza','Famosa']},
-      {n:'Bar do Arante',t:'Bar Histórico',e:'🍺',a:'Rua Abelardo Otacílio Gomes 254, Pântano do Sul',d:'Bar histórico e rústico no sul da ilha, famoso pelas notas deixadas nas paredes pelos visitantes.',w:'Para uma noite com história e muita autenticidade.',tags:['Histórico','Rústico','Único']},
-    ],
-    tranquila:[
-      {n:'Lagoa da Conceição',t:'Orla & Bares',e:'🌊',a:'Lagoa da Conceição, Florianópolis',d:'Orla da Lagoa com restaurantes, kite surf ao fundo e pôr do sol que deixa qualquer um sem palavras.',w:'Para uma tarde calma e contemplativa na Lagoa.',tags:['Lagoa','Pôr do sol','Tranquilo']},
-    ],
-    aventureira:[
-      {n:'Praia da Joaquina',t:'Praia & Aventura',e:'🏄',a:'Joaquina, Lagoa, Florianópolis',d:'Dunas para sandboard, surf com instrutores e muito sol. Uma das mais belas e animadas de Floripa.',w:'Para um dia de adrenalina e natureza incrível.',tags:['Surf','Dunas','Aventura']},
-    ],
-    triste:[
-      {n:'Praia da Solidão',t:'Praia Deserta',e:'🌅',a:'Ponta do Coral, Sul da Ilha, Florianópolis',d:'Praia deserta e silenciosa no sul da ilha. Perfeita para estar consigo mesma.',w:'Para ouvir o mar e reorganizar os pensamentos sem pressa.',tags:['Tranquila','Deserta','Mar']},
-    ],
-  },
-  'salvador':{
-    romantica:[
-      {n:'Amado',t:'Restaurante',e:'🍽️',a:'Ladeira do Porto das Barcas 4, Contorno',d:'Alta cozinha baiana com vista privilegiada para a Baía de Todos-os-Santos. Um dos mais bonitos do Brasil.',w:'Para um jantar especial com vista que nunca se esquece.',tags:['Baía','Alta cozinha','Vista']},
-      {n:'Soho Salvador',t:'Restaurante & Bar',e:'🌙',a:'Rua do Sodré 35, Barra',d:'Restaurante charmoso na Barra com culinária variada, drinks especiais e ambiente sofisticado.',w:'Para um jantar elegante com clima de Barra.',tags:['Barra','Sofisticado','Charmoso']},
-    ],
-    animada:[
-      {n:'Largo de Santana',t:'Polo de Bares',e:'🎶',a:'Largo de Santana, Rio Vermelho, Salvador',d:'O coração boêmio do Rio Vermelho com bares ao ar livre, música ao vivo e energia inigualável.',w:'Para soltar a energia com a melhor vibe baiana.',tags:['Rio Vermelho','Ao vivo','Energia']},
-      {n:'Pelourinho',t:'Centro Histórico Animado',e:'🥁',a:'Pelourinho, Salvador',d:'Centro histórico colonial com rodas de samba, afoxé e toda a cultura afrobaiana vibrando.',w:'Para uma noite com história, música e alma de Salvador.',tags:['Histórico','Samba','Cultural']},
-      {n:'Barra',t:'Orla Badalada',e:'🌊',a:'Avenida Oceânica, Barra, Salvador',d:'Orla da Barra com bares, restaurantes e a energia da praia mais badalada de Salvador.',w:'Para curtir a noite com o mar do lado.',tags:['Praia','Badalado','Noite']},
-    ],
-    tranquila:[
-      {n:'Café Alquimia',t:'Café Histórico',e:'☕',a:'Rua das Laranjeiras 2, Pelourinho',d:'Café no Pelô com ambiente colonial charmoso, cafés especiais e decoração que conta história.',w:'Para uma tarde com muito charme baiano e história.',tags:['Pelourinho','Café','Colonial']},
-    ],
-    aventureira:[
-      {n:'Farol da Barra',t:'Pôr do Sol & Capoeira',e:'🌅',a:'Avenida Oceânica, Barra, Salvador',d:'Pôr do sol mais famoso de Salvador com capoeiristas, marisqueiros e a energia única da Barra.',w:'Para uma experiência baiana absolutamente única.',tags:['Pôr do sol','Capoeira','Único']},
-    ],
-    triste:[
-      {n:'Parque da Cidade',t:'Parque',e:'🌿',a:'Rua Vasco da Gama, Itaigara, Salvador',d:'Parque enorme com trilhas, natureza e espaço para respirar no coração da cidade.',w:'Para sair do peso e se reconectar com você mesma.',tags:['Natureza','Trilhas','Tranquilo']},
-    ],
-  },
-  'fortaleza':{
-    romantica:[
-      {n:'Coco Bambu',t:'Frutos do Mar',e:'🦐',a:'Rua Cortez 190, Meireles',d:'A mais famosa rede de frutos do mar do Brasil. Porções generosas, ambiente animado e frutos do mar de qualidade.',w:'Para uma refeição saborosa e especial em Fortaleza.',tags:['Frutos do mar','Famoso','Generoso']},
-      {n:'La Pasta Gialla',t:'Restaurante Italiano',e:'🍝',a:'Rua Torres Câmara 30, Aldeota',d:'Restaurante italiano clássico de Fortaleza com massas artesanais e ambiente intimista.',w:'Para um jantar italiano com muito charme.',tags:['Italiano','Artesanal','Íntimo']},
-    ],
-    animada:[
-      {n:'Praia de Iracema',t:'Orla Boêmia',e:'🌙',a:'Praia de Iracema, Fortaleza',d:'A praia mais boêmia de Fortaleza com bares ao ar livre, música ao vivo e energia única.',w:'Para curtir a noite fortalezense com tudo.',tags:['Praia','Boêmio','Noite']},
-      {n:'Iguatemi Fortaleza',t:'Polo Gastronômico',e:'🍹',a:'Avenida Washington Soares 85, Edson Queiroz',d:'Polo de bares e restaurantes com opções variadas, eventos e muita vida noturna.',w:'Para uma noite com várias opções no mesmo lugar.',tags:['Bares','Variedade','Animado']},
-    ],
-    tranquila:[
-      {n:'Praia do Meireles',t:'Orla Tranquila',e:'🏖️',a:'Avenida Beira Mar, Meireles, Fortaleza',d:'Orla da praia mais famosa de Fortaleza com calçadão, barracas e brisa do mar.',w:'Para uma tarde tranquila com os pés na areia.',tags:['Praia','Orla','Brisa']},
-    ],
-    aventureira:[
-      {n:'Cumbuco',t:'Kite & Adventure',e:'🪁',a:'Praça dos Cumbucas, Cumbuco, Caucaia',d:'Meca do kite surf com lagoas, buggy nas dunas e beach clubs. Uma das mais belas do Nordeste.',w:'Para um dia de adrenalina e paisagens deslumbrantes.',tags:['Kite','Buggy','Aventura']},
-    ],
-    triste:[
-      {n:'Praia do Futuro',t:'Praia de Barracas',e:'🌊',a:'Praia do Futuro, Fortaleza',d:'Barracas de praia acolhedoras com caldo de peixe, tapioca e o mar cearense para confortar.',w:'Para se sentir abraçada pelo mar e pela simplicidade.',tags:['Praia','Barracas','Mar']},
-    ],
-  },
-  'recife':{
-    romantica:[
-      {n:'Chica Pitanga',t:'Culinária Nordestina',e:'🌶️',a:'Rua Petrolina 19, Boa Viagem',d:'Restaurante charmoso com culinária nordestina criativa e ambiente aconchegante em Boa Viagem.',w:'Para um jantar especial com muito sabor do Nordeste.',tags:['Nordestino','Criativo','Charmoso']},
-      {n:'Parque das Esculturas',t:'Arte & Vista',e:'🎨',a:'Cais do Porto, Marco Zero, Recife',d:'Parque de esculturas de Francisco Brennand no mar, com vista para o Marco Zero. Único no mundo.',w:'Para uma experiência artística e romântica única.',tags:['Arte','Vista','Único']},
-    ],
-    animada:[
-      {n:'Rua do Bom Jesus',t:'Polo de Bares',e:'🎶',a:'Rua do Bom Jesus, Recife Antigo',d:'Polo boêmio do Recife Antigo com bares ao ar livre, forró e toda a energia pernambucana.',w:'Para uma noite com muito frevo e alegria nordestina.',tags:['Recife Antigo','Forró','Energia']},
-      {n:'Recife Antigo',t:'Centro Histórico',e:'🏛️',a:'Recife Antigo, Recife',d:'Centro histórico com bares, restaurantes, arte de rua e a vibe mais animada do Recife.',w:'Para explorar o melhor da vida noturna de Recife.',tags:['Histórico','Bares','Cultura']},
-    ],
-    tranquila:[
-      {n:'Instituto Ricardo Brennand',t:'Museu & Jardins',e:'🏰',a:'Alameda Antônio Brennand s/n, Várzea',d:'Castelo medieval com coleção de arte, jardins impecáveis e café. Um dos museus mais bonitos do Brasil.',w:'Para uma tarde de cultura e beleza inigualável.',tags:['Museu','Jardins','Castelo']},
-    ],
-    aventureira:[
-      {n:'Porto de Galinhas',t:'Piscinas Naturais',e:'🌊',a:'Rua da Esperança, Porto de Galinhas, Ipojuca',d:'Uma das praias mais bonitas do Brasil com piscinas naturais e jangadas. A 70km de Recife.',w:'Para um passeio de dia imperdível perto de Recife.',tags:['Piscinas naturais','Jangada','Imperdível']},
-    ],
-    triste:[
-      {n:'Parque Estadual de Dois Irmãos',t:'Parque',e:'🌿',a:'Rua Dr. Enéas Aguiar 180, Dois Irmãos',d:'Parque com zoológico, trilhas e natureza abundante. Um refúgio verde dentro de Recife.',w:'Para se sentir renovada pela natureza.',tags:['Natureza','Trilhas','Tranquilo']},
-    ],
-  },
-  'manaus':{
-    romantica:[
-      {n:'Restaurante Caxiri',t:'Culinária Amazônica',e:'🌿',a:'Rua Leonardo Malcher 1350, Centro',d:'Restaurante especializado em culinária amazônica autêntica com ingredientes da floresta.',w:'Para uma experiência gastronômica única da Amazônia.',tags:['Amazônica','Autêntico','Único']},
-    ],
-    animada:[
-      {n:'Ponta Negra',t:'Orla Animada',e:'🌊',a:'Avenida Coronel Teixeira, Ponta Negra',d:'Orla de Manaus com bares, restaurantes e a margem do Rio Negro ao fundo.',w:'Para curtir a noite amazonense com o rio do lado.',tags:['Rio Negro','Bares','Noite']},
-    ],
-    tranquila:[
-      {n:'Teatro Amazonas',t:'Ópera Histórica',e:'🎭',a:'Largo de São Sebastião, Centro',d:'O icônico teatro da borracha, construído em 1896, com visitas guiadas e apresentações culturais.',w:'Para uma tarde de cultura e história amazônica.',tags:['1896','Histórico','Cultura']},
-    ],
-    aventureira:[
-      {n:'Encontro das Águas',t:'Passeio de Barco',e:'🚤',a:'Rio Negro com Rio Solimões, Manaus',d:'O fascinante encontro dos rios Negro e Solimões que não se misturam por quilômetros.',w:'Para uma das experiências naturais mais incríveis do mundo.',tags:['Natureza','Único','Rio']},
-    ],
-    triste:[
-      {n:'Jardim Botânico de Manaus',t:'Jardim',e:'🌺',a:'Avenida André Araújo 2936, Aleixo',d:'Jardim botânico com espécies amazônicas, trilhas e natureza exuberante da floresta.',w:'Para se sentir abraçada pela natureza da Amazônia.',tags:['Natureza','Floresta','Tranquilo']},
-    ],
-  },
-  'porto alegre':{
-    romantica:[
-      {n:'Katz',t:'Restaurante',e:'🍽️',a:'Rua da República 481, Floresta',d:'Restaurante charmoso com cozinha autoral e ambiente intimista. Um dos melhores de Porto Alegre.',w:'Para um jantar especial e memorável.',tags:['Autoral','Íntimo','Premiado']},
-      {n:'Birosca',t:'Bar & Bistrô',e:'🍷',a:'Rua Comendador Coruja 140, Bonfim',d:'Bar bistrô aconchegante no Bonfim com vinhos naturais, petiscos criativos e vibe intimista.',w:'Para uma noite descontraída com muito charme.',tags:['Vinho natural','Bonfim','Intimista']},
-    ],
-    animada:[
-      {n:'Opinião',t:'Show House',e:'🎸',a:'Rua José do Patrocínio 834, Cidade Baixa',d:'O principal espaço de shows da Cidade Baixa com artistas nacionais e internacionais.',w:'Para uma noite de música ao vivo com a melhor vibe de POA.',tags:['Shows','Cidade Baixa','Música']},
-      {n:'Cidade Baixa',t:'Polo de Bares',e:'🍺',a:'Cidade Baixa, Porto Alegre',d:'O bairro boêmio de POA com dezenas de bares, restaurantes e a vida noturna mais animada da cidade.',w:'Para uma noite explorando o melhor de Porto Alegre.',tags:['Boêmio','Bares','Noite']},
-    ],
-    tranquila:[
-      {n:'Parque Redenção',t:'Parque',e:'🌳',a:'Avenida José Bonifácio, Bom Fim',d:'O maior parque de POA com lago, patos, feira de artesanato aos domingos e muito verde.',w:'Para uma tarde relaxante no coração da cidade.',tags:['Parque','Lago','Tranquilo']},
-    ],
-    aventureira:[
-      {n:'Mercado Público de Porto Alegre',t:'Mercado Histórico',e:'🏛️',a:'Largo Jornalista Glênio Peres, Centro',d:'Mercado histórico de 1869 com gastronomia, açougues, flores e o coração econômico da cidade.',w:'Para explorar a cultura e gastronomia gaúcha autêntica.',tags:['1869','Histórico','Gastronomia']},
-    ],
-    triste:[
-      {n:'Parque Redenção',t:'Parque',e:'🌿',a:'Avenida José Bonifácio, Bom Fim',d:'Parque enorme com lago e natureza. O melhor lugar de POA para reorganizar os pensamentos.',w:'Para respirar ar fresco e deixar a mente descançar.',tags:['Natureza','Lago','Gratuito']},
-    ],
+    romantica:[{n:'Cantaloup',t:'Restaurante',e:'🍷',a:'Rua Jerônimo da Veiga 358, Itaim',d:'Culinária francesa e brasileira em ambiente elegante.',w:'Para um jantar especial e memorável.',tags:['Sofisticado','Vinho','Especial']}],
+    animada:[{n:'D-Edge',t:'Club',e:'🎧',a:'Avenida Olga 170, Barra Funda',d:'Uma das melhores baladas do Brasil com DJs internacionais.',w:'Para uma noite inesquecível.',tags:['Eletrônico','Internacional','Premium']}],
+    tranquila:[{n:'Empório Pinheiros',t:'Bar & Queijos',e:'🧀',a:'Rua Lacerda Franco 258, Pinheiros',d:'Bar clássico com tábua de frios impecável e vinhos selecionados.',w:'Para uma tarde tranquila com boa comida.',tags:['Pinheiros','Vinho','Tranquilo']}],
+    aventureira:[{n:'Beco do Batman',t:'Arte de Rua',e:'🎨',a:'Rua Gonçalo Afonso, Vila Madalena',d:'Beco repleto de grafites incríveis com vibe criativa.',w:'Para se inspirar e sair com fotos incríveis.',tags:['Arte','Grafite','Fotos']}],
+    triste:[{n:'Parque Ibirapuera',t:'Parque',e:'🌳',a:'Av. Pedro Álvares Cabral, Vila Mariana',d:'O maior parque urbano de SP com lagos e jardins.',w:'Para arejar a cabeça e recuperar as energias.',tags:['Natureza','Caminhada','Gratuito']}],
   },
 };
 
-/* ═══════════ IA COM DIÁLOGO REAL ═══════════ */
+/* ═══════════ DICAS CICLO MENSTRUAL ═══════════ */
+const DICAS_CICLO={
+  menstrual:[
+    {title:'Alimentação anti-inflamatória',text:'Consuma gengibre, cúrcuma e alimentos ricos em ômega-3. Eles reduzem naturalmente as cólicas e a inflamação.',icon:'🥗'},
+    {title:'Compressa quente é sua aliada',text:'Aplique calor na barriga por 15-20 minutos. Reduz espasmos musculares tão eficaz quanto medicamentos leves.',icon:'🌡️'},
+    {title:'Movimento suave',text:'Caminhada leve e yoga restaurativo são mais eficazes que repouso total para cólicas. Libera endorfinas naturais.',icon:'🧘'},
+    {title:'Evite sal e açúcar',text:'Eles aumentam a retenção de líquidos e o inchaço. Prefira água de coco e frutas hidratantes.',icon:'🚫'},
+    {title:'Ferro é essencial',text:'Menstruação significa perda de ferro. Consuma carne vermelha magra, feijão, lentilha e folhas escuras.',icon:'💊'},
+    {title:'Descanse mais',text:'Seu corpo está trabalhando muito. Durma 8h e não se culpe por precisar de mais descanso hoje.',icon:'😴'},
+    {title:'Chá de camomila',text:'Propriedades antiespasmódicas reduzem cólicas naturalmente. Tome 2-3 xícaras por dia durante a menstruação.',icon:'🍵'},
+    {title:'Liberte as emoções',text:'É normal se sentir mais emotiva. Hormônios flutuam — chore se precisar, não é fraqueza.',icon:'💕'},
+  ],
+  folicula:[
+    {title:'Energia em alta',text:'Estrogênio está subindo! Você está naturalmente mais comunicativa, confiante e atraente. Aproveite!',icon:'⚡'},
+    {title:'Momento ideal para novos começos',text:'Seu cérebro está mais criativo e aberto a novas experiências. Comece aquele projeto que estava adiando.',icon:'🌱'},
+    {title:'Academia: maximize resultados',text:'Sua força física está aumentando. Ideal para treinos mais intensos — seu corpo recupera mais rápido agora.',icon:'💪'},
+    {title:'Pele radiante naturalmente',text:'Estrogênio alto estimula colágeno. Sua pele está com textura mais fina e uniforme esta semana.',icon:'✨'},
+    {title:'Socialize mais',text:'Fase ótima para encontros, entrevistas, apresentações. Você está naturalmente mais carismática.',icon:'👥'},
+    {title:'Cuide do cabelo',text:'Menor queda capilar nessa fase. Faça a hidratação mais caprichada — resultados são melhores.',icon:'💆'},
+    {title:'Aposte em alimentos frescos',text:'Frutas cítricas, vegetais crucíferos e proteínas magras potencializam a fase folicular.',icon:'🥦'},
+    {title:'Planeje a semana',text:'Seu foco e clareza mental estão no pico. Momento ideal para tomar decisões importantes.',icon:'📋'},
+  ],
+  ovulacao:[
+    {title:'Seu dia mais magnético',text:'Pico de LH e estrogênio — você está no auge da sua atratividade física e social. Vá a eventos importantes hoje.',icon:'🌟'},
+    {title:'Voz mais atraente',text:'Estudos mostram que a voz feminina fica naturalmente mais melodiosa na ovulação. Fique à vontade para falar.',icon:'🎵'},
+    {title:'Temperatura corporal sobe',text:'Seu corpo está 0.2-0.5°C mais quente. Vista roupas confortáveis e mantenha-se hidratada.',icon:'🌡️'},
+    {title:'Muco cervical muda',text:'Fica mais transparente e elástico, parecendo clara de ovo. Sinal que ovulação está ocorrendo.',icon:'💧'},
+    {title:'Libido naturalmente mais alta',text:'Hormônios estão otimizados para isso. É fisiológico e saudável sentir mais desejo agora.',icon:'💕'},
+    {title:'Intuição aguçada',text:'Muitas mulheres relatam percepção mais aguçada de emoções alheias durante a ovulação.',icon:'🔮'},
+    {title:'Melhores resultados estéticos',text:'Procedimentos de beleza como limpeza de pele e hidratação profunda têm melhor resultado nessa fase.',icon:'💄'},
+    {title:'Janela fértil',text:'Se você não quer engravidar, use proteção. Se quer, é o melhor momento do ciclo.',icon:'🌸'},
+  ],
+  lutea:[
+    {title:'TPM: entenda o que está acontecendo',text:'Progesterona alta pode causar inchaço, irritabilidade e fadiga. É fisiológico — não é fraqueza nem drama.',icon:'🧠'},
+    {title:'Consuma magnésio',text:'Chocolate amargo 70%+, sementes de abóbora e banana reduzem sintomas da TPM significativamente.',icon:'🍫'},
+    {title:'Reduza cafeína',text:'Café intensifica ansiedade e irritabilidade nessa fase. Opte por chás ou reduza as doses.',icon:'☕'},
+    {title:'Introspecção é gift',text:'Fase ideal para reflexão, journaling e pensamentos mais profundos. Você está mais sensível e perceptiva.',icon:'📔'},
+    {title:'Exercícios moderados',text:'Yoga, pilates e caminhada são melhores que treinos intensos agora. Seu corpo pede suavidade.',icon:'🧘'},
+    {title:'Durma mais',text:'Progesterona tem efeito sedativo leve. Respeite o cansaço e durma quando precisar.',icon:'😴'},
+    {title:'Cuide dos desejos',text:'Compulsão por doce é hormonal. Opte por frutas doces ou chocolate amargo para satisfazer sem culpa.',icon:'🍓'},
+    {title:'Evite conflitos desnecessários',text:'Emoções estão mais à flor da pele. Adie conversas difíceis para depois da menstruação se possível.',icon:'🕊️'},
+  ],
+};
+
+/* ═══════════ LUGARES ═══════════ */
+const LMOODS=[{id:'romantica',l:'🌹 Romântica'},{id:'animada',l:'🎉 Animada'},{id:'tranquila',l:'☕ Tranquila'},{id:'aventureira',l:'🌟 Aventureira'},{id:'triste',l:'😢 Precisando sair'}];
+function renderLugMoods(){document.getElementById('lugMood').innerHTML=LMOODS.map(m=>`<button class="lmb${m.id===lugMood?' on':''}" onclick="selLM('${m.id}',this)">${m.l}</button>`).join('');}
+function selLM(m,btn){lugMood=m;document.querySelectorAll('.lmb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[-_]/g,' ').trim();}
+function buscarLugares(){
+  const raw=document.getElementById('lugCity').value.trim();
+  if(!raw){toast('Digite uma cidade!');return;}
+  if(!lugMood){toast('Selecione seu humor!');return;}
+  document.getElementById('lugBtn').disabled=true;
+  document.getElementById('lugResult').innerHTML=`<div class="spinw"><div class="spin"></div><p>Buscando lugares em ${raw}...</p></div>`;
+  setTimeout(()=>{
+    document.getElementById('lugBtn').disabled=false;
+    const key=norm(raw);
+    let ck=Object.keys(LUGARES).find(k=>k===key)||Object.keys(LUGARES).find(k=>key.includes(k)||k.split(' ')[0]===key.split(' ')[0]);
+    const lug=ck?LUGARES[ck][lugMood]:null;
+    if(!lug||!lug.length){
+      const cidades=Object.keys(LUGARES).map(k=>k.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ')).join(', ');
+      document.getElementById('lugResult').innerHTML=`<div class="emptyi"><div class="ei">🗺️</div><h3>Cidade não encontrada</h3><p>Temos dados para: ${cidades}.<br><br>Mais cidades sendo adicionadas em breve!</p></div>`;
+      return;
+    }
+    document.getElementById('lugResult').innerHTML=`<div style="margin-bottom:10px;"><div class="slbl">Lugares para você em ${raw}</div></div>`+lug.map(l=>`<div class="lcard"><div class="lctop"><div class="lcic">${l.e}</div><div class="lcin"><strong>${l.n}</strong><span>${l.t}</span></div></div><div class="lcaddr">📍 ${l.a}</div><div class="lcdesc">${l.d}</div><div class="lcwhy">✨ ${l.w}</div><div class="ltags">${l.tags.map(t=>`<span class="ltag">${t}</span>`).join('')}</div></div>`).join('');
+  },1200);
+}
+
+/* ═══════════ MENSTRUAÇÃO ═══════════ */
+function renderMenstruacao(){
+  const el=document.getElementById('menContent');
+  const menData=LS('mi_men')||null;
+  if(!menData||!menData.lastPeriod){
+    el.innerHTML=renderMenSetup();
+    return;
+  }
+  const today=new Date();
+  const lastPeriod=new Date(menData.lastPeriod);
+  const cycleLen=menData.cycleLen||28;
+  const periodLen=menData.periodLen||5;
+  const dayOfCycle=Math.floor((today-lastPeriod)/(1000*60*60*24))+1;
+  const phase=getPhase(dayOfCycle,cycleLen,periodLen);
+  const nextPeriod=new Date(lastPeriod);
+  nextPeriod.setDate(nextPeriod.getDate()+cycleLen);
+  const daysToNext=Math.ceil((nextPeriod-today)/(1000*60*60*24));
+  const ovDay=Math.round(cycleLen/2)-2;
+
+  // Generate 28-day calendar
+  const dayNames=['D','S','T','Q','Q','S','S'];
+  let calDays='';
+  for(let i=0;i<cycleLen;i++){
+    const d=new Date(lastPeriod);d.setDate(d.getDate()+i);
+    const dc=Math.floor((d-lastPeriod)/(1000*60*60*24))+1;
+    const isToday=d.toDateString()===today.toDateString();
+    let cls='men-day-num';
+    if(dc<=periodLen)cls+=' mens';
+    else if(dc>=ovDay-1&&dc<=ovDay+1)cls+=' ovulacao';
+    else if(dc>=ovDay-4&&dc<=ovDay+1)cls+=' fertil';
+    if(isToday)cls+=' today';
+    calDays+=`<div class="men-day"><div class="${cls}">${d.getDate()}</div><div class="men-day-label">${dayNames[d.getDay()]}</div></div>`;
+  }
+
+  const phaseInfo={
+    menstrual:{name:'🩸 Menstruação',color:'#C8174A',sub:'Fase de renovação e descanso'},
+    folicula:{name:'🌱 Folicular',color:'#1D9E75',sub:'Fase de energia e começos'},
+    ovulacao:{name:'🌟 Ovulação',color:'#FFD700',sub:'Fase de pico e magnetismo'},
+    lutea:{name:'🌙 Lútea (TPM)',color:'#8B2FC9',sub:'Fase de introspecção'},
+  }[phase];
+
+  // Daily tips for current phase
+  const tips=DICAS_CICLO[phase]||[];
+  const todayTip=tips[today.getDate()%tips.length];
+  const allTips=tips.map(t=>`<div class="men-tip-card"><div class="men-tip-phase">${t.icon} ${t.title}</div><div class="men-tip-text">${t.text}</div></div>`).join('');
+
+  el.innerHTML=`
+    <div class="men-hero" style="background:linear-gradient(135deg,${phaseInfo.color},${phaseInfo.color}88)">
+      <div class="men-title">Sua fase atual</div>
+      <div class="men-status">${phaseInfo.name}</div>
+      <div class="men-sub">${phaseInfo.sub} · Dia ${dayOfCycle} do ciclo</div>
+      <div class="men-days-row">${calDays}</div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <span style="font-size:10px;color:rgba(255,255,255,.7);">🩸 Menstr.</span>
+        <span style="font-size:10px;color:rgba(255,255,255,.7);">🟣 Fértil</span>
+        <span style="font-size:10px;color:rgba(255,255,255,.7);">⭐ Ovulação</span>
+      </div>
+    </div>
+    <div class="men-grid">
+      <div class="men-card">
+        <div class="men-card-icon">📅</div>
+        <div class="men-card-title">Próxima menstruação</div>
+        <div class="men-card-val">${daysToNext>0?daysToNext+'d':'Hoje'}</div>
+        <div class="men-card-sub">${nextPeriod.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})}</div>
+      </div>
+      <div class="men-card purple">
+        <div class="men-card-icon">🔄</div>
+        <div class="men-card-title">Dia do ciclo</div>
+        <div class="men-card-val">${dayOfCycle}</div>
+        <div class="men-card-sub">de ${cycleLen} dias</div>
+      </div>
+      <div class="men-card gold">
+        <div class="men-card-icon">🌟</div>
+        <div class="men-card-title">Ovulação prevista</div>
+        <div class="men-card-val">Dia ${ovDay}</div>
+        <div class="men-card-sub">Janela fértil: ${ovDay-4}-${ovDay+1}</div>
+      </div>
+      <div class="men-card green">
+        <div class="men-card-icon">📊</div>
+        <div class="men-card-title">Ciclo configurado</div>
+        <div class="men-card-val">${cycleLen}d</div>
+        <div class="men-card-sub">Duração: ${periodLen} dias</div>
+      </div>
+    </div>
+    <div class="slbl">Dica de hoje para sua fase</div>
+    ${todayTip?`<div class="men-tip-card" style="border-color:${phaseInfo.color}44;background:${phaseInfo.color}15;"><div class="men-tip-phase" style="color:${phaseInfo.color};">${todayTip.icon} ${todayTip.title}</div><div class="men-tip-text">${todayTip.text}</div></div>`:''}
+    <div class="slbl">Todas as dicas da fase ${phaseInfo.name}</div>
+    ${allTips}
+    <div style="margin-top:4px;">
+      <button onclick="resetMenData()" style="background:none;border:1px solid var(--b);border-radius:50px;padding:9px 18px;font-family:Inter,sans-serif;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;width:100%;">🔄 Reconfigurar ciclo</button>
+    </div>
+  `;
+  // update home status
+  const hSt=document.getElementById('homeMenuStatusCiclo');
+  if(hSt)hSt.textContent=`Dia ${dayOfCycle} · ${phaseInfo.name.split(' ')[1]||''}`;
+}
+
+function getPhase(dayOfCycle,cycleLen,periodLen){
+  if(dayOfCycle<=periodLen)return'menstrual';
+  const ovDay=Math.round(cycleLen/2)-2;
+  if(dayOfCycle<=ovDay-2)return'folicula';
+  if(dayOfCycle<=ovDay+2)return'ovulacao';
+  return'lutea';
+}
+
+function renderMenSetup(){
+  const today=new Date().toISOString().split('T')[0];
+  return`
+    <div style="text-align:center;padding:20px 0 10px;">
+      <div style="font-size:40px;margin-bottom:10px;">🌙</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:6px;">Ciclo <em style="color:#8B2FC9;">Menstrual</em></h2>
+      <p style="font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px;">Configure uma vez e receba dicas diárias personalizadas para cada fase do seu ciclo.</p>
+    </div>
+    <div class="men-setup">
+      <h3>Configurar meu ciclo</h3>
+      <p>Preencha as informações abaixo para começar.</p>
+      <div>
+        <div class="men-input-label">Primeiro dia da última menstruação</div>
+        <input type="date" class="men-input" id="menLastDate" value="${today}" style="margin-bottom:12px;">
+      </div>
+      <div class="men-input-row">
+        <div style="flex:1;">
+          <div class="men-input-label">Duração do ciclo (dias)</div>
+          <input type="number" class="men-input" id="menCycleLen" value="28" min="21" max="35">
+        </div>
+        <div style="flex:1;">
+          <div class="men-input-label">Duração da menstr. (dias)</div>
+          <input type="number" class="men-input" id="menPeriodLen" value="5" min="2" max="10">
+        </div>
+      </div>
+      <button class="men-btn" onclick="saveMenData()">🌙 Começar acompanhamento</button>
+    </div>
+    <div style="background:var(--menl);border:1px solid rgba(139,47,201,.2);border-radius:13px;padding:14px;margin-top:4px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#8B2FC9;margin-bottom:8px;">O que você vai receber</div>
+      <div style="font-size:12px;color:#E8D0FF;line-height:1.7;">🩸 Previsão do próximo período<br>🌟 Dias de ovulação e janela fértil<br>💡 Dicas diárias para cada fase<br>🧘 Orientações de saúde personalizadas<br>🍫 O que comer em cada momento do ciclo</div>
+    </div>
+  `;
+}
+
+function saveMenData(){
+  const lastPeriod=document.getElementById('menLastDate').value;
+  const cycleLen=parseInt(document.getElementById('menCycleLen').value)||28;
+  const periodLen=parseInt(document.getElementById('menPeriodLen').value)||5;
+  if(!lastPeriod){toast('Selecione a data!');return;}
+  LS('mi_men',{lastPeriod,cycleLen,periodLen});
+  toast('✅ Ciclo configurado!');
+  renderMenstruacao();
+}
+
+function resetMenData(){
+  if(confirm('Reconfigurar ciclo?')){
+    LS('mi_men',null);
+    renderMenstruacao();
+  }
+}
+
+/* ═══════════ CHAT AI EXPANDIDO ═══════════ */
+const QRS_ALL=[
+  'Me traiu, o que faço?','Trai o meu ex, ele descobriu','Saiu com o amigo dela','Fui de frescura com ele?',
+  'Ele não responde mais','Como reconquistar?','Ele me mandou oi seco','Me mandou mensagem às 3h',
+  'Quero uma mensagem de saudade','Como fazer ele sentir ciúme?','Ele ficou me vendo no stories',
+  'Postou foto com outra','Sumiu depois do sexo','Marcou e cancelou','Tá me dando em cima mas sumiu',
+  'Somos só amigos mas odeio isso','Me jogou na friendzone','Disse que gosta mas some',
+  'Me chamou de clinuda','Ele não quer relacionamento sério','Ficamos mas não assumiu',
+  'Minha amiga ficou com ele','Tenho ciúme da ex dele','Ele ainda fala com a ex',
+  'Nunca foi embora mas ela voltou','Como mando mensagem sem parecer carente?',
+  'Quero de volta mas tenho orgulho','Ele me viu feliz e voltou','Tô nervosa pro primeiro encontro',
+  'Como falo com meu crush?','Tô apaixonada pelo melhor amigo','Gosto de alguém comprometido',
+  'Como parar de pensar nele?','Não consigo esquecer','Fui larga por outra','Sinto que não mereço amor',
+  'Me sinto feia e insegura','Quero melhorar minha autoestima','Como ser mais atraente?',
+  'Como fazer ele me querer mais?','Ele pede desculpa mas repete','Como saber se ele gosta?',
+  'Quero mensagem pra retomar','Estou com medo de ser rejeitada','Ele ficou gelado depois do encontro',
+  'Quero sair mas não sei onde ir','Dicas para o primeiro beijo','Ele me pediu para ser amigos',
+  'Fiquei jogada na última vez','Como fazer ele ter saudade?'
+];
+
 class ChatIA {
   constructor(profile) {
     this.p = profile;
@@ -746,23 +959,55 @@ class ChatIA {
 
   detect(msg) {
     const l = msg.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    if (/^(oi|ola|bom dia|boa tarde|boa noite|e ai|eai|oi tudo|tudo bem)[\s!?.,]*$/.test(l)) return 'greeting';
-    if (/termino|terminou|terminei|acabou|separou|me deixou|me largou|foi embora|terminar/.test(l)) return 'termino';
-    if (/sumiu|sumindo|nao responde|nao respondeu|me ignorou|ignorando|vacuo|invisivel/.test(l)) return 'sumiu';
-    if (/(me da|quero|preciso|pode me dar|manda).{0,20}(mensagem|msg|texto|frase)/.test(l)) return 'pedido_msg';
-    if (/como (falo|escrevo|mando|respondo)/.test(l)) return 'pedido_msg';
-    if (/traiu|traicao|mentiu|mentira|corno|trai|enganou/.test(l)) return 'traicao';
-    if (/saudade|sinto falta|penso nele|nao consigo esquecer/.test(l)) return 'saudade';
-    if (/ansiosa|ansiedade|nervosa|preocupada|com medo|fico nervosa/.test(l)) return 'ansiedade';
-    if (/triste|chorando|chorei|deprimida|nao to bem|to mal|pessima|horrible/.test(l)) return 'tristeza';
-    if (/auto.?estima|me odeio|feia|burra|nao presto|nao sou boa|insegura/.test(l)) return 'autoestima';
-    if (/primeiro.?encontro|1.*encontro|vou sair com|ele me chamou pra sair|date/.test(l)) return 'encontro';
-    if (/crush|gosto (de|muito)|comecei a gostar|me interessei|pessoa nova|alguem novo/.test(l)) return 'crush';
-    if (/reconquistar|reconquista|voltar com ele|quero que ele volte/.test(l)) return 'reconquista';
-    if (/ele (voltou|me escreveu|me mandou|entrou em contato|apareceu)/.test(l)) return 'voltou';
-    if (/nao (estou|to) bem|preciso desabafar|quero desabafar/.test(l)) return 'desabafo';
-    if (/sim|nao|claro|ok|pode ser|quero saber|conta|me conta|pode/.test(l)) return 'confirma';
-    if (/obrigad|valeu|ajudou|funcionou|gostei|muito bom|perfeito/.test(l)) return 'obrigada';
+    // saudações
+    if (/^(oi|ola|hello|hey|eai|e ai|bom dia|boa tarde|boa noite|tudo bem|tudo bom)[\s!?.,]*$/.test(l)) return 'greeting';
+    // traição
+    if (/trai(u|ei|ou)|cornei|enganou|traicao|mentiu|mentira|engano|me enganou/.test(l)) return 'traicao';
+    // término
+    if (/termino|terminou|terminei|acabou|separou|me deixou|me largou|foi embora|terminar|ele foi|acabaram|foi embora|larga|largou/.test(l)) return 'termino';
+    // sumiu
+    if (/sumiu|sumindo|nao responde|nao respondeu|me ignorou|ignorando|vacuo|invisivel|gelou|ficou frio|nao abre|deixou em visto/.test(l)) return 'sumiu';
+    // mensagem pedida
+    if (/(me da|quero|preciso|pode me dar|manda|escreve|faz).{0,25}(mensagem|msg|texto|frase|resposta|algo pra)/.test(l)) return 'pedido_msg';
+    if (/como (falo|escrevo|mando|respondo|abordo|começo|falo com)/.test(l)) return 'pedido_msg';
+    // saiu com outra/outro
+    if (/saiu com|foi com|ficou com|tava com|viu com|estava com/.test(l)&&/(amig[ao]|outr[ao]|ex|colega|melhor amig)/.test(l)) return 'traicao';
+    // ciúme
+    if (/cium(e|es|enta)|inveja|ela postou|postou com|ex dele|fala com a ex|viu com outr/.test(l)) return 'ciume';
+    // friendzone
+    if (/friendzone|amig[ao]s|quer so amizad|me vê como amig|só somo amig/.test(l)) return 'friendzone';
+    // pedido de mensagem
+    if (/como (fazer|faz|faco) ele.{0,20}(sentir|perceber|querer|gostar|sentir falta|ter saudade)/.test(l)) return 'estrategia';
+    // reconquista
+    if (/reconquistar|reconquista|voltar com ele|quero que ele volte|ele vem de volta|recuperar/.test(l)) return 'reconquista';
+    // ex voltou / ele voltou
+    if (/ele (voltou|me escreveu|me mandou|entrou em contato|apareceu|voltou a|mandou oi)/.test(l)) return 'voltou';
+    // saudade
+    if (/saudade|sinto falta|penso nele|nao consigo esquecer|fico pensando|nao para de pensar/.test(l)) return 'saudade';
+    // ansiedade
+    if (/ansiosa|ansiedade|nervosa|preocupada|com medo|fico nervosa|angustia|angustiada/.test(l)) return 'ansiedade';
+    // tristeza
+    if (/triste|chorando|chorei|deprimida|nao to bem|to mal|pessima|horrible|choro muito|nao durmo/.test(l)) return 'tristeza';
+    // autoestima
+    if (/auto.?estima|me odeio|feia|burra|nao presto|nao sou boa|insegura|nao mereço|sinto q nao mereço|me sinto inferior/.test(l)) return 'autoestima';
+    // encontro
+    if (/primeiro.?encontro|1.*encontro|vou sair com|ele me chamou pra sair|date|ir pra casa|beijo|vamos sair/.test(l)) return 'encontro';
+    // crush
+    if (/crush|gosto (de|muito)|comecei a gostar|me interessei|pessoa nova|alguem novo|to gostando|nao sei se ele gosta/.test(l)) return 'crush';
+    // ex da amiga
+    if (/ex d[ao] minha amig|amiga ficou com ele|amiga e ele|amiga gosta dele|melhor amig.{0,10}ele/.test(l)) return 'exAmiga';
+    // não quer relacionamento
+    if (/nao quer relacionamento|nao quer assumir|nao ta pronto|nao quer namorar|so curtir|sem compromisso/.test(l)) return 'naoQuerNamorar';
+    // orgulho de voltar
+    if (/orgulho|vergonha de voltar|parece fraqueza|parece necessitada|parece desprezada/.test(l)) return 'orgulho';
+    // post do stories
+    if (/viu no stories|vizualizou|deixou em aberto|viu e nao respond|abriu e nao|stories/.test(l)) return 'stories';
+    // cancelou plano
+    if (/cancelou|desmarcou|nao foi|desapareceu antes|marcou e nao|sumiu no dia/.test(l)) return 'cancelou';
+    // confirmação/continuação
+    if (/sim|nao|claro|ok|pode ser|quero saber|conta|me conta|pode|quero|vai|continue|segue/.test(l)) return 'confirma';
+    // obrigada
+    if (/obrigad|valeu|ajudou|funcionou|gostei|muito bom|perfeito|adorei|me ajudou/.test(l)) return 'obrigada';
     return 'geral';
   }
 
@@ -773,10 +1018,10 @@ class ChatIA {
     const him = this.ctx.himName ? `o ${this.ctx.himName}` : 'ele';
 
     // Extract name from message
-    const nameMatch = userMsg.match(/(?:chama|nome é|se chama)\s+(\w+)/i);
+    const nameMatch = userMsg.match(/(?:chama|nome é|se chama|chamo de)\s+(\w+)/i);
     if (nameMatch && nameMatch[1].length > 2) this.ctx.himName = nameMatch[1];
 
-    // Handle waiting state (follow-up questions)
+    // Handle waiting state
     if (this.ctx.waiting) {
       const w = this.ctx.waiting;
       this.ctx.waiting = null;
@@ -784,43 +1029,45 @@ class ChatIA {
 
       if (w === 'tempo_sumiu') {
         if (/1 dia|hoje|ontem|poucas hora/.test(l))
-          return `${n}, um dia é pouco tempo. ${him.charAt(0).toUpperCase()+him.slice(1)} pode estar ocupado ou processando algo.\n\nMinha recomendação: 3 dias de silêncio antes de qualquer contato. Esse espaço te faz bem e faz ${him} sentir sua ausência.\n\nUse esse tempo para cuidar de você. Quer uma mensagem para quando o momento certo chegar?`;
+          return `${n}, um dia é pouco tempo. ${him.charAt(0).toUpperCase()+him.slice(1)} pode estar ocupado ou processando algo.\n\nMinha recomendação: 3 dias de silêncio antes de qualquer contato. Esse espaço te faz bem e faz ${him} sentir sua ausência.\n\nUse esse tempo para cuidar de você.`;
         if (/[3-6] dia|essa semana/.test(l))
           return `Com ${l.match(/\d+ dia/)?.[0] || 'alguns dias'}, já dá pra agir com estratégia. A chave é aparecer de forma leve, sem cobrança.${this.msgSug('vacuo')}`;
-        if (/semana|[7-9] dia|1[0-9] dia/.test(l))
-          return `Com esse tempo, a abordagem certa é reaparecer com leveza — como se você tivesse seguido em frente e não ficasse esperando.${this.msgSug('primeiro')}`;
-        return `Com tanto tempo assim, ${n}, a abordagem precisa ser ainda mais estratégica. Apareça no seu melhor, sem cobranças.${this.msgSug('primeiro')}`;
+        return `Com esse tempo, ${n}, a abordagem precisa ser ainda mais estratégica. Apareça no seu melhor, sem cobranças.${this.msgSug('primeiro')}`;
       }
 
       if (w === 'quem_terminou') {
         if (/eu|fui eu|terminei eu/.test(l))
-          return `Então foi você que tomou a decisão, ${n}. Isso muda a dinâmica — você tem uma posição de poder aqui.\n\nO desafio é reativar o interesse dele sem parecer que arrependeu imediatamente. A estratégia: 10 dias de silêncio, cuidar muito de você, aparecer bem — e então uma mensagem leve que desperte curiosidade.\n\nQuer que eu te mostre como fazer isso?`;
-        return `Então foi ${him} que terminou, ${n}. Eu sei que dói de um jeito diferente quando é assim.\n\nO silêncio estratégico agora é sua ferramenta mais poderosa. Ele esperava uma reação — e você não vai dar.\n\nPlano: zero contato por 14-21 dias, investir em você, e depois aparecer de uma forma que ele não esperava. Quer o passo a passo?`;
+          return `Então foi você que tomou a decisão, ${n}. Isso muda a dinâmica — você tem uma posição de poder aqui.\n\nO desafio é reativar o interesse dele sem parecer que arrependeu imediatamente. Estratégia: 10 dias de silêncio, cuidar muito de você, aparecer bem — e então uma mensagem leve que desperte curiosidade.`;
+        return `Então foi ${him} que terminou, ${n}. Eu sei que dói de um jeito diferente quando é assim.\n\nO silêncio estratégico agora é sua ferramenta mais poderosa. Plano: zero contato por 14-21 dias, investir em você, e depois aparecer de uma forma que ele não esperava. Quer o passo a passo?`;
       }
 
       if (w === 'tipo_msg') {
         if (/sumiu|desapareceu/.test(l)) return `Para alguém que sumiu, a mensagem certa é leve, sem cobrança, e demonstra que você tem vida.${this.msgSug('reacao')}`;
-        if (/saudade|falta/.test(l)) return `Para expressar saudade sem parecer carente, use algo verdadeiro mas controlado.${this.msgSug('reconquista')}`;
-        if (/comecar|retomar|primeiro contato/.test(l)) return `Para retomar contato, a mensagem precisa despertar curiosidade sem demonstrar ansiedade.${this.msgSug('primeiro')}`;
-        if (/reconquistar|voltar/.test(l)) return `Para reconquistar, nunca "quero voltar" — e sim aparecer no seu melhor e despertar curiosidade.${this.msgSug('reconquista')}`;
-        return `Para essa situação, aqui está uma mensagem que costuma funcionar bem.${this.msgSug('atração')}`;
+        if (/saudade|falta/.test(l)) return `Para expressar saudade sem parecer carente:${this.msgSug('reconquista')}`;
+        if (/comecar|retomar|primeiro contato/.test(l)) return `Para retomar contato:${this.msgSug('primeiro')}`;
+        return `Para essa situação:${this.msgSug('atração')}`;
       }
     }
 
-    // Main intent responses
     switch (intent) {
       case 'greeting':
         return this.r([
           `${n}, oi! 🌸 Que bom ter você aqui. Me conta — o que está rolando no seu coração hoje?`,
           `Oi, ${n}! 💕 Estou aqui pra te ouvir. O que está acontecendo?`,
-          `${n}! Pode me contar tudo — estou aqui pra ouvir e ajudar.`,
+          `${n}! Pode me contar tudo — sem julgamento. O que está te pesando?`,
+        ]);
+
+      case 'traicao':
+        return this.r([
+          `${n}, traição — seja de ${him} ou algo que aconteceu — é uma das dores mais profundas. Você tem todo o direito de estar como está.\n\nUm conselho importante: não tome nenhuma decisão grande agora, com a cabeça quente. A dor vai clarear na sua hora.\n\nO que aconteceu exatamente?`,
+          `${n}, traição machuca de um jeito que poucos entendem. Mas antes de qualquer reação — e eu sei que é difícil — respira.\n\nDecisões tomadas na dor raramente são as melhores.\n\nMe conta mais sobre o que aconteceu.`,
         ]);
 
       case 'termino':
         this.ctx.topic = 'termino';
         this.ctx.waiting = 'quem_terminou';
         return this.r([
-          `${n}, término dói — independente de como aconteceu. Antes de tudo, respira.\n\nMe conta uma coisa: foi ${him} que terminou ou foi você quem tomou essa decisão?`,
+          `${n}, término dói — independente de como aconteceu. Antes de tudo, respira.\n\nMe conta: foi ${him} que terminou ou foi você quem tomou essa decisão?`,
           `Ai, ${n}... término é uma das dores mais intensas que existem. Mas você está aqui — e isso já diz muito.\n\nFoi ${him} que tomou essa decisão ou foi você?`,
         ]);
 
@@ -829,7 +1076,22 @@ class ChatIA {
         this.ctx.waiting = 'tempo_sumiu';
         return this.r([
           `${n}, sumiço sem explicação é uma das situações mais angustiantes. O instinto é mandar mensagem — mas isso seria um erro agora.\n\nMe conta: faz quanto tempo ${him} está assim?`,
-          `Quando ${him} some, a tendência natural é correr atrás. Mas fazer isso agora seria exatamente o que ele espera.\n\nQuanto tempo ${him} está sumido?`,
+          `Quando ${him} some, a tendência é correr atrás. Mas fazer isso agora seria exatamente o que ele espera.\n\nQuanto tempo está assim?`,
+        ]);
+
+      case 'ciume':
+        return this.r([
+          `${n}, ciúme é normal — mas o que você faz com ele é o que importa.\n\nReagir ao ciúme de forma emocional vai exatamente na direção errada. A mulher que não demonstra que está abalada, mas que também não aceita qualquer coisa, é a que mais chama atenção.\n\nMe conta mais sobre a situação.`,
+          `Ciúme te diz que você se importa — isso é humano. Mas a estratégia agora é não deixar que ele perceba que está te afetando assim.\n\nO que está acontecendo especificamente?`,
+        ]);
+
+      case 'friendzone':
+        return `${n}, friendzone é frustrante — mas saiba: não é definitivo.\n\nA chave é parar de agir como amiga e começar a criar atração. Isso não é manipulação — é mostrar quem você realmente é.\n\nPasso 1: pare de estar sempre disponível. Tenha sua vida, seus planos.\nPasso 2: mude levemente a forma como interage — seja um pouco mais misteriosa.\nPasso 3: faça ele sentir que pode te perder.\n\nQuer uma mensagem que começa a mudar essa dinâmica?${this.msgSug('atração')}`;
+
+      case 'estrategia':
+        return this.r([
+          `${n}, a resposta mais poderosa é: invista em você, não nele.\n\nO que mais atrai é uma mulher que claramente tem vida, propósito e que não precisa de validação. Isso não é joguinho — é quem você deve ser de verdade.\n\nQuer estratégias específicas para a sua situação? Me conta mais.`,
+          `Fazer ${him} sentir sua falta tem uma fórmula simples, ${n}: seja menos previsível. Apareça menos, sorria mais, fale menos sobre o que está sentindo e mais sobre o que está vivendo.\n\nEle percebe que algo mudou — e o instinto é querer descobrir o que.`,
         ]);
 
       case 'pedido_msg':
@@ -837,24 +1099,18 @@ class ChatIA {
         this.ctx.waiting = 'tipo_msg';
         return this.r([
           `Claro que te ajudo com a mensagem certa, ${n}! Para eu acertar no alvo, me conta: é para qual situação? ${him} sumiu, vocês brigaram, é alguém novo, ou quer retomar depois de um tempo?`,
-          `Com prazer, ${n}! Me fala melhor a situação: ${him} sumiu, é depois de uma briga, para reconquistar, ou para se aproximar de alguém novo?`,
-        ]);
-
-      case 'traicao':
-        return this.r([
-          `${n}, traição é uma das dores mais profundas que existem. Você tem todo o direito de estar como está sentindo.\n\nUm conselho importante: não tome nenhuma decisão grande agora, com a cabeça quente. A dor vai clarear na sua hora certa.\n\nO que aconteceu? Pode me contar.`,
-          `${n}, traição machuca de um jeito que poucos conseguem entender. Você não precisa minimizar o que sente.\n\nMas antes de qualquer reação — e eu sei que é difícil — respira. Decisões tomadas na dor raramente são as melhores.\n\nMe conta mais sobre o que aconteceu.`,
+          `Com prazer! Me fala melhor a situação: ${him} sumiu, é depois de uma briga, para reconquistar, ou para se aproximar de alguém novo?`,
         ]);
 
       case 'saudade':
         return this.r([
           `Saudade é um dos sentimentos mais honestos que existem, ${n}. Mas existe uma diferença enorme entre sentir e agir a partir dela.\n\nSentir: completamente válido. Mandar mensagem impulsiva: arriscado.\n\nQuer que eu te dê uma mensagem que transmita saudade de forma que atrai ao invés de afastar?${this.msgSug('reconquista')}`,
-          `${n}, a saudade que você sente é real e válida. Mas agir a partir da saudade raramente dá bons resultados.\n\nA mensagem certa aqui é uma que demonstra que você pensa nele — mas que você não está desesperada. Quer essa mensagem?`,
+          `${n}, a saudade que você sente é real e válida. Mas a mensagem certa aqui é uma que demonstra que você pensa nele — mas que você não está desesperada. Quer essa mensagem?`,
         ]);
 
       case 'ansiedade':
         return this.r([
-          `Respira, ${n}. 💕\n\nAnsiedade em relacionamentos quase sempre vem de focar no que o outro está fazendo — e esquecer de focar em nós mesmas. Quanto mais você investe em sua própria vida, menos espaço a ansiedade tem.\n\nO que especificamente está te deixando ansiosa? Me conta.`,
+          `Respira, ${n}. 💕\n\nAnsiedade em relacionamentos quase sempre vem de focar no que o outro está fazendo — e esquecer de focar em nós mesmas. Quanto mais você investe em sua própria vida, menos espaço a ansiedade tem.\n\nO que especificamente está te deixando ansiosa?`,
           `${n}, esse aperto que você está sentindo é real. Mas posso te dizer: a energia que você transmite — calma ou ansiosa — ele sente. Mesmo à distância.\n\nO que está rolando que está te deixando assim?`,
         ]);
 
@@ -867,44 +1123,53 @@ class ChatIA {
       case 'autoestima':
         return this.r([
           `Para. ${n}.\n\nVocê não é o que essa situação te fez sentir. A dor é real — mas ela não define seu valor.\n\nVocê está aqui, se cuidando, buscando crescer. Isso já é enorme. O que aconteceu que te fez sentir assim?`,
-          `${n}, quase toda insegurança que sentimos em relacionamentos é a mentira que nossa cabeça cria quando estamos com medo.\n\nVocê não é feia, burra ou insuficiente. Você está num momento difícil — e isso passa.\n\nMe conta o que está te fazendo se sentir assim.`,
+          `${n}, quase toda insegurança que sentimos em relacionamentos é a mentira que nossa cabeça cria quando estamos com medo.\n\nVocê não é insuficiente. Você está num momento difícil — e isso passa.\n\nMe conta o que está te fazendo se sentir assim.`,
         ]);
 
       case 'encontro':
         return this.r([
           `Que fase boa, ${n}! Primeiro encontro tem aquela mistura de possibilidade e nervosismo que é única.\n\nRegra de ouro: seja você mesma, mas a melhor versão. Não force nada, não fique no celular, e — importante — encerre o encontro antes que a energia caia. Saia no pique.\n\nQuer dicas específicas de antes, durante ou depois?`,
-          `${n}, que emocionante! O segredo para o primeiro encontro: demonstre interesse genuíno nele, ria do que realmente achar graça, e saia quando a conversa ainda estiver boa.\n\nDeixar ele querendo mais é a estratégia mais poderosa que existe. Quer que eu te mande o guia completo?`,
+          `${n}, que emocionante! O segredo: demonstre interesse genuíno, ria do que realmente achar graça, e saia quando a conversa ainda estiver boa.\n\nDeixar ele querendo mais é a estratégia mais poderosa. Quer que eu te mande o guia completo?`,
         ]);
 
       case 'crush':
         return this.r([
-          `${n}, começos são mágicos! Essa fase onde tudo ainda é possível.\n\nO maior erro nessa fase: se apagar. Manter sua vida, seus planos e suas paixões enquanto demonstra interesse é o que atrai de verdade.\n\nQuer mensagens para essa fase inicial?${this.msgSug('atração')}`,
-          `Crush novo, ${n}! O segredo é simples: presente mas não desesperada. Demonstre interesse sem demonstrar necessidade.\n\nQuer uma mensagem para criar essa conexão inicial?${this.msgSug('atração')}`,
+          `${n}, começos são mágicos! Essa fase onde tudo ainda é possível.\n\nO maior erro: se apagar. Manter sua vida, seus planos e suas paixões enquanto demonstra interesse é o que atrai de verdade.\n\nQuer mensagens para essa fase inicial?${this.msgSug('atração')}`,
+          `Crush novo, ${n}! O segredo: presente mas não desesperada. Demonstre interesse sem demonstrar necessidade.\n\nQuer uma mensagem para criar essa conexão inicial?${this.msgSug('atração')}`,
         ]);
 
       case 'reconquista':
         return this.r([
           `${n}, reconquistar é possível — mas precisa ser do jeito certo. O maior erro é tentar convencer, explicar ou se justificar. Nada disso funciona.\n\nO que funciona: transformação visível + distância estratégica.\n\nTemos o Plano de 7 Dias completo no app. Mas posso te guiar aqui também. Quer o passo a passo?`,
-          `Reconquistar ${him} é totalmente possível, ${n}. Mas o caminho é contraintuitivo: quanto menos você correr atrás, mais ${him} vai perceber o que perdeu.\n\nPrimeiro passo: silêncio de 7-14 dias. Não é punição — é você se recompondo no seu melhor.\n\nQuer continuar?`,
+          `Reconquistar ${him} é totalmente possível, ${n}. Mas o caminho é contraintuitivo: quanto menos você correr atrás, mais ${him} vai perceber o que perdeu.\n\nPrimeiro passo: silêncio de 7-14 dias. Não é punição — é você se recompondo no seu melhor.`,
         ]);
 
       case 'voltou':
         return `${n}! ${him.charAt(0).toUpperCase()+him.slice(1)} voltou! Antes de qualquer coisa, respira.\n\nNão responda no impulso. A mensagem ideal é receptiva mas posicionada: você fica feliz que ${him} voltou, mas as coisas serão diferentes agora.\n\nQuer a mensagem exata para essa situação?${this.msgSug('reconquista')}`;
 
-      case 'desabafo':
-        return this.r([
-          `Estou aqui, ${n}. 💕 Pode falar. Não vou julgar — vou só ouvir.\n\nO que aconteceu?`,
-          `${n}, pode desabafar. Às vezes é exatamente isso que a gente precisa — alguém que ouça sem pressa.\n\nConta pra mim.`,
-        ]);
+      case 'exAmiga':
+        return `${n}, essa situação dói de um jeito diferente — porque mistura traição dele com traição de amizade.\n\nVocê tem o direito de sentir raiva, tristeza e confusão. Tudo isso ao mesmo tempo é válido.\n\nA minha recomendação: não tome decisões sobre nenhuma das duas relações agora. Deixe a poeira baixar.\n\nO que você quer priorizar: a situação com ${him} ou com sua amiga?`;
+
+      case 'naoQuerNamorar':
+        return `${n}, quando alguém diz "não quer relacionamento sério" — acredite nele. Essa é a informação mais honesta que ele pode te dar.\n\nO erro é achar que você vai ser a exceção. Às vezes é — mas raramente.\n\nA pergunta é: você consegue curtir sem se apegar? Se a resposta for não — e tudo bem se não conseguir — você já tem a sua decisão.\n\nO que você sente de verdade sobre isso?`;
+
+      case 'orgulho':
+        return `${n}, orgulho é um mecanismo de proteção — não uma fraqueza.\n\nMas existe uma diferença entre orgulho que te protege e orgulho que te impede de ter o que quer.\n\nA pergunta que importa: você quer ele de volta por amor genuíno ou por não querer perder?\n\nResposta honesta vai te guiar melhor do que qualquer estratégia.`;
+
+      case 'stories':
+        return `${n}, ele viu seus stories — isso é um sinal de interesse passivo. Ele está te observando sem ter coragem (ou intenção) de agir.\n\nO que fazer: nada. Continue postando sua vida, sua versão mais poderosa, sem direcionamento para ele.\n\nSe ele estiver interessado, ele vai agir. Forçar isso tira sua vantagem.\n\nQuer sugestão do que postar para aumentar o interesse?`;
+
+      case 'cancelou':
+        return `${n}, quando alguém cancela — especialmente de última hora — observa o padrão.\n\nUma vez com motivo justo: tudo bem. Padrão repetido: é comunicação sobre como ele te valoriza.\n\nComo você deve reagir? Com leveza. Não demonstre que te abalou. Responda algo como: "Tudo bem, fica pra próxima." — e não sugira nova data você mesma. Quem cancela, remarca.${this.msgSug('reacao')}`;
 
       case 'confirma':
         if (this.ctx.topic === 'reconquista') return `Então vamos lá! O primeiro e mais importante passo é o silêncio estratégico — de 7 a 21 dias, dependendo da situação.\n\nNesse tempo, você não entra em contato, foca em você, e se apresenta ao mundo no seu melhor. Só depois, você age.\n\nQuer que eu detalhe cada etapa?`;
-        return this.r([`Pode falar, ${n}! Estou ouvindo.`, `Conta mais pra mim, ${n}.`, `Sim! Me fala mais.`]);
+        return this.r([`Pode falar, ${n}! Estou ouvindo.`, `Conta mais pra mim, ${n}.`, `Sim! Me fala mais sobre isso.`]);
 
       case 'obrigada':
         return this.r([
-          `Fico feliz que ajudou, ${n}! 💕 Lembra: a mulher mais irresistível que existe é aquela que está em paz consigo mesma. Continue se cuidando.\n\nTem mais alguma coisa?`,
-          `Que bom! 🌸 Estou sempre aqui. Lembra: você não precisa que ninguém valide seu valor. Ele já existe. Continue assim.`,
+          `Fico feliz que ajudou, ${n}! 💕 Lembra: a mulher mais irresistível é aquela que está em paz consigo mesma. Continue se cuidando.`,
+          `Que bom! 🌸 Lembra: você não precisa que ninguém valide seu valor. Ele já existe. Continue assim.`,
         ]);
 
       default:
@@ -912,12 +1177,12 @@ class ChatIA {
           return this.r([
             `${n}, me conta mais detalhes... quero entender bem sua situação para te ajudar da forma certa.`,
             `Hmm, me fala mais sobre isso. O que está acontecendo exatamente?`,
-            `Entende... e como ${him} está se comportando nessa situação?`,
+            `Entendo... e como ${him} está se comportando nessa situação?`,
           ]);
         return this.r([
           `${n}, posso te ajudar melhor se me contar mais detalhes. O que está te pesando mais nisso tudo?`,
           `Me conta mais. Quero entender o que está te deixando assim.`,
-          `Isso é muito complexo, ${n}. Me ajuda a entender melhor contando mais detalhes.`,
+          `Isso é muito complexo, ${n}. Me ajuda a entender melhor contando mais detalhes sobre a situação.`,
         ]);
     }
   }
@@ -930,7 +1195,7 @@ let chatAI=null,chatH=[];
 let lugMood='';
 let obD={};
 
-function LS(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function LS(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}try{if(v===null){localStorage.removeItem(k);}else{localStorage.setItem(k,JSON.stringify(v));}}catch(e){}}
 function toast(t){const e=document.getElementById('tst');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2200);}
 function cp(txt){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).catch(()=>cpFb(txt));}else{cpFb(txt);}toast('✅ Copiado!');}
 function cpFb(t){const el=document.createElement('textarea');el.value=t;el.style.cssText='position:fixed;opacity:0;';document.body.appendChild(el);el.focus();el.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(el);}
@@ -973,6 +1238,16 @@ function startApp(){
   document.getElementById('refTxt').textContent=ref.txt;
   renderDots();renderMC();renderMs();renderDC();renderDs();renderPl();renderFavs();initChat();renderLugMoods();
   document.getElementById('app').style.display='flex';
+  // update home ciclo card
+  const menData=LS('mi_men');
+  if(menData&&menData.lastPeriod){
+    const today=new Date();const lastPeriod=new Date(menData.lastPeriod);
+    const dayOfCycle=Math.floor((today-lastPeriod)/(1000*60*60*24))+1;
+    const phase=getPhase(dayOfCycle,menData.cycleLen||28,menData.periodLen||5);
+    const pName={menstrual:'🩸 Mens.',folicula:'🌱 Folicular',ovulacao:'🌟 Ovulação',lutea:'🌙 TPM'}[phase];
+    const hSt=document.getElementById('homeMenuStatusCiclo');
+    if(hSt)hSt.textContent=`Dia ${dayOfCycle} · ${pName}`;
+  }
 }
 
 function sitL(){return{reconquista:'Reconquistando 💔',atrair:'Atraindo alguém ✨',manter:'Melhorando relação 💑',eu:'Foco em mim 👑'}[prof?.sit]||'Bem-vinda!';}
@@ -986,13 +1261,15 @@ function goPage(name){
   const nb=document.getElementById('nb-'+name);if(nb)nb.classList.add('on');
   if(name==='chat'){
     document.getElementById('pg-chat').classList.add('on');
-    setTimeout(()=>{const e=document.getElementById('chatMsgs');e.scrollTop=e.scrollHeight;},80);
+    setTimeout(()=>{const e=document.getElementById('chatMsgs');if(e)e.scrollTop=e.scrollHeight;document.getElementById('chatIn').focus();},100);
   }else{
     const pg=document.getElementById('pg-'+name);
     if(pg)pg.classList.add('on');
     if(name==='favs')renderFavs();
     if(name==='menu')renderMenu();
+    if(name==='menstruacao')renderMenstruacao();
   }
+  window.scrollTo(0,0);
 }
 
 /* ═══════════ MOOD ═══════════ */
@@ -1013,7 +1290,7 @@ function renderMs(){
     return`<div class="mc" onclick="openModal(${m.id})"><div class="mcsit">${m.sit}</div><div class="mctxt">${m.msg}</div><div class="mcfoot"><span class="mchint">Toque para ver a dica completa</span><div class="mcbtns"><button class="fvb" onclick="event.stopPropagation();togFM(${m.id},this)">${f?'💛':'🤍'}</button><button class="cpb" onclick="event.stopPropagation();cp(${JSON.stringify(m.msg)})">Copiar</button></div></div></div>`;
   }).join('');
 }
-function togFM(id,btn){const m=MSGS.find(x=>x.id===id);if(!m)return;const i=favs.indexOf(m.msg);if(i===-1){favs.push(m.msg);btn.textContent='💛';toast('Salvo nos favoritos!');}else{favs.splice(i,1);btn.textContent='🤍';}LS('mi_f',favs);renderFavs();}
+function togFM(id,btn){const m=MSGS.find(x=>x.id===id);if(!m)return;const i=favs.indexOf(m.msg);if(i===-1){favs.push(m.msg);btn.textContent='💛';toast('Salvo!');}else{favs.splice(i,1);btn.textContent='🤍';}LS('mi_f',favs);renderFavs();}
 function togHF(msg){const i=favs.indexOf(msg);if(i===-1){favs.push(msg);toast('💛 Salvo!');}else{favs.splice(i,1);}LS('mi_f',favs);updDF(msg);renderFavs();}
 function updDF(msg){document.getElementById('dmFv').textContent=favs.includes(msg)?'💛':'🤍';}
 
@@ -1058,19 +1335,26 @@ function togP(i){document.getElementById('pc'+i).classList.toggle('op');}
 function markDay(i){days[i]=true;LS('mi_d',days);renderDots();renderPl();toast(`🎉 Dia ${i+1} concluído!`);}
 
 /* ═══════════ CHAT ═══════════ */
-const QRS=['Como faço ele me responder?','Ele sumiu, o que faço?','Me ajuda a reconquistar','Quero mensagem de saudade','Como me valorizar mais?','Dicas pro primeiro encontro'];
+function getRandomQRs(){
+  const shuffled=[...QRS_ALL].sort(()=>Math.random()-.5);
+  return shuffled.slice(0,6);
+}
 function initChat(){
-  chatH=[{role:'ai',content:`Oi, ${prof?.nome||'linda'}! 🌸 Que bom ter você aqui.\n\nSou sua companheira pessoal de relacionamentos. Pode me contar tudo — o que está sentindo, o que aconteceu, o que quer fazer, ou pedir uma mensagem para alguma situação específica.\n\nO que está rolando hoje?`}];
+  chatH=[{role:'ai',content:`Oi, ${prof?.nome||'linda'}! 🌸 Que bom ter você aqui.\n\nSou sua companheira pessoal de relacionamentos e bem-estar. Pode me perguntar qualquer coisa — o que aconteceu, o que está sentindo, o que quer fazer, ou pedir uma mensagem para alguma situação.\n\nO que está rolando hoje?`}];
   renderChat();
-  document.getElementById('qrRow').innerHTML=QRS.map(q=>`<button class="qr" onclick="sendQR('${q}')">${q}</button>`).join('');
+  refreshQRs();
   document.getElementById('chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
+}
+function refreshQRs(){
+  document.getElementById('qrRow').innerHTML=getRandomQRs().map(q=>`<button class="qr" onclick="sendQR('${q.replace(/'/g,"\\'")}\">${q}</button>`).join('');
 }
 function renderChat(){
   const el=document.getElementById('chatMsgs');
+  if(!el)return;
   el.innerHTML=chatH.map(m=>`<div class="bw ${m.role}"><div class="bbl ${m.role}">${m.content.replace(/\n/g,'<br>')}</div><div class="bbt">${nt()}</div></div>`).join('');
   el.scrollTop=el.scrollHeight;
 }
-function addTyp(){const el=document.getElementById('chatMsgs');const d=document.createElement('div');d.id='typ';d.className='typing';d.innerHTML='<div class="td"></div><div class="td"></div><div class="td"></div>';el.appendChild(d);el.scrollTop=el.scrollHeight;}
+function addTyp(){const el=document.getElementById('chatMsgs');if(!el)return;const d=document.createElement('div');d.id='typ';d.className='typing';d.innerHTML='<div class="td"></div><div class="td"></div><div class="td"></div>';el.appendChild(d);el.scrollTop=el.scrollHeight;}
 function rmTyp(){const e=document.getElementById('typ');if(e)e.remove();}
 function sendQR(txt){document.getElementById('chatIn').value=txt;sendChat();}
 async function sendChat(){
@@ -1080,43 +1364,21 @@ async function sendChat(){
   document.getElementById('sndBtn').disabled=true;
   chatH.push({role:'usr',content:txt});
   renderChat();addTyp();
-  await new Promise(r=>setTimeout(r,700+Math.random()*1300));
+  await new Promise(r=>setTimeout(r,600+Math.random()*1200));
   rmTyp();
   const reply=chatAI.respond(txt);
   chatH.push({role:'ai',content:reply});
   renderChat();
   document.getElementById('sndBtn').disabled=false;
+  refreshQRs();
 }
 function autoH(el){el.style.height='38px';el.style.height=Math.min(el.scrollHeight,80)+'px';}
 
-/* ═══════════ LUGARES ═══════════ */
-const LMOODS=[{id:'romantica',l:'🌹 Romântica'},{id:'animada',l:'🎉 Animada'},{id:'tranquila',l:'☕ Tranquila'},{id:'aventureira',l:'🌟 Aventureira'},{id:'triste',l:'😢 Precisando sair'}];
-function renderLugMoods(){document.getElementById('lugMood').innerHTML=LMOODS.map(m=>`<button class="lmb${m.id===lugMood?' on':''}" onclick="selLM('${m.id}',this)">${m.l}</button>`).join('');}
-function selLM(m,btn){lugMood=m;document.querySelectorAll('.lmb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
-function norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[-_]/g,' ').trim();}
-function buscarLugares(){
-  const raw=document.getElementById('lugCity').value.trim();
-  if(!raw){toast('Digite uma cidade!');return;}
-  if(!lugMood){toast('Selecione seu humor!');return;}
-  document.getElementById('lugBtn').disabled=true;
-  document.getElementById('lugResult').innerHTML=`<div class="spinw"><div class="spin"></div><p>Buscando lugares em ${raw}...</p></div>`;
-  setTimeout(()=>{
-    document.getElementById('lugBtn').disabled=false;
-    const key=norm(raw);
-    let ck=Object.keys(LUGARES).find(k=>k===key)||Object.keys(LUGARES).find(k=>key.includes(k)||k.split(' ')[0]===key.split(' ')[0]);
-    const lug=ck?LUGARES[ck][lugMood]:null;
-    if(!lug||!lug.length){
-      const cidades=Object.keys(LUGARES).map(k=>k.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ')).join(', ');
-      document.getElementById('lugResult').innerHTML=`<div class="emptyi"><div class="ei">🗺️</div><h3>Cidade não encontrada</h3><p>Temos dados para: ${cidades}.<br><br>Mais cidades sendo adicionadas em breve!</p></div>`;
-      return;
-    }
-    document.getElementById('lugResult').innerHTML=`<div style="margin-bottom:10px;"><div class="slbl" style="margin-bottom:0;">Lugares para você em ${raw}</div></div>`+lug.map(l=>`<div class="lcard"><div class="lctop"><div class="lcic">${l.e}</div><div class="lcin"><strong>${l.n}</strong><span>${l.t}</span></div></div><div class="lcaddr">📍 ${l.a}</div><div class="lcdesc">${l.d}</div><div class="lcwhy">✨ ${l.w}</div><div class="ltags">${l.tags.map(t=>`<span class="ltag">${t}</span>`).join('')}</div></div>`).join('');
-  },1400);
-}
-
 /* ═══════════ MENU ═══════════ */
 function renderMenu(){
-  document.getElementById('mAv').textContent=avE();document.getElementById('mNm').textContent=prof?.nome||'Usuária';document.getElementById('mSb').textContent=sitL();
+  document.getElementById('mAv').textContent=avE();
+  document.getElementById('mNm').textContent=prof?.nome||'Usuária';
+  document.getElementById('mSb').textContent=sitL();
   const tl={romantica:'🌹 Romântica',pratica:'⚡ Prática',timida:'🌸 Sensível',independente:'🦋 Independente'}[prof?.tipo]||'';
   document.getElementById('mBgs').innerHTML=tl?`<span class="pbg">${tl}</span>`:'';
   const done=days.filter(Boolean).length;
