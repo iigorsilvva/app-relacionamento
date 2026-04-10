@@ -176,9 +176,8 @@ html,body{
   position:fixed;top:0;left:0;right:0;bottom:0;
   z-index:100;
   display:none;flex-direction:column;
-  /* Safe areas */
+  /* Safe area TOP only — nav handles bottom */
   padding-top:var(--sat);
-  padding-bottom:var(--sab);
   background:var(--bg);
 }
 
@@ -227,12 +226,24 @@ html,body{
   padding-bottom:12px;
 }
 .pg.on{display:block;}
-/* Chat is flex */
+/* Chat is flex — inside cwrap */
 .pg-chat{
   position:absolute;top:0;left:0;right:0;bottom:0;
   display:none;flex-direction:column;
+  /* NO overflow here — the inner msgs div handles it */
+  overflow:hidden;
 }
 .pg-chat.on{display:flex;}
+/* Spacer pushes messages to bottom */
+.chat-spacer{flex:1;}
+.chat-msgs{
+  flex:1;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:12px 14px 6px;
+  display:flex;flex-direction:column;
+  min-height:0;
+}
 
 /* Bottom Nav */
 .nav{
@@ -617,64 +628,6 @@ html,body{
 .mi-info span{font-size:11px;color:var(--t2);}
 .mi-arr{font-size:14px;color:var(--t3);}
 
-/* ═══ CHAT ════════════════════════════════════════════ */
-.chat-msgs{
-  flex:1;overflow-y:auto;overflow-x:hidden;
-  padding:12px 14px 8px;
-  display:flex;flex-direction:column;gap:9px;
-  -webkit-overflow-scrolling:touch;
-}
-.bw{display:flex;flex-direction:column;}
-.bw.ai{align-items:flex-start;}
-.bw.usr{align-items:flex-end;}
-.bbl{max-width:86%;padding:11px 13px;border-radius:16px;font-size:13px;line-height:1.6;}
-.ai .bbl{background:var(--s3);border:1px solid var(--b1);color:rgba(230,210,255,.9);border-bottom-left-radius:3px;}
-.usr .bbl{background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border-bottom-right-radius:3px;}
-.bbl-t{font-size:9px;color:var(--t3);margin-top:3px;padding:0 3px;}
-.bw.usr .bbl-t{text-align:right;}
-.typing-b{
-  display:flex;gap:4px;padding:11px 13px;
-  background:var(--s3);border:1px solid var(--b1);
-  border-radius:16px;border-bottom-left-radius:3px;
-  width:54px;align-self:flex-start;
-}
-.td{width:6px;height:6px;border-radius:50%;background:var(--t2);animation:tdot 1.3s infinite;}
-.td:nth-child(2){animation-delay:.2s;}
-.td:nth-child(3){animation-delay:.4s;}
-@keyframes tdot{0%,100%{opacity:.25;transform:scale(.8);}50%{opacity:1;transform:scale(1);}}
-.qr-row{
-  display:flex;gap:7px;overflow-x:auto;
-  padding:7px 14px 0;flex-shrink:0;
-}
-.qr-row::-webkit-scrollbar{display:none;}
-.qr{
-  flex-shrink:0;background:var(--s2);border:1px solid var(--b1);
-  border-radius:50px;padding:6px 12px;
-  font-family:var(--fb);font-size:11px;font-weight:600;color:var(--t2);cursor:pointer;white-space:nowrap;
-}
-.chat-bar{
-  padding:9px 12px;
-  padding-bottom:calc(9px + var(--sab));
-  background:var(--s1);border-top:1px solid var(--b1);
-  display:flex;gap:8px;align-items:flex-end;flex-shrink:0;
-}
-.chat-in{
-  flex:1;background:var(--s2);border:1.5px solid var(--b1);border-radius:20px;
-  padding:10px 14px;font-family:var(--fb);font-size:14px;color:var(--t0);
-  outline:none;resize:none;max-height:80px;min-height:40px;line-height:1.45;
-  appearance:none;-webkit-appearance:none;
-}
-.chat-in:focus{border-color:var(--rose);}
-.chat-in::placeholder{color:var(--t3);}
-.send-btn{
-  width:42px;height:42px;border-radius:50%;
-  background:linear-gradient(135deg,var(--rose),var(--rose2));
-  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;
-  flex-shrink:0;
-}
-.send-btn:active{transform:scale(.93);}
-.send-btn:disabled{opacity:.4;pointer-events:none;}
-
 /* ═══ DICAS ═══════════════════════════════════════════ */
 .dica-card{background:var(--s2);border:1px solid var(--b1);border-radius:14px;margin-bottom:9px;overflow:hidden;}
 .dica-hdr{display:flex;align-items:center;gap:11px;padding:13px;cursor:pointer;}
@@ -931,7 +884,6 @@ html,body{
         </div>
         <div class="gold-tip"><div class="gt-lbl" id="tipTag">Dica</div><div class="gt-txt" id="tipTxt">...</div></div>
         <div class="quick-grid">
-          <div class="qt ac" onclick="navTo('chat')"><div class="qt-ic">🤖</div><div class="qt-title">Conversar</div><div class="qt-sub">IA que te entende</div></div>
           <div class="qt" onclick="navTo('tarot')"><div class="qt-ic">🃏</div><div class="qt-title">Carta do Dia</div><div class="qt-sub" id="tarotSub">Retire sua carta</div></div>
           <div class="qt" onclick="navTo('ciclo')"><div class="qt-ic">🌸</div><div class="qt-title">Meu Ciclo</div><div class="qt-sub" id="cicloSub">Acompanhe</div></div>
           <div class="qt" onclick="navTo('msgs')"><div class="qt-ic">💬</div><div class="qt-title">Mensagens</div><div class="qt-sub">55+ prontas</div></div>
@@ -978,16 +930,6 @@ html,body{
     <div class="pg" id="pg-menu"><div class="menu-body" id="menuContent"></div></div>
 
   </div><!-- /cwrap -->
-
-  <!-- CHAT -->
-  <div class="pg-chat" id="pg-chat">
-    <div class="chat-msgs" id="chatMsgs"></div>
-    <div class="qr-row" id="qrRow"></div>
-    <div class="chat-bar">
-      <textarea class="chat-in" id="chatIn" placeholder="Pergunte, desabafe ou peça uma mensagem..." rows="1" oninput="autoH(this)"></textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendChat()">➤</button>
-    </div>
-  </div>
 
   <nav class="nav">
     <button class="nb on" id="nb-home" onclick="navTo('home')"><span class="nb-ic">🏠</span><span class="nb-lb">Início</span></button>
@@ -1123,23 +1065,23 @@ const MSGS=[
   {id:36,cat:'primeiro',sit:'Retomar após término',msg:'Não sei se é o momento certo, mas não consegui ficar sem dizer que sinto sua falta.',tip:'Vulnerabilidade no timing certo magnetiza.',when:'Após pelo menos 21 dias de zero contato.'},
   {id:37,cat:'primeiro',sit:'Reaproximação com memória',msg:'Você ainda ouve aquela música? Acabei de lembrar de você ouvindo essa.',tip:'Referência específica e casual.',when:'Para reaproximar de forma orgânica.'},
   {id:38,cat:'primeiro',sit:'Honestidade direta',msg:'Tô pensando em você há uns dias e resolvi simplesmente falar. Como você está?',tip:'Honestidade direta sem joguinho.',when:'Quando quiser ser direta e autêntica.'},
-  {id:39,cat:'chat',sit:'Para puxar papo',msg:'Sumida também por aqui. O que tem de novo na sua vida?',tip:'Leve e abre espaço para ele falar.',when:'Para iniciar conversa sem contexto obrigatório.'},
-  {id:40,cat:'chat',sit:'Para criar expectativa de encontro',msg:'Preciso te contar uma coisa que aconteceu, mas pessoalmente. Quando você tiver livre?',tip:'Cria suspense e antecipação de encontro.',when:'Para criar encontro de forma natural.'},
-  {id:41,cat:'chat',sit:'Mensagem que faz pensar',msg:'Às vezes fico pensando que as pessoas que passam pela gente deixam uma impressão permanente, mesmo sem querer.',tip:'Filosófica e íntima ao mesmo tempo.',when:'Para criar conexão emocional mais profunda.'},
-  {id:42,cat:'chat',sit:'Para reconquistar pela emoção',msg:'Sabe o que é engraçado? A gente às vezes só percebe o quanto alguém importa quando o silêncio fica pesado demais.',tip:'Abre o coração sem pedir nada.',when:'Para mensagem mais profunda após distância.'},
-  {id:43,cat:'chat',sit:'Para criar presença',msg:'Você apareceu do nada na minha cabeça hoje. Só vim verificar se está bem.',tip:'Simples, direto e carinhoso.',when:'Para contato leve que não pressiona por resposta.'},
+  {id:39,cat:'papo',sit:'Para puxar papo',msg:'Sumida também por aqui. O que tem de novo na sua vida?',tip:'Leve e abre espaço para ele falar.',when:'Para iniciar conversa sem contexto obrigatório.'},
+  {id:40,cat:'papo',sit:'Para criar expectativa de encontro',msg:'Preciso te contar uma coisa que aconteceu, mas pessoalmente. Quando você tiver livre?',tip:'Cria suspense e antecipação de encontro.',when:'Para criar encontro de forma natural.'},
+  {id:41,cat:'papo',sit:'Mensagem que faz pensar',msg:'Às vezes fico pensando que as pessoas que passam pela gente deixam uma impressão permanente, mesmo sem querer.',tip:'Filosófica e íntima ao mesmo tempo.',when:'Para criar conexão emocional mais profunda.'},
+  {id:42,cat:'papo',sit:'Para reconquistar pela emoção',msg:'Sabe o que é engraçado? A gente às vezes só percebe o quanto alguém importa quando o silêncio fica pesado demais.',tip:'Abre o coração sem pedir nada.',when:'Para mensagem mais profunda após distância.'},
+  {id:43,cat:'papo',sit:'Para criar presença',msg:'Você apareceu do nada na minha cabeça hoje. Só vim verificar se está bem.',tip:'Simples, direto e carinhoso.',when:'Para contato leve que não pressiona por resposta.'},
   {id:44,cat:'autoestima',sit:'Saindo de relacionamento difícil',msg:'Percebi que passei tempo demais tentando provar que merecia algo que deveria ser dado sem esforço.',tip:'Reconhecimento de padrão com dignidade.',when:'Ao sair de um relacionamento desgastante.'},
   {id:45,cat:'autoestima',sit:'Encontrando a si mesma',msg:'Estou no processo de lembrar quem eu sou quando não estou esperando alguém.',tip:'Empoderamento que atrai.',when:'Após período de foco em si mesma.'},
   {id:46,cat:'autoestima',sit:'Mantra de merecimento',msg:'Não preciso de um amor que me complete. Preciso de um que me honre.',tip:'Afirmação de merecimento.',when:'Como mantra pessoal de autoestima.'},
   {id:47,cat:'autoestima',sit:'Após decepção',msg:'Cada decepção me mostrou mais claramente o que eu mereço. Por isso não sinto raiva — sinto clareza.',tip:'Transforma dor em crescimento.',when:'Quando precisar ressignificar uma decepção.'},
   {id:48,cat:'autoestima',sit:'Posicionamento de valor',msg:'Posso aceitar muito. Mas não aceito ser tratada como se minha presença fosse descartável.',tip:'Firme e elegante.',when:'Quando sentir que não está sendo valorizada.'},
   {id:49,cat:'atração',sit:'Para criar intimidade',msg:'Você é a terceira pessoa que me lembra hoje. Talvez seja sinal de alguma coisa. Haha.',tip:'Cria mistério e interesse.',when:'Para surpreender no meio de conversa parada.'},
-  {id:50,cat:'chat',sit:'Leveza e humor',msg:'Acabei de fazer uma coisa completamente ridícula. Posso te contar? Preciso de alguém pra rir junto.',tip:'Cria leveza e conexão emocional.',when:'Para aliviar a tensão de uma situação séria.'},
+  {id:50,cat:'papo',sit:'Leveza e humor',msg:'Acabei de fazer uma coisa completamente ridícula. Posso te contar? Preciso de alguém pra rir junto.',tip:'Cria leveza e conexão emocional.',when:'Para aliviar a tensão de uma situação séria.'},
   {id:51,cat:'reacao',sit:'Quando fica na dúvida sobre responder',msg:'Às vezes eu olho sua mensagem por tempo demais tentando decidir o que responder. Hoje eu simplesmente resolvi ser honesta.',tip:'Vulnerabilidade controlada que cria conexão.',when:'Quando estiver em dúvida genuína sobre o que dizer.'},
   {id:52,cat:'valorização',sit:'Limites com afeto',msg:'Você sabe que eu gosto de você. Mas gostar de alguém não significa abrir mão de mim mesma.',tip:'Amor próprio antes do amor ao outro.',when:'Quando perceber que está perdendo seus limites.'},
   {id:53,cat:'silencio',sit:'Antes de um período de foco em si',msg:'Vou dar uma pausa das redes e do celular por uns dias. Cuide-se.',tip:'Cria mistério e demonstra vida fora do digital.',when:'Antes de um período de silêncio estratégico.'},
   {id:54,cat:'primeiro',sit:'Primeiro contato pós-desentendimento',msg:'Vi que me desbloqueou. Não vou fingir que não vi. Quer conversar?',tip:'Direto e sem drama.',when:'Quando o desbloqueio for percebido.'},
-  {id:55,cat:'chat',sit:'Encerrando conversa elegantemente',msg:'Bom, vou te deixar! Tô no meio de uma coisa mas fico feliz que conversamos.',tip:'Encerramento elegante que mantém valor.',when:'Para fechar uma conversa deixando boa impressão.'},
+  {id:55,cat:'papo',sit:'Encerrando conversa elegantemente',msg:'Bom, vou te deixar! Tô no meio de uma coisa mas fico feliz que conversamos.',tip:'Encerramento elegante que mantém valor.',when:'Para fechar uma conversa deixando boa impressão.'},
 ];
 
 const PLANO=[
@@ -1229,7 +1171,7 @@ const MSG_CATS=[
   {id:'valorização',l:'👑 Me valorizar'},
   {id:'silencio',l:'🔇 Silêncio'},
   {id:'primeiro',l:'📩 Retomar'},
-  {id:'chat',l:'💬 Papo natural'},
+  {id:'papo',l:'💬 Papo natural'},
   {id:'autoestima',l:'💪 Autoestima'},
 ];
 
@@ -1264,7 +1206,7 @@ function fbCp(t){
 function tStr(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 function dIdx(){return new Date().getDay();}
 function dNum(){return new Date().getDate();}
-function getEm(){const m={reconciliacao:'💔',relacionamento:'✨',manter:'💑',eu:'👑'};return m[prof?.obj]||'🌸';}
+function getEm(){const m={reconciliacao:'💔',relacionamento:'✨',manter:'💑',eu:'👑'};return m[(prof&&prof.obj)]||'🌸';}
 
 /* ═══ SPLASH ════════════════════════════════════════════ */
 (function(){
@@ -1358,7 +1300,7 @@ function startApp(){
     days=LS('mi_d')||[false,false,false,false,false,false,false];
     streak=LS('mi_s')||1;
 
-    var em=getEm(),n=prof?.nome||'Você';
+    var em=getEm(),n=(prof&&prof.nome)||'Você';
     var h=new Date().getHours(),g=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
     var el;
 
@@ -1409,7 +1351,7 @@ function startApp(){
 
 function sitLabel(){
   var m={reconciliacao:'Reconquistando 💔',relacionamento:'Novo amor ✨',manter:'Fortalecendo 💑',eu:'Foco em mim 👑'};
-  return m[prof?.obj]||'Bem-vinda!';
+  return m[(prof&&prof.obj)]||'Bem-vinda!';
 }
 
 /* ═══ NAV ═══════════════════════════════════════════════ */
@@ -1422,7 +1364,6 @@ function navTo(name){
   if(name==='menu')renderMenu();
   if(name==='ciclo')renderCiclo();
   if(name==='tarot'&&!tarotDrawn)buildDeck();
-  if(name==='chat')initOrScrollChat();
 }
 
 /* ═══ HOME ══════════════════════════════════════════════ */
@@ -1551,10 +1492,10 @@ var EXTRA_DICAS={
 function renderDicas(){
   var cards=[];
   if(curDicaCat==='pele'){
-    var pd=DICAS_PELE[prof?.pele]||DICAS_PELE['normal'];
+    var pd=DICAS_PELE[(prof&&prof.pele)]||DICAS_PELE['normal'];
     cards=[{t:pd.t,ic:pd.ic,c:pd.c,dicas:pd.d,personTag:'Para pele '+pd.t.toLowerCase()}];
   }else if(curDicaCat==='cabelo'){
-    var cd=DICAS_CABELO[prof?.cabelo]||DICAS_CABELO['liso'];
+    var cd=DICAS_CABELO[(prof&&prof.cabelo)]||DICAS_CABELO['liso'];
     cards=[{t:cd.t,ic:cd.ic,c:cd.c,dicas:cd.d,personTag:'Para cabelo '+cd.t.toLowerCase()}];
   }else{
     cards=EXTRA_DICAS[curDicaCat]||[];
@@ -1881,7 +1822,6 @@ function renderMenu(){
     +'<div class="mi" onclick="navTo(\'favs\')"><div class="mi-ic">🤍</div><div class="mi-info"><strong>Favoritas</strong><span>'+favs.length+' mensagem'+(favs.length!==1?'s':'')+' salva'+(favs.length!==1?'s':'')+'</span></div><span class="mi-arr">›</span></div>'
     +'<div class="mi" onclick="navTo(\'dicas\')"><div class="mi-ic">✨</div><div class="mi-info"><strong>Dicas personalizadas</strong><span>Pele '+(p.pele||'normal')+' · Cabelo '+(p.cabelo||'liso')+'</span></div><span class="mi-arr">›</span></div>'
     +'<div class="mi" onclick="navTo(\'plano\')"><div class="mi-ic">📅</div><div class="mi-info"><strong>Plano de 7 dias</strong><span>'+done+' de 7 dias concluídos</span></div><span class="mi-arr">›</span></div>'
-    +'<div class="mi" onclick="navTo(\'chat\')"><div class="mi-ic">🤖</div><div class="mi-info"><strong>Chat com IA</strong><span>Conselhos personalizados</span></div><span class="mi-arr">›</span></div>'
     +'<span class="msec">Conta</span>'
     +'<div class="mi" onclick="if(confirm(\'Reiniciar perfil e apagar todos os dados?\')){localStorage.clear();location.reload();}"><div class="mi-ic">🔄</div><div class="mi-info"><strong>Reiniciar perfil</strong><span>Atualizar suas informações</span></div><span class="mi-arr">›</span></div>';
 
@@ -1896,157 +1836,6 @@ function savePerson(){
   toast('Perfil atualizado!');
 }
 
-/* ═══ CHAT ═══════════════════════════════════════════════ */
-function ChatIA(p){
-  this.p=p||{};
-  this.nome=p&&p.nome?p.nome:'linda';
-  this.ctx={topic:null,waiting:null,turns:0,him:null};
-}
-ChatIA.prototype.n=function(){return this.nome;};
-ChatIA.prototype.r=function(arr){return arr[Math.floor(Math.random()*arr.length)];};
-ChatIA.prototype.sug=function(cat){
-  var opts=MSGS.filter(function(m){return m.cat===cat;});
-  if(!opts.length)return'';
-  var m=opts[Math.floor(Math.random()*opts.length)];
-  return'\n\n💌 Sugestão de mensagem:\n"'+m.msg+'"';
-};
-ChatIA.prototype.norm=function(s){
-  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,' ').trim();
-};
-ChatIA.prototype.detect=function(msg){
-  var l=this.norm(msg);
-  if(/trai(u|ram)|engan(ou|aram)|corno|mentiu|flagrei|saiu com (outra|amiga|amigo)|ficou com (amiga|amigo|outra|ex)/.test(l))return'traicao';
-  if(/termin(ou|ei|amos)|acab(ou|ei)|separou|me deixou|foi embora|me largou/.test(l))return'termino';
-  if(/sumiu|sumindo|nao respond|me ignor|viu e nao|leu e nao|deixou no visto/.test(l))return'sumiu';
-  if(/(me da|quero|preciso de|manda).{0,20}mensagem|como (falo|escrevo|mando|respondo)|o que (falo|mando|escrevo)/.test(l))return'msg';
-  if(/saudade|sinto falta|penso nele|nao consigo esquecer|sonhei com/.test(l))return'saudade';
-  if(/ansiosa|ansiedad|nervosa|insegura|com medo|preocupada|nao consigo dormir/.test(l))return'ansiedade';
-  if(/trist|chorand|chorei|estou mal|to mal|pessima|deprimida/.test(l))return'tristeza';
-  if(/auto.?estima|me odeio|feia|burra|nao presto|insuficiente|nao mereço/.test(l))return'autoestima';
-  if(/ciume|ela|outra mulher|ex dele|ex dela/.test(l))return'ciume';
-  if(/nao quer assumir|zona de amizade|fica mas nao namora|nao sabe o que quer/.test(l))return'indefinido';
-  if(/primeiro.?encontro|vou sair com|ele me chamou|date/.test(l))return'encontro';
-  if(/crush|gosto de alguem|comecei a gostar|me interessei/.test(l))return'crush';
-  if(/reconquistar|reconquista|voltar com|quero ele de volta/.test(l))return'reconquista';
-  if(/ele (voltou|apareceu|entrou em contato|quer voltar)/.test(l))return'voltou';
-  if(/bloqueou|me bloqueou|me deletou|sumiu das redes/.test(l))return'bloqueou';
-  if(/gravida|menstrua.{0,15}atrasad|nao veio|nao desceu|teste positivo/.test(l))return'gravidez';
-  if(/toxica|manipulador|me controla|me isola|agressivo|me faz mal/.test(l))return'toxico';
-  if(/signo|horoscopo|compatibilidade/.test(l))return'signo';
-  if(/^(oi|ola|bom dia|boa tarde|boa noite|e ai|tudo bem|tudo bom|hey)[\s!?.,]*$/.test(l))return'hi';
-  if(/obrigad|valeu|ajudou|funcionou|deu certo|gostei/.test(l))return'obrigada';
-  if(/^(sim|nao|ok|claro|pode|quero|conta)[\s!?.,]*$/.test(l))return'ok';
-  return'geral';
-};
-ChatIA.prototype.respond=function(userMsg){
-  var self=this;
-  this.ctx.turns++;
-  var intent=this.detect(userMsg);
-  var n=this.n();
-  var him=this.ctx.him?'o '+this.ctx.him:'ele';
-  var nm=userMsg.match(/(?:chama|nome é|se chama)\s+([A-Z][a-z]+)/i);
-  if(nm&&nm[1].length>2)this.ctx.him=nm[1];
-
-  // Follow-ups
-  if(this.ctx.waiting){
-    var w=this.ctx.waiting;this.ctx.waiting=null;
-    var l=this.norm(userMsg);
-    if(w==='tempo'){
-      if(/1 dia|hoje|ontem/.test(l))return n+', um dia é pouco tempo. Sugiro pelo menos 3 dias de silêncio antes de qualquer contato.\n\nQuer uma mensagem para quando o momento certo chegar?';
-      if(/[3-6] dia|essa semana/.test(l))return'Com esse tempo já dá pra agir com estratégia. A chave é aparecer de forma leve, sem cobranças.'+this.sug('silencio');
-      return'Com tanto tempo assim, a abordagem precisa ser estratégica. Apareça no seu melhor, sem cobranças.'+this.sug('primeiro');
-    }
-    if(w==='quem'){
-      if(/eu|fui eu|terminei/.test(l))return'Então foi você que tomou a decisão, '+n+'. Isso muda a dinâmica — você tem poder aqui.\n\nEstratégia: 10 dias de silêncio, cuidar muito de você, aparecer bem — e então uma mensagem leve. Quer que eu mostre como?';
-      return'Então foi '+him+' que terminou. Eu sei que dói diferente quando é assim.\n\nO silêncio estratégico agora é sua ferramenta mais poderosa. Zero contato por 14-21 dias, investir em você, aparecer de uma forma que '+him+' não esperava. Quer o passo a passo?';
-    }
-    if(w==='tipo_msg'){
-      if(/sumiu|desapareceu/.test(l))return'Para alguém que sumiu, a mensagem certa é leve, sem cobrança.'+this.sug('reacao');
-      if(/saudade|falta/.test(l))return'Para expressar saudade sem parecer carente.'+this.sug('reconquista');
-      if(/comecar|retomar/.test(l))return'Para retomar contato, a mensagem precisa despertar curiosidade.'+this.sug('primeiro');
-      return'Para essa situação, aqui está uma mensagem que costuma funcionar.'+this.sug('atração');
-    }
-  }
-
-  var sig=SIGNOS[this.p.signo]||null;
-  switch(intent){
-    case'hi':return this.r([n+', oi! 🌸 Que bom ter você aqui. Me conta — o que está rolando hoje?','Oi, '+n+'! Pode me contar tudo. O que está acontecendo?']);
-    case'traicao':return this.r([n+', traição é uma das dores mais profundas. Você tem todo o direito de estar como está.\n\nMas não tome nenhuma decisão grande agora, com a cabeça quente. O que aconteceu? Me conta mais.',n+', seja com a amiga, o amigo dela ou qualquer outra pessoa — isso machuca de um jeito que vai fundo.\n\nAntes de qualquer reação, respira. Me conta o que aconteceu.']);
-    case'termino':this.ctx.topic='termino';this.ctx.waiting='quem';return this.r([n+', término dói — independente de como foi. Antes de tudo, respira.\n\nMe conta: foi '+him+' que terminou ou foi você?',n+'... término é uma das dores mais intensas. Mas você está aqui — e isso já diz muito.\n\nFoi '+him+' que tomou essa decisão ou foi você?']);
-    case'sumiu':this.ctx.topic='sumiu';this.ctx.waiting='tempo';return this.r([n+', sumiço sem explicação é angustiante. O instinto é mandar mensagem — mas isso seria um erro agora.\n\nFaz quanto tempo '+him+' está assim?','Quando '+him+' some, a tendência é correr atrás. Mas isso é exatamente o que ele espera.\n\nQuanto tempo '+him+' está sumido?']);
-    case'msg':this.ctx.topic='msg';this.ctx.waiting='tipo_msg';return'Claro que te ajudo, '+n+'! Para acertar no alvo, me conta: é para qual situação? '+him+' sumiu, vocês brigaram, é alguém novo, ou quer retomar contato?';
-    case'saudade':return this.r([n+', saudade é um dos sentimentos mais honestos que existem. Mas tem uma diferença enorme entre sentir e agir.\n\nQuer uma mensagem que transmita saudade de forma que atrai ao invés de afastar?'+this.sug('reconquista'),n+', saudade é real. Mas sabe o que é ainda mais real? Você está aqui, se fortalecendo.\n\nQuer que eu sugira uma mensagem que comunica saudade com elegância?']);
-    case'ansiedade':return this.r(['Respira, '+n+'. 💕\n\nAnsiedade em relacionamentos quase sempre vem de focar no que o outro está fazendo. O que especificamente está te deixando ansiosa?',n+', esse aperto é real. Mas a energia que você transmite — calma ou ansiosa — '+him+' sente mesmo sem você dizer nada.\n\nO que está rolando?']);
-    case'tristeza':return this.r([n+', tudo bem ficar triste. Você não precisa estar bem o tempo todo.\n\nO que não pode é deixar essa tristeza tomar decisões no celular. Me conta o que aconteceu.','Eu ouço você, '+n+'. O que está pesando?']);
-    case'autoestima':return this.r(['Para. '+n+'.\n\nVocê não é o que essa situação te fez sentir. A dor é real — mas ela não define seu valor. O que aconteceu que te fez sentir assim?',n+', quase toda insegurança que sentimos é a mentira que nossa cabeça cria quando estamos com medo.\n\nMe conta o que está te fazendo se sentir assim.']);
-    case'ciume':return n+', a melhor forma de lidar com qualquer "concorrência" não é focar nela. É se tornar tão inesquecível que a comparação não faz mais sentido.\n\nMe conta mais — o que está acontecendo?';
-    case'indefinido':return n+', a zona cinzenta é um dos lugares mais dolorosos. A verdade é que quando alguém quer assumir, ele assume — sem desculpas.\n\nMe conta: o que acontece entre vocês?';
-    case'encontro':return'Que fase boa, '+n+'! Regra de ouro: seja você mesma, mas a melhor versão. Não force nada, encerre o encontro antes que a energia caia.\n\nQuer dicas específicas de antes, durante ou depois?';
-    case'crush':return n+', começos são mágicos! O maior erro nessa fase: se apagar. Manter sua vida enquanto demonstra interesse é o que atrai.\n\nQuer mensagens para essa fase inicial?'+this.sug('atração');
-    case'reconquista':return n+', reconquistar é possível — mas precisa ser do jeito certo. O maior erro é tentar convencer ou se justificar. Isso não funciona.\n\nO que funciona: transformação visível + distância estratégica. Quer o passo a passo?';
-    case'voltou':return n+'! '+him.charAt(0).toUpperCase()+him.slice(1)+' voltou! Antes de qualquer coisa, respira.\n\nA mensagem ideal é receptiva mas posicionada: você fica feliz que voltou, mas as coisas serão diferentes.\n\nQuer a mensagem exata?'+this.sug('reconquista');
-    case'bloqueou':return n+', ser bloqueada dói diferente. Mas bloquear é geralmente uma resposta emocional — não necessariamente definitiva.\n\nO que aconteceu antes disso?';
-    case'gravidez':return n+', entendo que isso pode ser um momento de muita incerteza.\n\nO mais importante: faça um teste de farmácia — são precisos. Independente do resultado, consulte um ginecologista. Não tome nenhuma decisão sem orientação médica.\n\nVocê tem alguém de confiança para te acompanhar nisso?';
-    case'toxico':return n+', quando um relacionamento consistentemente te faz mal — seja por controle, manipulação ou agressividade — isso merece atenção séria.\n\nVocê merece ser amada de uma forma que te faça crescer, não diminuir.\n\nMe conta mais sobre o que está acontecendo.';
-    case'signo':if(sig)return n+', como '+sig.name+' você é essencialmente: '+sig.desc.split('.')[0]+'.\n\nAfirmação de hoje: "'+sig.aff+'"\n\nCompatibilidades maiores: '+sig.cG.join(', ')+'. Mais difíceis: '+sig.cH.join(', ')+'.';return n+', qual é o seu signo? Posso falar mais sobre você com base nele.';
-    case'obrigada':return this.r(['Fico feliz que ajudou, '+n+'! 💕 Continue se cuidando. Tem mais alguma coisa?','Que bom! 🌸 Lembra: você não precisa de validação para ter valor. Continue assim.']);
-    case'ok':if(this.ctx.topic==='reconquista')return'Então vamos lá! O primeiro passo é o silêncio estratégico — de 7 a 21 dias. Nesse tempo: zero contato, foco em você, aparece no seu melhor. Só depois, você age. Quer o detalhamento?';return this.r(['Pode falar, '+n+'! Estou ouvindo.','Conta mais pra mim, '+n+'.']);
-    default:if(this.ctx.turns<=2)return this.r([n+', me conta mais detalhes... quero entender bem sua situação para te ajudar da forma certa.','Me fala mais sobre isso. O que está acontecendo exatamente?']);return this.r([n+', posso te ajudar melhor se me contar mais. O que está te pesando nisso tudo?','Me conta mais. Quero entender o que está te deixando assim.']);
-  }
-};
-
-function initOrScrollChat(){
-  if(!chatAI){chatAI=new ChatIA(prof);initChat();}
-  setTimeout(function(){var e=document.getElementById('chatMsgs');if(e)e.scrollTop=e.scrollHeight;},80);
-}
-
-function initChat(){
-  var n=prof?.nome||'linda';
-  var pDesc={romantico:'apaixonado e expressivo',protetor:'protetor e estável',aventureiro:'aventureiro e livre',ambicioso:'ambicioso e focado',sensivel:'tranquilo e sensível'};
-  var pd=pDesc[prof?.parc]||'especial';
-  chatH=[{role:'ai',content:'Oi, '+n+'! 🌸 Que bom ter você aqui.\n\nJá sei que você busca alguém '+pd+' — então vou adaptar meus conselhos a esse perfil.\n\nPode me contar tudo. O que está rolando hoje?'}];
-  renderChatMsgs();
-  var qrs=['Ele me traiu, o que faço?','Ele sumiu do nada','Me ajuda a reconquistar','Quero mensagem de saudade','Dicas pro primeiro encontro','Ele não quer assumir','Como me valorizar mais?'];
-  document.getElementById('qrRow').innerHTML=qrs.map(function(q){return'<button class="qr" onclick="sendQR(\''+q.replace(/'/g,"\\'")+'\')">'+ q+'</button>';}).join('');
-  document.getElementById('chatIn').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
-}
-
-function renderChatMsgs(){
-  var el=document.getElementById('chatMsgs');
-  el.innerHTML=chatH.map(function(m){
-    return'<div class="bw '+m.role+'"><div class="bbl '+m.role+'">'+m.content.replace(/\n/g,'<br>')+'</div><div class="bbl-t">'+tStr()+'</div></div>';
-  }).join('');
-  el.scrollTop=el.scrollHeight;
-}
-
-function addTyping(){
-  var el=document.getElementById('chatMsgs');
-  var d=document.createElement('div');d.id='typing';d.className='typing-b';
-  d.innerHTML='<div class="td"></div><div class="td"></div><div class="td"></div>';
-  el.appendChild(d);el.scrollTop=el.scrollHeight;
-}
-function rmTyping(){var e=document.getElementById('typing');if(e)e.remove();}
-
-function sendQR(t){document.getElementById('chatIn').value=t;sendChat();}
-function sendChat(){
-  var ta=document.getElementById('chatIn');
-  var txt=ta.value.trim();if(!txt)return;
-  ta.value='';ta.style.height='40px';
-  document.getElementById('sendBtn').disabled=true;
-  chatH.push({role:'usr',content:txt});
-  renderChatMsgs();addTyping();
-  var delay=600+Math.random()*1200;
-  setTimeout(function(){
-    rmTyping();
-    if(!chatAI)chatAI=new ChatIA(prof);
-    var reply=chatAI.respond(txt);
-    chatH.push({role:'ai',content:reply});
-    renderChatMsgs();
-    document.getElementById('sendBtn').disabled=false;
-  },delay);
-}
-
-function autoH(el){el.style.height='40px';el.style.height=Math.min(el.scrollHeight,80)+'px';}
 </script>
 </body>
 </html>
