@@ -367,6 +367,9 @@ html,body{
 .msgs-header{background:linear-gradient(135deg,rgba(180,24,80,.12),rgba(180,24,80,.06));border:1px solid rgba(180,24,80,.25);border-radius:13px;padding:11px 14px;margin-bottom:12px;}
 .msgs-badge{font-size:11px;font-weight:700;color:rgba(255,140,170,.95);margin-bottom:3px;}
 .msgs-sub{font-size:10px;color:var(--t2);}
+/* Card personalizado para perfil do pretendente */
+.msg-card-p{border-color:rgba(180,24,80,.35);background:linear-gradient(135deg,rgba(180,24,80,.07),var(--s2));}
+.msg-parc-tag{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,130,160,.8);margin-bottom:5px;}
 .msg-card{
   background:var(--s2);border:1px solid var(--b1);border-radius:14px;
   padding:13px;margin-bottom:9px;cursor:pointer;
@@ -1104,61 +1107,124 @@ const SIGNOS={
 };
 
 const MSGS=[
-  {id:1,cat:'reconquista',sit:'Após silêncio longo',msg:'Não vou fingir que não pensei em você. Mas aprendi que algumas coisas a gente sente e guarda.',tip:'Demonstra sentimento sem implorar. O controle emocional é o que seduz.',when:'Use após pelo menos 7 dias de silêncio completo.'},
-  {id:2,cat:'reconquista',sit:'Depois de uma briga',msg:'Não estou bem desde aquilo. Não pra cobrar — só pra ser honesta com você.',tip:'Honestidade sem agressividade gera culpa saudável nele.',when:'2-3 dias após a briga, nunca no calor do momento.'},
-  {id:3,cat:'reconquista',sit:'Quando ele some',msg:'Tudo bem por aí? Percebi que a gente está sumida e não quero fingir que está normal.',tip:'Nomeia o problema sem atacar. Demonstra maturidade.',when:'Quando o silêncio dele já passou 5+ dias.'},
-  {id:4,cat:'reconquista',sit:'Ele voltou depois de sumir',msg:'Oi. Fico feliz que voltou. Mas agora as coisas vão ser diferentes da última vez.',tip:'Recebe sem punir, mas posiciona que você cresceu.',when:'Assim que ele entrar em contato depois de sumir.'},
-  {id:5,cat:'reconquista',sit:'Saudade com elegância',msg:'Tive um sonho com você essa semana. Acordei rindo à toa. Achei que ia ficar esquisito não contar.',tip:'Sonhos são íntimos e neutros. Ele vai pensar em você o dia todo.',when:'Quando sentir saudade genuína e quiser reaproximação leve.'},
-  {id:6,cat:'reconquista',sit:'Após término — vulnerabilidade',msg:'Não sei exatamente por que estou escrevendo isso. Sei apenas que sou mais honesta comigo quando não finjo que você não existiu.',tip:'Vulnerabilidade inteligente sem pedir retorno.',when:'15+ dias após o término.'},
-  {id:7,cat:'reconquista',sit:'Reaproximação indireta',msg:'Você apareceu no meu feed hoje. Fiquei olhando por tempo demais. Achei que você devia saber.',tip:'Honestidade leve que provoca curiosidade.',when:'Quando viu algo dele nas redes sociais.'},
-  {id:8,cat:'reconquista',sit:'Memória positiva do passado',msg:'Encontrei aquela coisa que você me recomendou meses atrás. Você tinha razão. Obrigada por isso.',tip:'Referência ao passado sem ser dramática.',when:'Para reaproximar usando uma memória positiva.'},
-  {id:9,cat:'atração',sit:'Para despertar curiosidade',msg:'Acabei de passar por um lugar que me fez lembrar muito de você. Curioso, né?',tip:'Ativa o instinto de curiosidade. Ele vai querer saber qual lugar.',when:'Para iniciar contato sem parecer desesperada.'},
-  {id:10,cat:'atração',sit:'Para criar mistério',msg:'Tive um dia que me ensinou bastante coisa. Queria muito te contar, mas talvez não seja o momento ainda.',tip:'O "ainda" cria antecipação irresistível.',when:'Para manter conversa interessante.'},
-  {id:11,cat:'atração',sit:'Para virar assunto na cabeça dele',msg:'Você aparece em várias músicas que ouço ultimamente. Minha playlist sabe mais de mim do que eu.',tip:'Leve, verdadeira e com humor. Faz ele se sentir presente.',when:'Quando estão com boa energia.'},
-  {id:12,cat:'atração',sit:'Para ele sentir sua falta',msg:'Hoje foi um dia que eu teria adorado dividir com você. Ainda não encontrei ninguém que ouvisse igual.',tip:'Específico + exclusivo. Diz que ele tem algo único.',when:'Após um bom acontecimento no seu dia.'},
-  {id:13,cat:'atração',sit:'Primeiro contato com crush',msg:'Você tem uma energia diferente. Fiquei curiosa pra saber quem você é de verdade.',tip:'Ninguém resiste a saber que foi percebido de forma especial.',when:'Nas primeiras trocas com quem te interessa.'},
-  {id:14,cat:'atração',sit:'Vida ocupada e interessante',msg:'Tô num projeto que tá me consumindo completamente. Sabe quando você está tão focada que esquece o mundo? Tô nessa fase.',tip:'Demonstra vida ocupada e interessante.',when:'Para gerar interesse sem falar diretamente de relacionamento.'},
-  {id:15,cat:'atração',sit:'Depois de um bom papo',msg:'Acabei de terminar uma call longa, mas a conversa que ficou na minha cabeça foi a nossa.',tip:'Específico e elegante.',when:'Horas depois de uma boa conversa.'},
-  {id:16,cat:'atração',sit:'Criando oportunidade de encontro',msg:'Tenho pensado em fazer algo diferente esse fim de semana. Você costuma ser de fazer planos de última hora?',tip:'Cria abertura natural para encontro.',when:'Quando quiser criar oportunidade de encontro.'},
-  {id:17,cat:'atração',sit:'Elogio inteligente',msg:'Tem gente que sabe exatamente como fazer os outros se sentirem vistos. Você tem esse talento.',tip:'Elogio específico que não é óbvio.',when:'Para elogiar sem parecer bajuladora.'},
-  {id:18,cat:'reacao',sit:'Ele enviou "oi" seco',msg:'Oi! Tô no meio de uma coisa, te falo mais tarde 😊',tip:'Nunca responda "oi" com "oi". Mostrar que tem vida eleva seu valor.',when:'Sempre que receber mensagens monossilábicas.'},
-  {id:19,cat:'reacao',sit:'Ele demorou horas para responder',msg:'Haha tudo bem, estava atarefada aqui também. O que rolou?',tip:'Nunca demonstre que percebeu o delay.',when:'Quando ele demorar mais de 3h sem motivo.'},
-  {id:20,cat:'reacao',sit:'Ele te elogiou',msg:'Que bom que você percebeu isso. Não sou sempre assim, mas hoje tava me sentindo bem.',tip:'Aceita o elogio com confiança e naturalidade.',when:'Ao receber elogios. Nunca diga "que nada".'},
-  {id:21,cat:'reacao',sit:'Ele sumiu e voltou',msg:'Olha quem apareceu! Estava sumido... tudo bem?',tip:'Nomeia o sumiço com leveza. Não ataca, não ignora.',when:'Quando ele voltar depois de sumir.'},
-  {id:22,cat:'reacao',sit:'Ele ficou frio de repente',msg:'Tô sentindo você diferente hoje. Tá tudo bem?',tip:'Nomeia a mudança sem drama.',when:'Quando sentir a conversa esfriando sem motivo.'},
-  {id:23,cat:'reacao',sit:'Mensagem de madrugada',msg:'Que horas são essas pra aparecer? 😂 O que foi?',tip:'Humor + posicionamento. Não está disponível 24h.',when:'Ao receber mensagens após meia-noite.'},
-  {id:24,cat:'reacao',sit:'Para responder áudio longo',msg:'Ouvi! Você é engraçado haha. Agora preciso correr — te respondo direitinho mais tarde.',tip:'Mostra que ouviu, demonstra vida ocupada.',when:'Para responder áudios sem parecer grudada.'},
-  {id:25,cat:'valorização',sit:'Quando ele testa seus limites',msg:'Eu me importo com você, mas não a ponto de me perder por isso.',tip:'Amor com limite. A mulher que demonstra isso ele nunca quer perder.',when:'Quando sentir que está cedendo mais do que deveria.'},
-  {id:26,cat:'valorização',sit:'Quando ele te ignora',msg:'Tudo bem. Tenho coisas demais acontecendo pra ficar esperando o que não está disponível pra mim.',tip:'Posiciona você como alguém com valor e escolha.',when:'Quando estiver sendo deixada em segundo plano.'},
-  {id:27,cat:'valorização',sit:'Sendo tratada como opção',msg:'Posso esperar muita coisa, mas não sou opção.',tip:'Curta, direta e poderosa.',when:'Quando se sentir sendo tratada como segunda opção.'},
-  {id:28,cat:'valorização',sit:'Ele não liga a compromisso',msg:'Não preciso de promessas. Preciso de coerência. Tem diferença.',tip:'Madura e firme sem agressividade.',when:'Quando ele evitar qualquer forma de comprometimento.'},
-  {id:29,cat:'valorização',sit:'Autoestima em alta',msg:'Hoje acordei diferente. Sabe aquele dia que você simplesmente sabe seu próprio valor? Tô nesse.',tip:'Demonstra segurança e desperta interesse.',when:'Para mostrar evolução e autoconfiança.'},
-  {id:30,cat:'valorização',sit:'Ele quer atenção sem dar nada',msg:'Percebo que você gosta da minha atenção. Mas ela não é infinita.',tip:'Diz que seu tempo tem valor.',when:'Quando ele não investe mas quer que você invista.'},
-  {id:31,cat:'silencio',sit:'Encerrar conversa no pique',msg:'Bom, vou te deixar — tenho coisas pra resolver. Continuamos depois? 😊',tip:'Encerrar quando está bom faz ele querer mais.',when:'Quando a conversa atingir um pico de energia.'},
-  {id:32,cat:'silencio',sit:'Vácuo após briga',msg:'Preciso de um tempo pra processar. Quando eu tiver pronta, a gente conversa direito.',tip:'Silêncio com explicação breve. Não agride, só se posiciona.',when:'Logo após uma discussão acalorada.'},
-  {id:33,cat:'silencio',sit:'Reduzir disponibilidade voluntária',msg:'Vou dar um espaço pra gente por uns dias. Falo em breve.',tip:'Voluntariamente reduz a disponibilidade.',when:'Quando perceber que está sendo fácil demais.'},
-  {id:34,cat:'silencio',sit:'Resposta estratégica com delay',msg:'Nossa, me perdi hoje completamente. Como foi seu dia?',tip:'Demora natural + interesse real. Ciclo perfeito de atração.',when:'Para responder com atraso proposital mas voltar com qualidade.'},
-  {id:35,cat:'primeiro',sit:'Retomar depois de semanas',msg:'Ei, apareceu uma coisa que eu sei que você ia adorar. Ainda tenho esse costume de pensar em você 😅',tip:'O "ainda" indica continuidade sem dependência.',when:'Para reabrir contato após 15+ dias.'},
-  {id:36,cat:'primeiro',sit:'Retomar após término',msg:'Não sei se é o momento certo, mas não consegui ficar sem dizer que sinto sua falta.',tip:'Vulnerabilidade no timing certo magnetiza.',when:'Após pelo menos 21 dias de zero contato.'},
-  {id:37,cat:'primeiro',sit:'Reaproximação com memória',msg:'Você ainda ouve aquela música? Acabei de lembrar de você ouvindo essa.',tip:'Referência específica e casual.',when:'Para reaproximar de forma orgânica.'},
-  {id:38,cat:'primeiro',sit:'Honestidade direta',msg:'Tô pensando em você há uns dias e resolvi simplesmente falar. Como você está?',tip:'Honestidade direta sem joguinho.',when:'Quando quiser ser direta e autêntica.'},
-  {id:39,cat:'papo',sit:'Para puxar papo',msg:'Sumida também por aqui. O que tem de novo na sua vida?',tip:'Leve e abre espaço para ele falar.',when:'Para iniciar conversa sem contexto obrigatório.'},
-  {id:40,cat:'papo',sit:'Para criar expectativa de encontro',msg:'Preciso te contar uma coisa que aconteceu, mas pessoalmente. Quando você tiver livre?',tip:'Cria suspense e antecipação de encontro.',when:'Para criar encontro de forma natural.'},
-  {id:41,cat:'papo',sit:'Mensagem que faz pensar',msg:'Às vezes fico pensando que as pessoas que passam pela gente deixam uma impressão permanente, mesmo sem querer.',tip:'Filosófica e íntima ao mesmo tempo.',when:'Para criar conexão emocional mais profunda.'},
-  {id:42,cat:'papo',sit:'Para reconquistar pela emoção',msg:'Sabe o que é engraçado? A gente às vezes só percebe o quanto alguém importa quando o silêncio fica pesado demais.',tip:'Abre o coração sem pedir nada.',when:'Para mensagem mais profunda após distância.'},
-  {id:43,cat:'papo',sit:'Para criar presença',msg:'Você apareceu do nada na minha cabeça hoje. Só vim verificar se está bem.',tip:'Simples, direto e carinhoso.',when:'Para contato leve que não pressiona por resposta.'},
-  {id:44,cat:'autoestima',sit:'Saindo de relacionamento difícil',msg:'Percebi que passei tempo demais tentando provar que merecia algo que deveria ser dado sem esforço.',tip:'Reconhecimento de padrão com dignidade.',when:'Ao sair de um relacionamento desgastante.'},
-  {id:45,cat:'autoestima',sit:'Encontrando a si mesma',msg:'Estou no processo de lembrar quem eu sou quando não estou esperando alguém.',tip:'Empoderamento que atrai.',when:'Após período de foco em si mesma.'},
-  {id:46,cat:'autoestima',sit:'Mantra de merecimento',msg:'Não preciso de um amor que me complete. Preciso de um que me honre.',tip:'Afirmação de merecimento.',when:'Como mantra pessoal de autoestima.'},
-  {id:47,cat:'autoestima',sit:'Após decepção',msg:'Cada decepção me mostrou mais claramente o que eu mereço. Por isso não sinto raiva — sinto clareza.',tip:'Transforma dor em crescimento.',when:'Quando precisar ressignificar uma decepção.'},
-  {id:48,cat:'autoestima',sit:'Posicionamento de valor',msg:'Posso aceitar muito. Mas não aceito ser tratada como se minha presença fosse descartável.',tip:'Firme e elegante.',when:'Quando sentir que não está sendo valorizada.'},
-  {id:49,cat:'atração',sit:'Para criar intimidade',msg:'Você é a terceira pessoa que me lembra hoje. Talvez seja sinal de alguma coisa. Haha.',tip:'Cria mistério e interesse.',when:'Para surpreender no meio de conversa parada.'},
-  {id:50,cat:'papo',sit:'Leveza e humor',msg:'Acabei de fazer uma coisa completamente ridícula. Posso te contar? Preciso de alguém pra rir junto.',tip:'Cria leveza e conexão emocional.',when:'Para aliviar a tensão de uma situação séria.'},
-  {id:51,cat:'reacao',sit:'Quando fica na dúvida sobre responder',msg:'Às vezes eu olho sua mensagem por tempo demais tentando decidir o que responder. Hoje eu simplesmente resolvi ser honesta.',tip:'Vulnerabilidade controlada que cria conexão.',when:'Quando estiver em dúvida genuína sobre o que dizer.'},
-  {id:52,cat:'valorização',sit:'Limites com afeto',msg:'Você sabe que eu gosto de você. Mas gostar de alguém não significa abrir mão de mim mesma.',tip:'Amor próprio antes do amor ao outro.',when:'Quando perceber que está perdendo seus limites.'},
-  {id:53,cat:'silencio',sit:'Antes de um período de foco em si',msg:'Vou dar uma pausa das redes e do celular por uns dias. Cuide-se.',tip:'Cria mistério e demonstra vida fora do digital.',when:'Antes de um período de silêncio estratégico.'},
-  {id:54,cat:'primeiro',sit:'Primeiro contato pós-desentendimento',msg:'Vi que me desbloqueou. Não vou fingir que não vi. Quer conversar?',tip:'Direto e sem drama.',when:'Quando o desbloqueio for percebido.'},
-  {id:55,cat:'papo',sit:'Encerrando conversa elegantemente',msg:'Bom, vou te deixar! Tô no meio de uma coisa mas fico feliz que conversamos.',tip:'Encerramento elegante que mantém valor.',when:'Para fechar uma conversa deixando boa impressão.'},
+/* ══ RECONQUISTA — universais ══ */
+{id:1,cat:'reconquista',parc:'todos',sit:'Após silêncio longo',msg:'Não vou fingir que não pensei em você. Mas aprendi que algumas coisas a gente sente e guarda.',tip:'Demonstra sentimento sem implorar. O controle emocional é o que seduz.',when:'Use após pelo menos 7 dias de silêncio completo.'},
+{id:2,cat:'reconquista',parc:'todos',sit:'Depois de uma briga',msg:'Não estou bem desde aquilo. Não pra cobrar — só pra ser honesta com você.',tip:'Honestidade sem agressividade gera culpa saudável nele.',when:'2-3 dias após a briga, nunca no calor do momento.'},
+{id:3,cat:'reconquista',parc:'todos',sit:'Saudade com elegância',msg:'Tive um sonho com você essa semana. Acordei rindo à toa. Achei que ia ficar esquisito não contar.',tip:'Sonhos são íntimos e neutros. Ele vai pensar em você o dia todo.',when:'Quando sentir saudade genuína.'},
+{id:4,cat:'reconquista',parc:'todos',sit:'Após término',msg:'Não sei exatamente por que estou escrevendo isso. Sei apenas que sou mais honesta comigo quando não finjo que você não existiu.',tip:'Vulnerabilidade inteligente sem pedir retorno.',when:'15+ dias após o término.'},
+{id:5,cat:'reconquista',parc:'todos',sit:'Reaproximação indireta',msg:'Você apareceu no meu feed hoje. Fiquei olhando por tempo demais. Achei que você devia saber.',tip:'Honestidade leve que provoca curiosidade.',when:'Quando viu algo dele nas redes sociais.'},
+{id:6,cat:'reconquista',parc:'todos',sit:'Ele voltou depois de sumir',msg:'Oi. Fico feliz que voltou. Mas agora as coisas vão ser diferentes da última vez.',tip:'Recebe sem punir, mas posiciona que você cresceu.',when:'Assim que ele entrar em contato depois de sumir.'},
+/* ══ RECONQUISTA — por tipo de pretendente ══ */
+{id:7,cat:'reconquista',parc:'romantico',sit:'Para o romântico — memória afetiva',msg:'Lembrei de uma coisa que você falou meses atrás. Ainda penso nisso. Você tem esse jeito de deixar marcas sem tentar.',tip:'O romântico ama saber que tocou você de forma única e duradoura.',when:'Para reconquistar alguém expressivo e sentimental.'},
+{id:8,cat:'reconquista',parc:'romantico',sit:'Para o romântico — vulnerabilidade honesta',msg:'Tô num dia em que a saudade pesa mais do que devia. Não vim cobrar nada — só quis ser honesta com o que ainda sinto.',tip:'O romântico responde à emoção genuína. Não force, não dramatize.',when:'Quando quiser reaproximar com abertura emocional real.'},
+{id:9,cat:'reconquista',parc:'protetor',sit:'Para o protetor — admitir que precisa',msg:'Passei por uma situação difícil essa semana. Por algum motivo, você foi a primeira pessoa que veio na minha cabeça.',tip:'O protetor sente-se valorizado quando alguém demonstra que ele faz diferença.',when:'Quando você genuinamente passou por algo difícil.'},
+{id:10,cat:'reconquista',parc:'protetor',sit:'Para o protetor — estabilidade',msg:'Às vezes sinto falta da sensação de ter alguém que realmente me olha. Você tinha esse jeito.',tip:'O protetor quer sentir que oferecia algo único. Nomear isso funciona.',when:'Para reconquistar alguém que expressava cuidado e presença.'},
+{id:11,cat:'reconquista',parc:'aventureiro',sit:'Para o aventureiro — leveza e curiosidade',msg:'Tô planejando fazer algo completamente diferente esse mês. Por algum motivo, sei que você ia adorar.',tip:'O aventureiro é atraído por novidade e espontaneidade, não por nostalgia pesada.',when:'Quando quiser reaproximar levemente sem carregar o histórico.'},
+{id:12,cat:'reconquista',parc:'aventureiro',sit:'Para o aventureiro — sem pressão',msg:'Não tô aqui pra complicar nada. Só quis mandar um oi de verdade. Como você tá?',tip:'O aventureiro foge de peso emocional. Leveza é o caminho.',when:'Para reaproximar alguém que evita compromissos.'},
+{id:13,cat:'reconquista',parc:'ambicioso',sit:'Para o ambicioso — igual a igual',msg:'Tive uma semana intensa. Conquistas que eu queria muito compartilhar com alguém que entendesse a dimensão.',tip:'O ambicioso se conecta com quem tem vida própria e conquistas. Mostre que evoluiu.',when:'Após uma conquista real na sua vida.'},
+{id:14,cat:'reconquista',parc:'ambicioso',sit:'Para o ambicioso — respeito mútuo',msg:'Sempre respeitei muito sua forma de ver as coisas. Acho que nunca falei isso claramente.',tip:'O ambicioso valoriza reconhecimento intelectual mais do que romantismo.',when:'Para reaproximar alguém racional e determinado.'},
+{id:15,cat:'reconquista',parc:'sensivel',sit:'Para o sensível — empatia',msg:'Sei que as coisas entre a gente não terminaram da forma que mereciam. Fico pensando se você também sente isso.',tip:'O sensível quer sentir que você percebeu a dor dele também, não só a sua.',when:'Para reconquistar alguém empático que se machucou no processo.'},
+{id:16,cat:'reconquista',parc:'sensivel',sit:'Para o sensível — abertura emocional',msg:'Aprendi muita coisa sobre mim mesma depois da gente. Gostaria muito de poder conversar com você sobre isso um dia.',tip:'O sensível responde a conversas profundas e crescimento pessoal.',when:'Quando quiser reaproximar com profundidade emocional.'},
+
+/* ══ ATRAÇÃO — universais ══ */
+{id:17,cat:'atração',parc:'todos',sit:'Despertar curiosidade',msg:'Acabei de passar por um lugar que me fez lembrar muito de você. Curioso, né?',tip:'Ativa o instinto de curiosidade. Ele vai querer saber qual lugar.',when:'Para iniciar contato sem parecer desesperada.'},
+{id:18,cat:'atração',parc:'todos',sit:'Para criar mistério',msg:'Tive um dia que me ensinou bastante coisa. Queria muito te contar, mas talvez não seja o momento ainda.',tip:'O "ainda" cria antecipação irresistível.',when:'Para manter conversa interessante.'},
+{id:19,cat:'atração',parc:'todos',sit:'Para ele sentir sua falta',msg:'Hoje foi um dia que eu teria adorado dividir com você. Ainda não encontrei ninguém que ouvisse igual.',tip:'Específico + exclusivo. Diz que ele tem algo único.',when:'Após um bom acontecimento no seu dia.'},
+{id:20,cat:'atração',parc:'todos',sit:'Elogio inteligente',msg:'Tem gente que sabe exatamente como fazer os outros se sentirem vistos. Você tem esse talento.',tip:'Elogio específico que não é óbvio. Ninguém resiste.',when:'Para elogiar sem parecer bajuladora.'},
+/* ══ ATRAÇÃO — por tipo ══ */
+{id:21,cat:'atração',parc:'romantico',sit:'Para o romântico — intensidade compartilhada',msg:'Você aparece em várias músicas que ouço ultimamente. Minha playlist sabe mais de mim do que eu.',tip:'O romântico ama saber que está presente no seu mundo cotidiano.',when:'Quando estão com boa energia.'},
+{id:22,cat:'atração',parc:'romantico',sit:'Para o romântico — intimidade',msg:'Tem coisas que eu só falo pra poucas pessoas. Contigo é diferente — eu nem precisaria explicar o porquê.',tip:'Cria exclusividade emocional, que é o que o romântico mais deseja.',when:'Após uma conversa que gerou conexão real.'},
+{id:23,cat:'atração',parc:'protetor',sit:'Para o protetor — deixá-lo cuidar',msg:'Hoje foi um dia pesado. Tô bem, mas é aquele tipo de dia que a gente queria ter alguém por perto.',tip:'O protetor quer ser necessário. Abrir espaço para isso é uma isca poderosa.',when:'Em dias em que você de fato precisou de apoio.'},
+{id:24,cat:'atração',parc:'protetor',sit:'Para o protetor — admiração',msg:'Você tem uma estabilidade que eu admiro muito. Não é todo mundo que consegue ser porto seguro sem perder a si mesmo.',tip:'O protetor raramente recebe reconhecimento por quem ele é — isso toca fundo.',when:'Para criar conexão com alguém que é naturalmente cuidadoso.'},
+{id:25,cat:'atração',parc:'aventureiro',sit:'Para o aventureiro — espontaneidade',msg:'Tô pensando em fazer algo diferente esse fim de semana. Você costuma ser de fazer planos de última hora?',tip:'Cria abertura natural para encontro sem pressão de compromisso.',when:'Quando quiser criar oportunidade de encontro leve.'},
+{id:26,cat:'atração',parc:'aventureiro',sit:'Para o aventureiro — liberdade',msg:'Às vezes acho que as pessoas mais interessantes são as que vivem sem precisar de aprovação. Isso é raro.',tip:'O aventureiro quer sentir que você vê e valoriza sua independência.',when:'Para atrair alguém que valoriza liberdade acima de tudo.'},
+{id:27,cat:'atração',parc:'ambicioso',sit:'Para o ambicioso — vida interessante',msg:'Tô num projeto que tá me consumindo completamente. Sabe quando você está tão focada que esquece o mundo? Tô nessa fase.',tip:'O ambicioso é atraído por quem tem propósito e vida própria.',when:'Para gerar interesse com alguém focado e determinado.'},
+{id:28,cat:'atração',parc:'ambicioso',sit:'Para o ambicioso — desafio intelectual',msg:'Você me fez pensar em algo que eu nunca tinha parado pra considerar. Que conversa boa.',tip:'O ambicioso adora quem o desafia intelectualmente.',when:'Após uma conversa com troca real de ideias.'},
+{id:29,cat:'atração',parc:'sensivel',sit:'Para o sensível — conexão emocional',msg:'Raramente encontro alguém que ouve de verdade — sem pressa, sem consertar. Você faz isso.',tip:'O sensível quer sentir que sua presença emocional foi percebida.',when:'Após um momento em que ele demonstrou escuta real.'},
+{id:30,cat:'atração',parc:'sensivel',sit:'Para o sensível — profundidade',msg:'Você é do tipo que percebe quando as pessoas estão bem antes delas falarem. Isso é muito raro.',tip:'Nomear a sensibilidade dele como qualidade o toca de verdade.',when:'Para criar conexão profunda com alguém empático.'},
+
+/* ══ COMO REAGIR — universais ══ */
+{id:31,cat:'reacao',parc:'todos',sit:'"Oi" seco',msg:'Oi! Tô no meio de uma coisa, te falo mais tarde 😊',tip:'Nunca responda "oi" com "oi". Mostrar que tem vida eleva seu valor.',when:'Sempre que receber mensagens monossilábicas.'},
+{id:32,cat:'reacao',parc:'todos',sit:'Ele demorou horas',msg:'Haha tudo bem, estava atarefada aqui também. O que rolou?',tip:'Nunca demonstre que percebeu o delay.',when:'Quando ele demorar mais de 3h sem motivo.'},
+{id:33,cat:'reacao',parc:'todos',sit:'Ele te elogiou',msg:'Que bom que você percebeu isso. Não sou sempre assim, mas hoje tava me sentindo bem.',tip:'Aceita o elogio com confiança e naturalidade. Nunca diga "que nada".',when:'Ao receber qualquer elogio.'},
+{id:34,cat:'reacao',parc:'todos',sit:'Ele sumiu e voltou',msg:'Olha quem apareceu! Estava sumido... tudo bem?',tip:'Nomeia o sumiço com leveza. Não ataca, não ignora.',when:'Quando ele voltar depois de sumir.'},
+{id:35,cat:'reacao',parc:'todos',sit:'Ele ficou frio',msg:'Tô sentindo você diferente hoje. Tá tudo bem?',tip:'Nomeia a mudança sem drama. Abre espaço sem cobrar.',when:'Quando a conversa esfriar sem motivo aparente.'},
+{id:36,cat:'reacao',parc:'todos',sit:'Mensagem de madrugada',msg:'Que horas são essas pra aparecer? 😂 O que foi?',tip:'Humor + posicionamento. Não está disponível 24h.',when:'Ao receber mensagens após meia-noite.'},
+/* ══ REAGIR — por tipo ══ */
+{id:37,cat:'reacao',parc:'romantico',sit:'Romântico mandou mensagem intensa',msg:'Que mensagem bonita essa. Você me pega de surpresa às vezes.',tip:'O romântico ama quando sua intensidade é recebida, não minimizada.',when:'Quando ele mandar algo mais profundo ou poético.'},
+{id:38,cat:'reacao',parc:'romantico',sit:'Romântico ficou distante',msg:'Você andou quieto. Tô sentindo. Quando quiser conversar, tô aqui.',tip:'O romântico precisa saber que a porta está aberta, sem pressão.',when:'Quando o romântico retrair sem explicação.'},
+{id:39,cat:'reacao',parc:'protetor',sit:'Protetor ofereceu ajuda',msg:'Você não precisava fazer isso — mas obrigada. Significa bastante.',tip:'O protetor precisa sentir que o cuidado dele foi percebido e valorizado.',when:'Quando ele fizer algo gentil por você.'},
+{id:40,cat:'reacao',parc:'protetor',sit:'Protetor ficou mais frio',msg:'Você parece com a cabeça em outro lugar. Aconteceu alguma coisa?',tip:'O protetor às vezes carrega peso sozinho. Perguntar por ele, não por você, gera conexão.',when:'Quando ele parecer distante ou sobrecarregado.'},
+{id:41,cat:'reacao',parc:'aventureiro',sit:'Aventureiro desapareceu',msg:'Oi sumido! Tô ficando curiosa com o que você andou aprontando.',tip:'O aventureiro não responde a cobranças, mas responde à curiosidade com leveza.',when:'Quando ele sumir por alguns dias.'},
+{id:42,cat:'reacao',parc:'aventureiro',sit:'Aventureiro propôs algo de última hora',msg:'Pode ser. Odeio planos rígidos também. O que você tá pensando?',tip:'Demonstra que você também é leve e espontânea — o que ele mais admira.',when:'Quando ele propor algo espontâneo.'},
+{id:43,cat:'reacao',parc:'ambicioso',sit:'Ambicioso falou de conquista',msg:'Isso é grande! Você foi atrás daquilo faz tempo. Merece.',tip:'O ambicioso quer reconhecimento real, não genérico. Referencie algo específico.',when:'Quando ele compartilhar uma vitória ou conquista.'},
+{id:44,cat:'reacao',parc:'ambicioso',sit:'Ambicioso ficou ocupado',msg:'Tô vendo que você anda numa fase intensa. Vai com calma quando der.',tip:'O ambicioso se sente visto quando alguém percebe seu ritmo sem cobrar atenção.',when:'Quando ele estiver claramente ocupado ou sobrecarregado.'},
+{id:45,cat:'reacao',parc:'sensivel',sit:'Sensível abriu o coração',msg:'Não é todo mundo que consegue falar sobre isso assim. Obrigada por confiar.',tip:'O sensível precisa sentir que a vulnerabilidade dele foi acolhida, não só ouvida.',when:'Quando ele compartilhar algo pessoal ou emotivo.'},
+{id:46,cat:'reacao',parc:'sensivel',sit:'Sensível ficou recolhido',msg:'Não precisa estar bem. Às vezes é isso mesmo. Tô aqui se quiser.',tip:'O sensível não quer respostas — quer presença sem cobranças.',when:'Quando ele parecer para baixo ou fechado.'},
+
+/* ══ ME VALORIZAR — universais ══ */
+{id:47,cat:'valorização',parc:'todos',sit:'Quando ele testa seus limites',msg:'Eu me importo com você, mas não a ponto de me perder por isso.',tip:'Amor com limite. A mulher que demonstra isso ele nunca quer perder.',when:'Quando sentir que está cedendo demais.'},
+{id:48,cat:'valorização',parc:'todos',sit:'Sendo tratada como opção',msg:'Posso esperar muita coisa, mas não sou opção.',tip:'Curta, direta e poderosa. Diz tudo sem precisar de explicação.',when:'Quando se sentir sendo tratada como segunda opção.'},
+{id:49,cat:'valorização',parc:'todos',sit:'Ele não liga a compromisso',msg:'Não preciso de promessas. Preciso de coerência. Tem diferença.',tip:'Madura e firme sem agressividade.',when:'Quando ele evitar qualquer comprometimento.'},
+{id:50,cat:'valorização',parc:'todos',sit:'Autoestima em alta',msg:'Hoje acordei diferente. Sabe aquele dia que você simplesmente sabe seu próprio valor? Tô nesse.',tip:'Demonstra segurança e desperta interesse.',when:'Para mostrar evolução e autoconfiança.'},
+/* ══ VALORIZAÇÃO — por tipo ══ */
+{id:51,cat:'valorização',parc:'romantico',sit:'Romântico intenso demais',msg:'Eu também sinto muito. Mas a intensidade precisa vir dos dois lados pra funcionar.',tip:'O romântico respeita quem coloca equilíbrio sem rejeitar a emoção.',when:'Quando ele vier muito pesado emocionalmente.'},
+{id:52,cat:'valorização',parc:'protetor',sit:'Protetor controlador',msg:'Fico feliz que se importa. Mas cuidar de mim também significa confiar em mim.',tip:'O protetor precisa ouvir que o cuidado excessivo viola, não protege.',when:'Quando ele começar a ser controlador ou ciumento.'},
+{id:53,cat:'valorização',parc:'aventureiro',sit:'Aventureiro evitando seriedade',msg:'Posso ser leve e ainda assim merecer respeito. Não são coisas opostas.',tip:'O aventureiro precisa entender que leveza não é sinal de que qualquer coisa serve.',when:'Quando ele usar a "leveza" como desculpa para não investir.'},
+{id:54,cat:'valorização',parc:'ambicioso',sit:'Ambicioso priorizando trabalho',msg:'Respeito muito sua dedicação. E espero o mesmo respeito pela minha presença.',tip:'O ambicioso precisa entender que tempo e atenção também são investimento.',when:'Quando ele consistentemente colocar outros compromissos à frente.'},
+{id:55,cat:'valorização',parc:'sensivel',sit:'Sensível que se vitimiza',msg:'Ouço você. E preciso que você me ouça também. Cuidar é mútuo.',tip:'O sensível às vezes monopoliza o espaço emocional. Nomear isso com gentileza funciona.',when:'Quando a relação for muito unilateral emocionalmente.'},
+
+/* ══ SILÊNCIO ESTRATÉGICO ══ */
+{id:56,cat:'silencio',parc:'todos',sit:'Encerrar no pique',msg:'Bom, vou te deixar — tenho coisas pra resolver. Continuamos depois? 😊',tip:'Encerrar quando está bom faz ele querer mais.',when:'Quando a conversa atingir um pico de energia.'},
+{id:57,cat:'silencio',parc:'todos',sit:'Vácuo após briga',msg:'Preciso de um tempo pra processar. Quando eu tiver pronta, a gente conversa direito.',tip:'Silêncio com explicação breve. Não agride, só se posiciona.',when:'Logo após uma discussão acalorada.'},
+{id:58,cat:'silencio',parc:'todos',sit:'Reduzir disponibilidade',msg:'Vou dar um espaço pra gente por uns dias. Falo em breve.',tip:'Voluntariamente reduz a disponibilidade quando perceber que está sendo fácil demais.',when:'Quando perceber que está muito disponível.'},
+{id:59,cat:'silencio',parc:'romantico',sit:'Silêncio com o romântico',msg:'Às vezes o silêncio entre duas pessoas fala mais do que qualquer conversa. Preciso de um tempinho.',tip:'O romântico sente o peso do silêncio mais do que qualquer outro tipo.',when:'Para criar impacto emocional no romântico.'},
+{id:60,cat:'silencio',parc:'aventureiro',sit:'Silêncio com o aventureiro',msg:'Tô numa fase de me reconectar comigo. Falo quando sair.',tip:'O aventureiro respeita quem tem vida própria e não precisa explicar cada passo.',when:'Para sumir estrategicamente do aventureiro.'},
+{id:61,cat:'silencio',parc:'ambicioso',sit:'Silêncio com o ambicioso',msg:'Tô em modo foco por um tempo. Vida acontecendo aqui.',tip:'O ambicioso admira quem tem projetos e objetivos. Sumir "por motivo" gera respeito.',when:'Para criar mistério com o ambicioso.'},
+{id:62,cat:'silencio',parc:'sensivel',sit:'Silêncio com o sensível',msg:'Preciso de um tempo pra mim. Não é sobre você — é sobre mim.',tip:'O sensível tende a internalizartudo. Deixar claro que é sobre você evita que ele sofra desnecessariamente.',when:'Antes de um período de silêncio com o sensível.'},
+
+/* ══ RETOMAR CONTATO ══ */
+{id:63,cat:'primeiro',parc:'todos',sit:'Depois de semanas',msg:'Ei, apareceu uma coisa que eu sei que você ia adorar. Ainda tenho esse costume de pensar em você 😅',tip:'O "ainda" indica continuidade sem dependência.',when:'Para reabrir contato após 15+ dias.'},
+{id:64,cat:'primeiro',parc:'todos',sit:'Retomar após término',msg:'Não sei se é o momento certo, mas não consegui ficar sem dizer que sinto sua falta.',tip:'Vulnerabilidade no timing certo magnetiza.',when:'Após pelo menos 21 dias de zero contato.'},
+{id:65,cat:'primeiro',parc:'todos',sit:'Honestidade direta',msg:'Tô pensando em você há uns dias e resolvi simplesmente falar. Como você está?',tip:'Honestidade direta sem joguinho.',when:'Quando quiser ser direta e autêntica.'},
+{id:66,cat:'primeiro',parc:'romantico',sit:'Retomar com o romântico',msg:'Tem uma música que eu escutei ontem que me jogou de volta pra gente. Não sei se você ainda ouve isso.',tip:'O romântico retoma através de gatilhos sensoriais e afetivos.',when:'Para reaproximar um romântico com referência emocional.'},
+{id:67,cat:'primeiro',parc:'protetor',sit:'Retomar com o protetor',msg:'Passando por uma situação e lembrei que você sempre soube o que dizer. Saudade disso.',tip:'O protetor sente-se valorizado quando sua presença prática é lembrada.',when:'Para reaproximar o protetor de forma genuína.'},
+{id:68,cat:'primeiro',parc:'aventureiro',sit:'Retomar com o aventureiro',msg:'Vi uma coisa hoje que gritou o seu nome. Você continua nessa de [algo específico]?',tip:'O aventureiro retoma através de referências às coisas que ele gosta e vive.',when:'Para reaproximar o aventureiro de forma leve.'},
+{id:69,cat:'primeiro',parc:'ambicioso',sit:'Retomar com o ambicioso',msg:'Ouvi que você [conquista/projeto]. Sempre soube que ia chegar lá. Parabéns de verdade.',tip:'O ambicioso abre espaço para quem reconhece suas conquistas com especificidade.',when:'Quando ele atingir algo significativo.'},
+{id:70,cat:'primeiro',parc:'sensivel',sit:'Retomar com o sensível',msg:'Tenho pensado em como terminaram as coisas entre a gente. Acho que a gente mereceu mais do que isso.',tip:'O sensível abre espaço para quem reconhece que os dois sofreram.',when:'Para reaproximar alguém empático com respeito à dor mútua.'},
+
+/* ══ PAPO NATURAL ══ */
+{id:71,cat:'papo',parc:'todos',sit:'Para puxar papo',msg:'Sumida também por aqui. O que tem de novo na sua vida?',tip:'Leve e abre espaço para ele falar.',when:'Para iniciar conversa sem contexto obrigatório.'},
+{id:72,cat:'papo',parc:'todos',sit:'Criar expectativa de encontro',msg:'Preciso te contar uma coisa que aconteceu, mas pessoalmente. Quando você tiver livre?',tip:'Cria suspense e antecipação de encontro.',when:'Para criar encontro de forma natural.'},
+{id:73,cat:'papo',parc:'todos',sit:'Leveza e humor',msg:'Acabei de fazer uma coisa completamente ridícula. Posso te contar? Preciso de alguém pra rir junto.',tip:'Cria leveza e conexão emocional.',when:'Para aliviar a tensão de uma situação séria.'},
+{id:74,cat:'papo',parc:'romantico',sit:'Papo com o romântico — profundidade',msg:'Às vezes fico pensando em conversas que tivemos e como algumas ficam marcadas. A gente se entendia de um jeito estranho.',tip:'O romântico ama saber que as conversas de vocês tinham peso.',when:'Para conversa mais profunda com o romântico.'},
+{id:75,cat:'papo',parc:'protetor',sit:'Papo com o protetor — cotidiano',msg:'Tô aqui tentando resolver umas coisas práticas e lembrei que você sempre tinha uma solução boa pra qualquer situação.',tip:'Puxar conversa por habilidade prática valoriza o protetor.',when:'Para iniciar conversa natural com o protetor.'},
+{id:76,cat:'papo',parc:'aventureiro',sit:'Papo com o aventureiro — aventura',msg:'Acabei de descobrir um lugar incrível aqui perto. Você seria o tipo de pessoa que iria sem planejar.',tip:'O aventureiro adora ser visto como alguém espontâneo e ousado.',when:'Para iniciar conversa com o aventureiro a partir de algo novo.'},
+{id:77,cat:'papo',parc:'ambicioso',sit:'Papo com o ambicioso — ideias',msg:'Li uma coisa sobre [tema] que me fez pensar em você. Você já viu isso por outro ângulo?',tip:'O ambicioso adore quem trás conteúdo e perspectivas novas.',when:'Para iniciar conversa intelectualmente estimulante.'},
+{id:78,cat:'papo',parc:'sensivel',sit:'Papo com o sensível — conexão',msg:'Hoje foi um dia de muita coisa. Aquele tipo de dia que você queria poder descompactar com alguém que entende.',tip:'O sensível adora ser a pessoa escolhida para desabafo.',when:'Para iniciar conversa de conexão emocional com o sensível.'},
+
+/* ══ AUTOESTIMA ══ */
+{id:79,cat:'autoestima',parc:'todos',sit:'Saindo de relacionamento difícil',msg:'Percebi que passei tempo demais tentando provar que merecia algo que deveria ser dado sem esforço.',tip:'Reconhecimento de padrão com dignidade.',when:'Ao sair de um relacionamento desgastante.'},
+{id:80,cat:'autoestima',parc:'todos',sit:'Encontrando a si mesma',msg:'Estou no processo de lembrar quem eu sou quando não estou esperando alguém.',tip:'Empoderamento que atrai.',when:'Após período de foco em si mesma.'},
+{id:81,cat:'autoestima',parc:'todos',sit:'Mantra de merecimento',msg:'Não preciso de um amor que me complete. Preciso de um que me honre.',tip:'Afirmação de merecimento.',when:'Como mantra pessoal de autoestima.'},
+{id:82,cat:'autoestima',parc:'todos',sit:'Após decepção',msg:'Cada decepção me mostrou mais claramente o que eu mereço. Por isso não sinto raiva — sinto clareza.',tip:'Transforma dor em crescimento.',when:'Quando precisar ressignificar uma decepção.'},
+{id:83,cat:'autoestima',parc:'todos',sit:'Posicionamento de valor',msg:'Posso aceitar muito. Mas não aceito ser tratada como se minha presença fosse descartável.',tip:'Firme e elegante.',when:'Quando sentir que não está sendo valorizada.'},
+{id:84,cat:'autoestima',parc:'romantico',sit:'Autoestima com o romântico',msg:'Aprendi que amor de verdade não cansa, não pesa e não faz duvidar de si mesma. Isso mudou o que eu aceito.',tip:'Para o romântico intenso: nomear o padrão que mudou reposiciona você.',when:'Quando quiser mostrar crescimento para o romântico.'},
+{id:85,cat:'autoestima',parc:'aventureiro',sit:'Autoestima com o aventureiro',msg:'Fui atrás da minha própria aventura. Tô diferente — de um jeito bom.',tip:'O aventureiro é atraído por quem está em movimento e crescendo.',when:'Para mostrar crescimento pessoal ao aventureiro.'},
+{id:86,cat:'autoestima',parc:'ambicioso',sit:'Autoestima com o ambicioso',msg:'Aprendi que meu tempo e energia são recursos. Tô investindo nos lugares certos.',tip:'Linguagem de investimento e recurso ressoa com o perfil ambicioso.',when:'Para mostrar autoconhecimento ao ambicioso.'},
+
+/* ══ PERGUNTAR / TESTAR ══ */
+{id:87,cat:'papo',parc:'todos',sit:'Criar presença',msg:'Você apareceu do nada na minha cabeça hoje. Só vim verificar se está bem.',tip:'Simples, direto e carinhoso. Não pressiona por resposta.',when:'Para contato leve que não pressiona.'},
+{id:88,cat:'papo',parc:'todos',sit:'Encerrar elegantemente',msg:'Bom, vou te deixar! Tô no meio de uma coisa mas fico feliz que conversamos.',tip:'Encerramento elegante que mantém valor.',when:'Para fechar uma conversa deixando boa impressão.'},
+{id:89,cat:'papo',parc:'todos',sit:'Mensagem que faz pensar',msg:'Às vezes fico pensando que as pessoas que passam pela gente deixam uma impressão permanente, mesmo sem querer.',tip:'Filosófica e íntima ao mesmo tempo.',when:'Para criar conexão emocional mais profunda.'},
+{id:90,cat:'papo',parc:'todos',sit:'Para reconquistar pela emoção',msg:'Sabe o que é engraçado? A gente às vezes só percebe o quanto alguém importa quando o silêncio fica pesado demais.',tip:'Abre o coração sem pedir nada.',when:'Para mensagem profunda após distância.'},
+
+/* ══ PRIMEIRO ENCONTRO ══ */
+{id:91,cat:'reacao',parc:'romantico',sit:'Depois do primeiro encontro — romântico',msg:'Tô ainda com o barulho da nossa conversa na cabeça. Tem isso às vezes, né?',tip:'O romântico ama saber que você ainda está com o encontro na memória.',when:'Horas após um primeiro encontro com o romântico.'},
+{id:92,cat:'reacao',parc:'protetor',sit:'Depois do primeiro encontro — protetor',msg:'Cheguei bem em casa. Obrigada por checar. Gostei muito de você hoje.',tip:'O protetor precisa saber que o cuidado dele foi percebido.',when:'Após encontro em que ele demonstrou cuidado.'},
+{id:93,cat:'reacao',parc:'aventureiro',sit:'Depois do primeiro encontro — aventureiro',msg:'Isso foi diferente. Você é diferente. Curioso.',tip:'O aventureiro adora ser visto como alguém único e fora do comum.',when:'Após primeiro encontro com o aventureiro.'},
+{id:94,cat:'reacao',parc:'ambicioso',sit:'Depois do primeiro encontro — ambicioso',msg:'Essa conversa me deu muito o que pensar. Você tem um jeito de ver as coisas que é raro.',tip:'O ambicioso ama reconhecimento da sua perspectiva intelectual.',when:'Após encontro em que ele falou sobre visão de mundo ou projetos.'},
+{id:95,cat:'reacao',parc:'sensivel',sit:'Depois do primeiro encontro — sensível',msg:'Foi muito bom. Você é a prova de que ainda existe gente que escuta de verdade.',tip:'O sensível valoriza ser reconhecido pela sua escuta e presença emocional.',when:'Após encontro em que ele foi presente e ouvinte.'},
 ];
 
 const PLANO=[
@@ -1613,22 +1679,31 @@ function adaptMsg(text, tip){
 }
 
 function renderMsgs(){
-  var list=curMsgCat==='all'?MSGS:MSGS.filter(function(m){return m.cat===curMsgCat;});
-  var o=(prof&&prof.orient)||'hetero';
   var par=(prof&&prof.parc)||'romantico';
-  var parLabel={romantico:'apaixonado',protetor:'protetor',aventureiro:'aventureiro',ambicioso:'ambicioso',tranquilo:'sensível'}[par]||par;
+  var o=(prof&&prof.orient)||'hetero';
+  var base=curMsgCat==='all'?MSGS:MSGS.filter(function(m){return m.cat===curMsgCat;});
+  var personalized=base.filter(function(m){return m.parc===par;});
+  var universal=base.filter(function(m){return m.parc==='todos';});
+  var list=personalized.concat(universal);
+  var parNames={romantico:'Romântico 🌹',protetor:'Protetor 🛡️',aventureiro:'Aventureiro 🌍',ambicioso:'Ambicioso 🎯',sensivel:'Sensível 🧘'};
+  var parLabel=parNames[par]||par;
   var orientLabel={hetero:'para ele',lesbica:'para ela',gay:'para ele',bi:'para ela/ele',livre:'personalizado'}[o]||'personalizado';
-  var pronLabel=o==='lesbica'?'Pronomes: ela/dela':(o==='bi'?'Pronomes: ela/ele':'Pronomes: ele/dele');
-  var headerHtml='<div class="msgs-header"><div class="msgs-badge">✨ Personalizado '+orientLabel+'</div><div class="msgs-sub">Pretendente '+parLabel+' · '+pronLabel+'</div></div>';
+  var pronLabel=o==='lesbica'?'Pronomes femininos':(o==='bi'?'Pronomes adaptados':'Pronomes masculinos');
+  var headerHtml='<div class="msgs-header">'
+    +'<div class="msgs-badge">✨ Personalizado '+orientLabel+' · '+parLabel+'</div>'
+    +'<div class="msgs-sub">'+pronLabel+' · '+personalized.length+' específicas para o perfil dele</div>'
+    +'</div>';
   document.getElementById('msgList').innerHTML=headerHtml+list.map(function(m){
     var adapted=adaptMsg(m.msg,m.tip);
     var fav=favs.includes(adapted.msg);
-    return'<div class="msg-card" onclick="openMM('+m.id+')">'
+    var isP=m.parc===par;
+    return'<div class="msg-card'+(isP?' msg-card-p':'')+'" onclick="openMM('+m.id+')">'
+      +(isP?'<div class="msg-parc-tag">🎯 Para o perfil dele</div>':'')
       +'<div class="msg-tag">'+m.sit+'</div>'
       +'<div class="msg-txt">'+adapted.msg+'</div>'
       +'<div class="msg-foot"><span class="msg-hint">Toque para ver a dica</span>'
       +'<div class="msg-acts">'
-      +'<button class="fav-b" onclick="event.stopPropagation();togFav('+m.id+',this)">'+(fav?'💛':'🤍')+'</button>'
+      +'<button class="fav-b" onclick="event.stopPropagation();togFav('+m.id+',this)">'+(fav?'💛':'\u2764')+'</button>'
       +'<button class="copy-b" onclick="event.stopPropagation();cpAdapted('+m.id+')">Copiar</button>'
       +'</div></div></div>';
   }).join('');
