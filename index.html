@@ -363,6 +363,10 @@ html,body{
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--rose),#E0306A);border-radius:2px;}
 
 /* ═══ MENSAGENS ═══════════════════════════════════════ */
+/* Mensagens header personalizado */
+.msgs-header{background:linear-gradient(135deg,rgba(180,24,80,.12),rgba(180,24,80,.06));border:1px solid rgba(180,24,80,.25);border-radius:13px;padding:11px 14px;margin-bottom:12px;}
+.msgs-badge{font-size:11px;font-weight:700;color:rgba(255,140,170,.95);margin-bottom:3px;}
+.msgs-sub{font-size:10px;color:var(--t2);}
 .msg-card{
   background:var(--s2);border:1px solid var(--b1);border-radius:14px;
   padding:13px;margin-bottom:9px;cursor:pointer;
@@ -1534,30 +1538,121 @@ function selMC(id,el){
   el.classList.add('on');
   renderMsgs();
 }
+/* ═══ ADAPTAÇÃO DE GÊNERO ════════════════════════════════
+   Adapta pronomes e termos de acordo com:
+   - prof.orient: hetero | lesbica | gay | bi | livre
+   - prof.parc:   romantico | protetor | aventureiro | ambicioso | tranquilo
+════════════════════════════════════════════════════════ */
+function getPronomes(){
+  var o=(prof&&prof.orient)||'hetero';
+  // Pronomes do pretendente (a pessoa que está sendo contatada)
+  if(o==='lesbica'){
+    // Mulher interessada em mulher
+    return{
+      ele:'ela',Ele:'Ela',dele:'dela',nele:'nela',
+      ele_a:'ela',sumiu:'sumiu',ficou:'ficou',
+      voltou:'voltou',apareceu:'apareceu',
+      oi_genero:'', // sem mudança
+      tip_genero:function(t){return t.replace(/\bnele\b/g,'nela').replace(/\bele\b/g,'ela').replace(/\bEle\b/g,'Ela').replace(/\bdele\b/g,'dela');}
+    };
+  }
+  if(o==='gay'){
+    // Pessoa que se identifica como gay (se relaciona com homens)
+    return{
+      ele:'ele',Ele:'Ele',dele:'dele',nele:'nele',
+      ele_a:'ele',sumiu:'sumiu',ficou:'ficou',
+      voltou:'voltou',apareceu:'apareceu',
+      oi_genero:'',
+      tip_genero:function(t){return t;}
+    };
+  }
+  // hetero, bi, livre — usa masculino (ele)
+  return{
+    ele:'ele',Ele:'Ele',dele:'dele',nele:'nele',
+    ele_a:'ele',sumiu:'sumiu',ficou:'ficou',
+    voltou:'voltou',apareceu:'apareceu',
+    oi_genero:'',
+    tip_genero:function(t){return t;}
+  };
+}
+
+function adaptMsg(text, tip){
+  var o=(prof&&prof.orient)||'hetero';
+  if(o==='hetero'||o==='gay'||o==='livre'){
+    // Texto já está no masculino, retorna como está
+    return{msg:text,tip:tip};
+  }
+  // Lésbica ou bi — substitui pronomes masculinos por femininos
+  function fem(t){
+    if(!t)return t;
+    return t
+      // pronomes isolados
+      .replace(/\bele\b/g,'ela').replace(/\bEle\b/g,'Ela')
+      .replace(/\bdele\b/g,'dela').replace(/\bDele\b/g,'Dela')
+      .replace(/\bnele\b/g,'nela').replace(/\bNele\b/g,'Nela')
+      .replace(/\bpara ele\b/g,'para ela').replace(/\bde ele\b/g,'dela')
+      // expressões comuns nos textos
+      .replace(/\bele sumiu\b/gi,'ela sumiu')
+      .replace(/\bele voltou\b/gi,'ela voltou')
+      .replace(/\bele ficou\b/gi,'ela ficou')
+      .replace(/\bele some\b/gi,'ela some')
+      .replace(/\bele está\b/gi,'ela está')
+      .replace(/\bele testa\b/gi,'ela testa')
+      .replace(/\bele quer\b/gi,'ela quer')
+      .replace(/\bele gosta\b/gi,'ela gosta')
+      .replace(/\bele entrou\b/gi,'ela entrou')
+      .replace(/\bele desbloqueou\b/gi,'ela desbloqueou')
+      .replace(/\bele não liga\b/gi,'ela não liga')
+      .replace(/\bele te ignora\b/gi,'ela te ignora')
+      // tips
+      .replace(/\bculpa saudável nele\b/g,'culpa saudável nela')
+      .replace(/\bpensará em você\b/g,'pensará em você')
+      ;
+  }
+  return{msg:fem(text),tip:fem(tip)};
+}
+
 function renderMsgs(){
   var list=curMsgCat==='all'?MSGS:MSGS.filter(function(m){return m.cat===curMsgCat;});
-  document.getElementById('msgList').innerHTML=list.map(function(m){
-    var fav=favs.includes(m.msg);
+  var o=(prof&&prof.orient)||'hetero';
+  var par=(prof&&prof.parc)||'romantico';
+  var parLabel={romantico:'apaixonado',protetor:'protetor',aventureiro:'aventureiro',ambicioso:'ambicioso',tranquilo:'sensível'}[par]||par;
+  var orientLabel={hetero:'para ele',lesbica:'para ela',gay:'para ele',bi:'para ela/ele',livre:'personalizado'}[o]||'personalizado';
+  var pronLabel=o==='lesbica'?'Pronomes: ela/dela':(o==='bi'?'Pronomes: ela/ele':'Pronomes: ele/dele');
+  var headerHtml='<div class="msgs-header"><div class="msgs-badge">✨ Personalizado '+orientLabel+'</div><div class="msgs-sub">Pretendente '+parLabel+' · '+pronLabel+'</div></div>';
+  document.getElementById('msgList').innerHTML=headerHtml+list.map(function(m){
+    var adapted=adaptMsg(m.msg,m.tip);
+    var fav=favs.includes(adapted.msg);
     return'<div class="msg-card" onclick="openMM('+m.id+')">'
       +'<div class="msg-tag">'+m.sit+'</div>'
-      +'<div class="msg-txt">'+esc(m.msg)+'</div>'
-      +'<div class="msg-foot"><span class="msg-hint">Toque para ver a dica completa</span>'
+      +'<div class="msg-txt">'+adapted.msg+'</div>'
+      +'<div class="msg-foot"><span class="msg-hint">Toque para ver a dica</span>'
       +'<div class="msg-acts">'
       +'<button class="fav-b" onclick="event.stopPropagation();togFav('+m.id+',this)">'+(fav?'💛':'🤍')+'</button>'
-      +'<button class="copy-b" onclick="event.stopPropagation();cp('+JSON.stringify(m.msg)+')">Copiar</button>'
+      +'<button class="copy-b" onclick="event.stopPropagation();cpAdapted('+m.id+')">Copiar</button>'
       +'</div></div></div>';
   }).join('');
 }
 function togFav(id,btn){
   var m=MSGS.find(function(x){return x.id===id;});if(!m)return;
-  var i=favs.indexOf(m.msg);
-  if(i===-1){favs.push(m.msg);btn.textContent='💛';toast('💛 Salvo!');}
+  var adapted=adaptMsg(m.msg,m.tip);
+  var msg=adapted.msg;
+  var i=favs.indexOf(msg);
+  if(i===-1){favs.push(msg);btn.textContent='💛';toast('💛 Salvo!');}
   else{favs.splice(i,1);btn.textContent='🤍';}
   LS('mi_f',favs);renderFavs();
 }
 function openMM(id){
   var m=MSGS.find(function(x){return x.id===id;});if(!m)return;
-  curModal=m;showModal();
+  var adapted=adaptMsg(m.msg,m.tip);
+  // Show adapted message in modal
+  curModal={sit:m.sit,msg:adapted.msg,tip:adapted.tip||m.tip,when:m.when};
+  showModal();
+}
+function cpAdapted(id){
+  var m=MSGS.find(function(x){return x.id===id;});if(!m)return;
+  var adapted=adaptMsg(m.msg,m.tip);
+  cp(adapted.msg);
 }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
