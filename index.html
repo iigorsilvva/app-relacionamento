@@ -330,26 +330,37 @@ html,body{
 .gt-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
 .gt-txt{font-size:13px;color:rgba(255,236,160,.9);line-height:1.65;}
 
-.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px;}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
 .qt{background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:14px;cursor:pointer;}
 .qt.ac{border-color:rgba(180,24,80,.3);background:rgba(180,24,80,.07);}
 .qt-ic{font-size:22px;margin-bottom:8px;}
 .qt-title{font-size:12px;font-weight:700;color:var(--t0);margin-bottom:3px;}
 .qt-sub{font-size:10px;color:var(--t2);line-height:1.35;}
-
-.plan-mini{background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:14px;margin-bottom:10px;}
-.pm-title{font-size:12px;font-weight:700;color:var(--t0);margin-bottom:10px;}
+/* PLANO DESTAQUE */
+.plano-destaque{
+  background:linear-gradient(135deg,#1C0830 0%,#300A1C 60%,#1A0830 100%);
+  border:1.5px solid rgba(180,24,80,.4);
+  border-radius:18px;padding:16px;margin-bottom:12px;cursor:pointer;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 24px rgba(180,24,80,.18);
+}
+.plano-destaque::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(180,24,80,.18),transparent 70%);pointer-events:none;}
+.pd-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.pd-badge{background:rgba(180,24,80,.3);border:1px solid rgba(180,24,80,.5);border-radius:50px;padding:4px 10px;font-size:10px;font-weight:700;color:rgba(255,160,190,.95);}
+.pd-pct{font-size:11px;font-weight:700;color:rgba(255,160,190,.7);}
+.pd-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:2px;}
+.pd-sub{font-size:11px;color:rgba(220,180,210,.65);margin-bottom:10px;}
+.pd-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:7px;}
+.pd-hint{font-size:10px;color:rgba(180,140,200,.55);}
+.pd-cta{font-size:11px;font-weight:700;color:rgba(255,160,190,.9);}
 .dot-row{display:flex;gap:3px;justify-content:space-between;margin-bottom:8px;}
 .dw{flex:1;text-align:center;}
-.dc{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin:0 auto 3px;color:var(--t3);}
+.dc{width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(180,24,80,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin:0 auto 3px;color:rgba(255,255,255,.25);}
 .dc.done{background:var(--rose);border-color:var(--rose);color:#fff;}
 .dc.today{border-color:var(--gold);color:var(--gold);}
-.dl{font-size:8px;color:var(--t3);}
-.prog-line{height:3px;background:var(--s3);border-radius:2px;margin-bottom:6px;overflow:hidden;}
-.prog-fill{height:100%;background:var(--rose);border-radius:2px;}
-.pm-foot{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--t3);}
-.pm-foot strong{color:var(--t1);}
-.lnk{background:none;border:none;color:var(--rose3);font-family:var(--fb);font-size:10px;font-weight:600;cursor:pointer;padding:0;}
+.dl{font-size:8px;color:rgba(180,140,200,.5);}
+.prog-line{height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-bottom:6px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--rose),#E0306A);border-radius:2px;}
 
 /* ═══ MENSAGENS ═══════════════════════════════════════ */
 .msg-card{
@@ -594,6 +605,23 @@ html,body{
 .sct-l{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
 .sct-t{font-size:12px;color:rgba(255,236,180,.9);line-height:1.6;}
 .sc-compat-l{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:8px;}
+/* Week grid */
+.sc-week{background:rgba(255,255,255,.04);border:1px solid var(--b1);border-radius:10px;padding:11px;margin-bottom:10px;}
+.sc-week-grid{display:flex;flex-direction:column;gap:6px;}
+.swg-item{font-size:12px;color:rgba(220,200,255,.85);line-height:1.5;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.swg-item:last-child{border-bottom:none;}
+.swg-ger{color:rgba(255,230,160,.9);font-weight:600;}
+/* Compat detail */
+.compat-detail{display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
+.cd-item{border-radius:10px;padding:9px 11px;}
+.cd-great{background:rgba(80,180,80,.1);border:1px solid rgba(80,180,80,.2);}
+.cd-good{background:rgba(192,144,48,.08);border:1px solid rgba(192,144,48,.18);}
+.cd-hard{background:rgba(180,24,80,.1);border:1px solid rgba(180,24,80,.2);}
+.cd-sign{display:block;font-size:11px;font-weight:700;color:var(--t0);margin-bottom:3px;}
+.cd-great .cd-sign{color:#80D880;}
+.cd-good .cd-sign{color:var(--gold);}
+.cd-hard .cd-sign{color:rgba(255,120,150,.9);}
+.cd-desc{font-size:11px;color:var(--t2);line-height:1.5;}
 .compat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .compat{border-radius:50px;padding:4px 11px;font-size:11px;font-weight:600;}
 .c-great{background:rgba(80,180,80,.15);color:#70D070;}
@@ -886,13 +914,23 @@ html,body{
         <div class="quick-grid">
           <div class="qt" onclick="navTo('tarot')"><div class="qt-ic">🃏</div><div class="qt-title">Carta do Dia</div><div class="qt-sub" id="tarotSub">Retire sua carta</div></div>
           <div class="qt" onclick="navTo('ciclo')"><div class="qt-ic">🌸</div><div class="qt-title">Meu Ciclo</div><div class="qt-sub" id="cicloSub">Acompanhe</div></div>
-          <div class="qt" onclick="navTo('msgs')"><div class="qt-ic">💬</div><div class="qt-title">Mensagens</div><div class="qt-sub">55+ prontas</div></div>
+          <div class="qt" onclick="navTo('msgs')"><div class="qt-ic">💬</div><div class="qt-title">Mensagens</div><div class="qt-sub">80+ prontas</div></div>
+          <div class="qt" onclick="navTo('menu');renderMenu()"><div class="qt-ic" id="homeSignoIc">⭐</div><div class="qt-title">Meu Signo</div><div class="qt-sub" id="homeSignoSub">Veja seu horóscopo</div></div>
         </div>
-        <div class="plan-mini">
-          <div class="pm-title" id="planTitle">Dia 1 — Silêncio estratégico</div>
+        <!-- PLANO DESTAQUE -->
+        <div class="plano-destaque" onclick="navTo('plano')">
+          <div class="pd-top">
+            <div class="pd-badge">🔥 Plano de 7 Dias</div>
+            <div class="pd-pct" id="pdPct">14%</div>
+          </div>
+          <div class="pd-title" id="pdTitle">Dia 1 — Silêncio estratégico</div>
+          <div class="pd-sub" id="pdSub">As primeiras 24h</div>
           <div class="dot-row" id="dotRow"></div>
           <div class="prog-line"><div class="prog-fill" id="progFill" style="width:14%"></div></div>
-          <div class="pm-foot"><span>Progresso: <strong id="progPct">14%</strong></span><button class="lnk" onclick="navTo('plano')">Ver plano →</button></div>
+          <div class="pd-bottom">
+            <span class="pd-hint">Toque para ver o passo a passo de hoje</span>
+            <span class="pd-cta">Continuar →</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1011,21 +1049,56 @@ const TAROT=[
 
 /* ═══ SIGNOS ════════════════════════════════════════════ */
 const SIGNOS={
-  aries:{em:'♈',name:'Áries',dates:'21/03–19/04',desc:'Corajosa, pioneira e apaixonada. Sua energia transforma ambientes. O desafio é a impulsividade, mas sua força está na liderança natural.',aff:'Minha energia é meu poder. Canalizarei minha paixão com sabedoria.',cG:['Leão','Sagitário','Gêmeos'],cB:['Aquário','Libra'],cH:['Câncer','Capricórnio'],day:function(d){return['Ótimo dia para tomar iniciativa — sua energia está elevada.','Dia favorável para conversas diretas e sinceras.','Evite decisões impulsivas hoje — pense antes de agir.','Sua intuição está afiada. Confie nos seus instintos.','Bom momento para investir em você mesma.','Dia de paciência — as coisas vão se resolver no ritmo certo.','Sua presença está magnética hoje. Use isso.'][d%7];}},
-  touro:{em:'♉',name:'Touro',dates:'20/04–20/05',desc:'Leal, sensível e persistente. Ama o que dura. Sua constância é sua maior força — quando se compromete, é de verdade.',aff:'Meu valor é inabalável. Confio no meu tempo e na minha capacidade.',cG:['Virgem','Capricórnio','Câncer'],cB:['Escorpião','Peixes'],cH:['Aquário','Leão'],day:function(d){return['Ótimo dia para cuidar de você — invista em beleza e conforto.','Dia favorável para resolver questões práticas com calma.','Evite gastar emocionalmente com quem não merece.','Sua paciência hoje será recompensada.','Bom momento para conversas profundas e significativas.','Dia de introspecção — o que você realmente quer?','Sua sensualidade está elevada. Cuide de si.'][d%7];}},
-  gemeos:{em:'♊',name:'Gêmeos',dates:'21/05–20/06',desc:'Criativa, curiosa e comunicativa como ninguém. Sua mente trabalha em múltiplas direções. Seu encanto natural é imbatível.',aff:'Minha mente é meu instrumento. Uso meu carisma para criar conexões verdadeiras.',cG:['Libra','Aquário','Áries'],cB:['Leão','Sagitário'],cH:['Peixes','Virgem'],day:function(d){return['Ótimo dia para comunicação — mande aquela mensagem.','Dia favorável para aprender algo novo e se inspirar.','Cuidado com informações incompletas — verifique antes de agir.','Sua criatividade está no pico.','Bom dia para socializar e criar conexões novas.','Dia de foco — escolha uma coisa e conclua.','Sua curiosidade abre portas hoje.'][d%7];}},
-  cancer:{em:'♋',name:'Câncer',dates:'21/06–22/07',desc:'Sente tudo profundamente e ama com intensidade. Intuitiva, protetora e empática. Sua força está nas conexões emocionais autênticas.',aff:'Minha sensibilidade é um presente. Cuido de mim antes de cuidar de alguém.',cG:['Escorpião','Peixes','Touro'],cB:['Virgem','Capricórnio'],cH:['Áries','Libra'],day:function(d){return['Dia de autocuidado — você merece atenção e carinho.','Sua intuição está aguçada. Confie no que sente.','Evite decisões baseadas apenas em emoção hoje.','Ótimo dia para cuidar de quem você ama.','Sua empatia está elevada — use com sabedoria.','Dia favorável para criatividade e expressão emocional.','Cuidado com absorver as emoções dos outros.'][d%7];}},
-  leao:{em:'♌',name:'Leão',dates:'23/07–22/08',desc:'Nasceu para brilhar. Generosa, criativa e magnética — sua presença é impossível de ignorar.',aff:'Eu sou luz. Permito-me brilhar sem pedir permissão a ninguém.',cG:['Áries','Sagitário','Gêmeos'],cB:['Libra','Aquário'],cH:['Touro','Escorpião'],day:function(d){return['Ótimo dia para mostrar quem você é — apareça!','Sua criatividade está no auge.','Bom dia para liderar e inspirar as pessoas ao redor.','Dia favorável para cuidar da aparência e autoestima.','Cuidado com o ego hoje — ouça mais do que fala.','Sua generosidade abre portas que o orgulho fecha.','Você está radiante. Use isso com consciência.'][d%7];}},
-  virgem:{em:'♍',name:'Virgem',dates:'23/08–22/09',desc:'Analítica, dedicada e com olhos para detalhes que ninguém mais vê. Sua força está no cuidado que coloca em tudo que faz.',aff:'Minha atenção aos detalhes é um superpoder. Cuido de mim com o mesmo cuidado que dedico a tudo.',cG:['Touro','Capricórnio','Câncer'],cB:['Escorpião','Peixes'],cH:['Sagitário','Gêmeos'],day:function(d){return['Ótimo dia para organizar e planejar com clareza.','Sua análise está afiada — confie na sua lógica.','Cuidado com o perfeccionismo — feito é melhor que perfeito.','Dia favorável para cuidar da saúde e rotina.','Bom momento para ajudar alguém com sua sabedoria prática.','Solte o controle em algo hoje — confie no processo.','Sua atenção ao detalhe impressiona.'][d%7];}},
-  libra:{em:'♎',name:'Libra',dates:'23/09–22/10',desc:'Busca equilíbrio, beleza e conexão verdadeira. Charmosa e diplomática.',aff:'Eu mereço o equilíbrio que busco para os outros. Hoje, coloco minha paz em primeiro lugar.',cG:['Gêmeos','Aquário','Leão'],cB:['Sagitário','Áries'],cH:['Câncer','Capricórnio'],day:function(d){return['Ótimo dia para decisões — sua visão está equilibrada.','Sua diplomacia resolve conflitos hoje com elegância.','Dia favorável para cuidar da estética e dos ambientes.','Bom momento para conversas de relacionamento.','Cuidado com agradar demais — sua opinião importa.','Dia de ação — decida e execute sem hesitar.','Sua presença suaviza tensões.'][d%7];}},
-  escorpiao:{em:'♏',name:'Escorpião',dates:'23/10–21/11',desc:'Intensa, magnética e vai fundo em tudo. Sua força está na intuição aguçada e na capacidade de transformar situações difíceis.',aff:'Minha intensidade é poder. Uso minha profundidade para criar conexões que realmente importam.',cG:['Câncer','Peixes','Capricórnio'],cB:['Virgem','Touro'],cH:['Leão','Aquário'],day:function(d){return['Ótimo dia para investigar o que está por baixo da superfície.','Sua intuição está no pico — confie nela.','Dia favorável para transformações profundas.','Cuidado com ciúme ou controle hoje — respire.','Bom momento para conversas verdadeiras e profundas.','Sua intensidade pode intimidar — suavize se necessário.','Você está no seu poder hoje.'][d%7];}},
-  sagitario:{em:'♐',name:'Sagitário',dates:'22/11–21/12',desc:'Livre, aventureira e otimista. Seu entusiasmo pela vida é contagiante.',aff:'Minha liberdade é sagrada. Cada passo em direção ao que me faz bem é o caminho certo.',cG:['Áries','Leão','Aquário'],cB:['Libra','Gêmeos'],cH:['Virgem','Peixes'],day:function(d){return['Ótimo dia para expandir horizontes — explore algo novo.','Sua filosofia de vida inspira as pessoas ao redor.','Dia favorável para planejar viagens e aventuras.','Bom momento para falar suas verdades com leveza.','Cuidado com impulsividade — pense nas consequências.','Seu otimismo contagia. Compartilhe.','Dia de aprendizado — absorva conhecimento novo.'][d%7];}},
-  capricornio:{em:'♑',name:'Capricórnio',dates:'22/12–19/01',desc:'Determinada, responsável e construída para durar. Sua força está na disciplina silenciosa.',aff:'Minha determinação me leva exatamente onde preciso chegar. Confio no meu processo.',cG:['Touro','Virgem','Escorpião'],cB:['Peixes','Câncer'],cH:['Áries','Libra'],day:function(d){return['Ótimo dia para focar em objetivos de longo prazo.','Sua disciplina hoje te coloca à frente.','Dia favorável para negócios e decisões práticas.','Bom momento para revisar e ajustar seus planos.','Cuidado com rigidez — às vezes flexibilidade é força.','Sua responsabilidade inspira confiança.','Dia de colheita — o que você plantou está crescendo.'][d%7];}},
-  aquario:{em:'♒',name:'Aquário',dates:'20/01–18/02',desc:'Única, visionária e pensa diferente de todo mundo. Sua força está na capacidade de enxergar o que ainda não existe.',aff:'Minha originalidade é minha maior força. Não preciso ser compreendida por todos para ter valor.',cG:['Gêmeos','Libra','Sagitário'],cB:['Áries','Leão'],cH:['Touro','Escorpião'],day:function(d){return['Ótimo dia para ideias inovadoras — pense fora da caixa.','Sua visão de futuro inspira as pessoas ao redor.','Dia favorável para conexões com pessoas interessantes.','Bom momento para causas coletivas e comunidade.','Cuidado com distanciamento emocional — esteja presente.','Sua originalidade abre portas que a convenção fecha.','Dia de revoluções internas. Mude o que precisa mudar.'][d%7];}},
-  peixes:{em:'♓',name:'Peixes',dates:'19/02–20/03',desc:'Empática, intuitiva e conectada a algo maior. Sua força está em sentir o que os outros não articulam.',aff:'Minha sensibilidade é sabedoria. Hoje, cuido da minha energia e escolho o que merece minha magia.',cG:['Câncer','Escorpião','Capricórnio'],cB:['Touro','Virgem'],cH:['Gêmeos','Sagitário'],day:function(d){return['Ótimo dia para criatividade e expressão artística.','Sua empatia é um presente — use com sabedoria.','Dia favorável para meditação e conexão espiritual.','Bom momento para ajudar quem você ama.','Cuidado com absorver as dores alheias hoje.','Sua intuição é mais precisa do que você imagina.','Dia de sonhos — o que você deseja está mais perto.'][d%7];}},
+  aries:{em:'♈',name:'Áries',dates:'21/03–19/04',desc:'Corajosa, pioneira e apaixonada. Sua energia transforma ambientes.',aff:'Minha energia é meu poder. Canalizarei minha paixão com sabedoria.',cG:['Leão','Sagitário','Gêmeos'],cB:['Aquário','Libra'],cH:['Câncer','Capricórnio'],compatDetail:{'Leão':'Paixão intensa e energia compartilhada. Dois líderes que se respeitam.','Sagitário':'Combinação explosivamente boa. Ambos amam liberdade e aventura.','Gêmeos':'Química imediata. O Gêmeos alimenta sua curiosidade e você traz a ação.','Aquário':'Boa conexão intelectual, mas pode faltar profundidade emocional.','Libra':'Opostos que se atraem — mas o ritmo diferente pode frustrar.','Câncer':'Difícil. Sua objetividade choca com a sensibilidade do Câncer.','Capricórnio':'Tensão constante. Ambos são determinados mas de formas opostas.'},
+    day:function(d){return['Sua energia está elevada — ótimo dia para tomar iniciativa em relacionamentos.','Dia favorável para conversas diretas. Não tenha medo de dizer o que sente.','Evite decisões impulsivas hoje. Pense 3x antes de mandar aquela mensagem.','Sua intuição está afiada — confie no que está sentindo sobre a situação.','Bom momento para investir em você. Academia, cuidado pessoal, presença.','Dia de paciência. As coisas vão se resolver no ritmo certo — não force.','Sua presença está magnética. Apareça, seja vista, permita-se ser desejada.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Semana para iniciativas — não espere.',neg:'💼 Negócios: Projetos novos têm boa energia.',ami:'👥 Amizade: Momento ideal para fortalecer laços.',via:'✈️ Viagem: Ótima para planejar algo espontâneo.',ger:'✨ Energia elevada em todas as áreas.'},{rel:'💕 Amor: Evite confrontos — espere o momento certo.',neg:'💼 Negócios: Revise antes de assinar ou decidir.',ami:'👥 Amizade: Ouça mais do que fala esta semana.',via:'✈️ Viagem: Semana melhor para ficar perto de casa.',ger:'🌙 Semana de introspecção. Recarregue as energias.'},{rel:'💕 Amor: Sua presença está irresistível. Use isso.',neg:'💼 Negócios: Parcerias e negociações favorecidas.',ami:'👥 Amizade: Novas conexões podem surgir.',via:'✈️ Viagem: Boa para aventuras curtas.',ger:'⚡ Semana de alta vibração. Tudo que iniciar tende a dar certo.'}];return ws[w%ws.length];}
+  },
+  touro:{em:'♉',name:'Touro',dates:'20/04–20/05',desc:'Leal, sensível e persistente. Ama o que dura. Quando se compromete, é de verdade.',aff:'Meu valor é inabalável. Confio no meu tempo e na minha capacidade.',cG:['Virgem','Capricórnio','Câncer'],cB:['Escorpião','Peixes'],cH:['Aquário','Leão'],compatDetail:{'Virgem':'Conexão sólida e confiável. Ambos valorizam estabilidade e lealdade.','Capricórnio':'Um dos melhores matches. Compartilham valores e necessidade de segurança.','Câncer':'Conexão emocional profunda. Os dois precisam de afeto real.','Escorpião':'Atração intensa mas muita tensão. Pode fascinar mas também sufocar.','Peixes':'Vínculo sensível e nutritivo. O Peixes entende sua necessidade de cuidado.','Aquário':'Difícil. Sua necessidade de segurança choca com a imprevisibilidade do Aquário.','Leão':'Tensão de egos. Ambos são teimosos — conflitos constantes.'},
+    day:function(d){return['Ótimo dia para cuidar de você — beleza, conforto, autocuidado.','Dia favorável para resolver questões práticas com calma.','Evite gastar emocionalmente com quem não merece.','Sua paciência hoje será recompensada. Continue firme.','Bom momento para conversas profundas e genuínas.','Dia de introspecção — o que você realmente quer?','Sua sensualidade está elevada. Cuide da sua presença e aparência.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Semana para estabilidade — demonstre afeto concreto.',neg:'💼 Negócios: Finanças e planejamento favorecidos.',ami:'👥 Amizade: Convide alguém especial para algo íntimo.',via:'✈️ Viagem: Boa para destinos confortáveis e relaxantes.',ger:'✨ Semana de construção. Invista no que quer ver crescer.'},{rel:'💕 Amor: Cuidado com ciúme — dê espaço.',neg:'💼 Negócios: Evite grandes decisões financeiras agora.',ami:'👥 Amizade: Priorize qualidade sobre quantidade.',via:'✈️ Viagem: Melhor para ficar confortável em casa.',ger:'🌙 Recarregue. Não é semana de forçar nada.'},{rel:'💕 Amor: Momentos simples criam conexões profundas.',neg:'💼 Negócios: Bom para consolidar projetos.',ami:'👥 Amizade: Conexões antigas surgem com boa energia.',via:'✈️ Viagem: Bom para viagens de prazer.',ger:'⚡ Semana de colheita. O que construiu começa a dar resultados.'}];return ws[w%ws.length];}
+  },
+  gemeos:{em:'♊',name:'Gêmeos',dates:'21/05–20/06',desc:'Criativa, curiosa e comunicativa. Mente em múltiplas direções e encanto imbatível.',aff:'Minha mente é meu instrumento. Uso meu carisma para criar conexões verdadeiras.',cG:['Libra','Aquário','Áries'],cB:['Leão','Sagitário'],cH:['Peixes','Virgem'],compatDetail:{'Libra':'Conexão mental extraordinária. Conversas que nunca entediam.','Aquário':'Vínculo intelectual intenso. O Aquário te desafia.','Áries':'Química imediata. A energia do Áries te coloca em ação.','Leão':'O Leão precisa de mais atenção exclusiva do que você quer dar.','Sagitário':'Aventura e liberdade — ótimo no curto prazo.','Peixes':'Mundos muito diferentes. Sua racionalidade choca com a sensibilidade do Peixes.','Virgem':'O Virgem precisa de certezas; você vive nas possibilidades.'},
+    day:function(d){return['Ótimo dia para comunicação — mande aquela mensagem que estava adiando.','Dia favorável para aprender algo novo e se inspirar.','Cuidado com informações incompletas — verifique antes de agir.','Sua criatividade está no pico. Escreva, crie, expresse.','Bom dia para socializar e criar conexões novas.','Dia de foco — escolha uma coisa e conclua. Dispersão não serve hoje.','Sua curiosidade abre portas hoje. Pergunte, explore, esteja presente.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Conversa é a chave. Seja direta e criativa.',neg:'💼 Negócios: Comunicação e networking favorecidos.',ami:'👥 Amizade: Novas amizades interessantes surgem.',via:'✈️ Viagem: Ótima para passeios culturais.',ger:'✨ Semana de expansão mental. Absorva coisas novas.'},{rel:'💕 Amor: Foque em ouvir mais do que falar.',neg:'💼 Negócios: Revise comunicações antes de fechar.',ami:'👥 Amizade: Alguém precisa de você — esteja disponível.',via:'✈️ Viagem: Bom para visitar lugares familiares.',ger:'🌙 Semana de processamento. Integre o que viveu.'},{rel:'💕 Amor: Sua leveza e humor são seus maiores atrativos.',neg:'💼 Negócios: Criatividade em alta — proponha ideias.',ami:'👥 Amizade: Reuniões têm ótima energia.',via:'✈️ Viagem: Perfeito para viagens rápidas e espontâneas.',ger:'⚡ Semana de conexões. Cada pessoa pode ser importante.'}];return ws[w%ws.length];}
+  },
+  cancer:{em:'♋',name:'Câncer',dates:'21/06–22/07',desc:'Sente tudo profundamente e ama com intensidade. Intuitiva, protetora e empática.',aff:'Minha sensibilidade é um presente. Cuido de mim antes de cuidar de alguém.',cG:['Escorpião','Peixes','Touro'],cB:['Virgem','Capricórnio'],cH:['Áries','Libra'],compatDetail:{'Escorpião':'Conexão profunda e intensa. O Escorpião te entende como poucos.','Peixes':'Vínculo emocional raro. Ambos são intuitivos e precisam de amor real.','Touro':'Relação nutritiva e estável. O Touro oferece a segurança que você precisa.','Virgem':'Cuidam um do outro de formas complementares.','Capricórnio':'Opostos que se atraem. O Capricórnio traz estabilidade; você traz calor.','Áries':'Difícil. A objetividade do Áries pode parecer fria para você.','Libra':'A indecisão do Libra e sua necessidade de certeza criam tensão.'},
+    day:function(d){return['Dia de autocuidado intenso — você merece atenção e carinho de si mesma.','Sua intuição está aguçada hoje. Confie no que está sentindo.','Evite decisões baseadas apenas em emoção — espere a clareza chegar.','Ótimo dia para demonstrar carinho por quem você ama.','Sua empatia está elevada — use com sabedoria, não se perca.','Dia favorável para criatividade e expressão do que está sentindo.','Cuidado com absorver as emoções dos outros. Proteja sua energia.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Semana emocional intensa — confie na sua intuição.',neg:'💼 Negócios: Bom para cuidar de projetos pessoais.',ami:'👥 Amizade: Amizades profundas se fortalecem.',via:'✈️ Viagem: Ótima para destinos ligados à natureza ou água.',ger:'✨ Semana de conexão emocional. O que é real se aprofunda.'},{rel:'💕 Amor: Evite se cobrar por sentir demais — é sua natureza.',neg:'💼 Negócios: Cuidado com decisões baseadas em insegurança.',ami:'👥 Amizade: Selecione quem realmente merece sua energia.',via:'✈️ Viagem: Melhor ficar perto de casa e do conforto.',ger:'🌙 Semana de regeneração. Cuide do seu estado emocional.'},{rel:'💕 Amor: Sua presença afetuosa está no auge — deixe-se receber.',neg:'💼 Negócios: Parcerias baseadas em confiança são favorecidas.',ami:'👥 Amizade: Organize algo acolhedor com pessoas que ama.',via:'✈️ Viagem: Bom para viagens afetivas — visitar família.',ger:'⚡ Semana de florescimento emocional. O que você cuida cresce.'}];return ws[w%ws.length];}
+  },
+  leao:{em:'♌',name:'Leão',dates:'23/07–22/08',desc:'Nasceu para brilhar. Generosa, criativa e magnética — sua presença é impossível de ignorar.',aff:'Eu sou luz. Permito-me brilhar sem pedir permissão a ninguém.',cG:['Áries','Sagitário','Gêmeos'],cB:['Libra','Aquário'],cH:['Touro','Escorpião'],compatDetail:{'Áries':'Dois fogos que se entendem. Paixão e intensidade mútua.','Sagitário':'Parceria radiante. Ambos vivem com intensidade e se inspiram.','Gêmeos':'O Gêmeos alimenta seu estímulo intelectual e você traz brilho.','Libra':'O Libra te adora, mas a indecisão pode te frustrar.','Aquário':'Atração intensa mas valores diferentes sobre individualidade.','Touro':'Teimosia dos dois lados. Pode funcionar com muito respeito.','Escorpião':'Guerra de poder constante. Paixão intensa, conflito garantido.'},
+    day:function(d){return['Ótimo dia para aparecer — sua energia está no pico. Seja vista.','Sua criatividade está no auge hoje. Crie, expresse, produza.','Bom dia para liderar e inspirar pessoas ao seu redor.','Dia favorável para cuidar da aparência e da autoestima.','Cuidado com o ego hoje — ouça mais do que fala.','Sua generosidade abre portas que o orgulho fecha. Seja magnânima.','Você está radiante. A energia que você irradia volta multiplicada.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Você está irresistível esta semana. Não se esconda.',neg:'💼 Negócios: Sua liderança está em evidência — assuma projetos.',ami:'👥 Amizade: Reúna pessoas ao seu redor. Você catalisa alegria.',via:'✈️ Viagem: Semana favorável para destinos glamourosos.',ger:'✨ Semana de protagonismo. Você está no centro das atenções.'},{rel:'💕 Amor: Mostre vulnerabilidade — é mais atraente que perfeição.',neg:'💼 Negócios: Revise antes de agir. Orgulho pode custar caro.',ami:'👥 Amizade: Alguém próximo precisa da sua presença, não do brilho.',via:'✈️ Viagem: Melhor semana para descanso.',ger:'🌙 Semana de recarga. Até o sol precisa se pôr.'},{rel:'💕 Amor: Faça algo surpreendente — mostre seu lado generoso.',neg:'💼 Negócios: Projetos criativos têm energia excelente.',ami:'👥 Amizade: Reconheça publicamente alguém que você admira.',via:'✈️ Viagem: Ótima para aventuras e experiências novas.',ger:'⚡ Semana de expansão. Tudo que você tocar com intenção brilha.'}];return ws[w%ws.length];}
+  },
+  virgem:{em:'♍',name:'Virgem',dates:'23/08–22/09',desc:'Analítica, dedicada e com olhos para detalhes que ninguém mais vê.',aff:'Minha atenção aos detalhes é um superpoder. Cuido de mim com o mesmo cuidado.',cG:['Touro','Capricórnio','Câncer'],cB:['Escorpião','Peixes'],cH:['Sagitário','Gêmeos'],compatDetail:{'Touro':'Conexão sólida. Ambos são práticos, leais e valorizam estabilidade.','Capricórnio':'Um dos melhores matches do zodíaco. Construção real e mútua.','Câncer':'Cuidam um do outro de formas diferentes mas complementares.','Escorpião':'Atração intensa. A profundidade do Escorpião te fascina.','Peixes':'Opostos que se completam — você traz ordem, ele traz sonho.','Sagitário':'O Sagitário é impulsivo onde você é cuidadosa. Tensão frequente.','Gêmeos':'Tensão entre razão e dispersão. Dificilmente mantêm o mesmo ritmo.'},
+    day:function(d){return['Ótimo dia para organizar e planejar com clareza e precisão.','Sua análise está afiada — confie na sua lógica hoje.','Cuidado com o perfeccionismo paralisante — feito é melhor que perfeito.','Dia favorável para cuidar da saúde e da rotina de autocuidado.','Bom momento para ajudar alguém com sua sabedoria prática.','Solte o controle em algo hoje — confie no processo.','Sua atenção ao detalhe impressiona. Use isso estrategicamente.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Planeje um momento especial — detalhes fazem diferença.',neg:'💼 Negócios: Semana excelente para análises e planejamento.',ami:'👥 Amizade: Pequenos gestos de cuidado fortalecem laços.',via:'✈️ Viagem: Ideal para viagens bem planejadas.',ger:'✨ Semana produtiva. Tudo que organizar tende a funcionar.'},{rel:'💕 Amor: Largue a análise excessiva — sinta em vez de analisar.',neg:'💼 Negócios: Evite paralisar por busca de perfeição.',ami:'👥 Amizade: Aceite os amigos como são.',via:'✈️ Viagem: Bom para viagens relaxantes sem agenda rígida.',ger:'🌙 Semana de gentileza consigo mesma.'},{rel:'💕 Amor: Sua presença cuidadosa é o que mais atrai.',neg:'💼 Negócios: Projetos de saúde e bem-estar em alta.',ami:'👥 Amizade: Ajude alguém a organizar algo.',via:'✈️ Viagem: Ótima para retiros ou natureza.',ger:'⚡ Semana de precisão. O que você faz com cuidado gera resultados.'}];return ws[w%ws.length];}
+  },
+  libra:{em:'♎',name:'Libra',dates:'23/09–22/10',desc:'Busca equilíbrio, beleza e conexão verdadeira. Charmosa e diplomática.',aff:'Eu mereço o equilíbrio que busco para os outros. Minha paz vem primeiro.',cG:['Gêmeos','Aquário','Leão'],cB:['Sagitário','Áries'],cH:['Câncer','Capricórnio'],compatDetail:{'Gêmeos':'Conexão mental e social intensa. Parceria leve e estimulante.','Aquário':'Compartilham ideais, beleza e liberdade. Vínculo elegante.','Leão':'O Leão adora ser admirado e você adora admirar — funciona.','Sagitário':'Boa energia, mas o Sagitário pode ser direto demais.','Áries':'Opostos que se atraem, mas o ritmo do Áries pode te desequilibrar.','Câncer':'A intensidade emocional do Câncer pode pesar para quem busca leveza.','Capricórnio':'Tensão entre leveza e seriedade. Requer esforço.'},
+    day:function(d){return['Ótimo dia para decisões — sua visão está equilibrada e clara.','Sua diplomacia resolve conflitos com elegância hoje.','Dia favorável para cuidar da estética e da aparência.','Bom momento para conversas sobre relacionamento.','Cuidado com agradar demais — sua opinião também importa.','Dia de ação — decida e execute sem hesitar.','Sua presença suaviza tensões. Você equilibra onde tudo era conflito.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Semana para belas experiências compartilhadas.',neg:'💼 Negócios: Parcerias e negociações têm ótima energia.',ami:'👥 Amizade: Organize algo bonito com pessoas que ama.',via:'✈️ Viagem: Ideal para destinos culturais, arte e gastronomia.',ger:'✨ Semana de harmonia. Relacionamentos florescem.'},{rel:'💕 Amor: Tome uma decisão que estava adiando sobre ele.',neg:'💼 Negócios: Não deixe a indecisão paralisar projetos.',ami:'👥 Amizade: Seja direta — evite ambiguidades.',via:'✈️ Viagem: Melhor para ambientes familiares.',ger:'🌙 Semana de autoconhecimento. Quem você quer ser no amor?'},{rel:'💕 Amor: Sua beleza e charme estão em evidência — apareça.',neg:'💼 Negócios: Criatividade e estética favorecidas.',ami:'👥 Amizade: Novas conexões elegantes surgem.',via:'✈️ Viagem: Ótima semana para viagens românticas.',ger:'⚡ Semana de atração. O que você projeta volta multiplicado.'}];return ws[w%ws.length];}
+  },
+  escorpiao:{em:'♏',name:'Escorpião',dates:'23/10–21/11',desc:'Intensa, magnética e vai fundo em tudo. Intuição aguçada e capacidade de transformar qualquer situação.',aff:'Minha intensidade é poder. Uso minha profundidade para criar conexões que realmente importam.',cG:['Câncer','Peixes','Capricórnio'],cB:['Virgem','Touro'],cH:['Leão','Aquário'],compatDetail:{'Câncer':'Conexão emocional raramente encontrada. Ambos sentem de verdade.','Peixes':'Ligação profunda e quase mística. O Peixes navega suas águas.','Capricórnio':'Parceria sólida e poderosa. Ambos são determinados.','Virgem':'Atração intensa pela diferença. O Virgem te organiza; você o aprofunda.','Touro':'Opostos que se magnetizam. Tensão constante, atração irresistível.','Leão':'Guerra de poder disfarçada de paixão. Funciona se aprenderem a ceder.','Aquário':'Mundos diferentes demais. O Aquário não entende sua profundidade.'},
+    day:function(d){return['Ótimo dia para investigar o que está por baixo da superfície de uma situação.','Sua intuição está no pico hoje — confie nela absolutamente.','Dia favorável para transformações profundas e decisões definitivas.','Cuidado com ciúme ou controle — respira antes de agir.','Bom momento para conversas verdadeiras e sem rodeios.','Sua intensidade pode intimidar — suavize a forma sem perder o fundo.','Você está no seu poder pleno hoje. Use com consciência.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Semana de profundidade — conexões superficiais não satisfazem.',neg:'💼 Negócios: Estratégia e investigação favorecem seus projetos.',ami:'👥 Amizade: Conversas verdadeiras criam laços duradouros.',via:'✈️ Viagem: Ótima para destinos misteriosos e transformadores.',ger:'✨ Semana de poder pessoal. Você está no controle.'},{rel:'💕 Amor: Libere o que não serve mais — dê espaço para o novo.',neg:'💼 Negócios: Cuidado com desconfiança excessiva.',ami:'👥 Amizade: Perdoe quem merece. Rancor pesa só em você.',via:'✈️ Viagem: Melhor para retiros introspectivos.',ger:'🌙 Semana de transformação interna. O que precisa acabar, deixa.'},{rel:'💕 Amor: Seu magnetismo está em alta — você atrai sem esforço.',neg:'💼 Negócios: Parcerias profundas e poderosas se formam.',ami:'👥 Amizade: Quem está do seu lado agora, fica para sempre.',via:'✈️ Viagem: Excelente para viagens intensas e marcantes.',ger:'⚡ Semana de magnetismo. Você atrai o que vibra na sua frequência.'}];return ws[w%ws.length];}
+  },
+  sagitario:{em:'♐',name:'Sagitário',dates:'22/11–21/12',desc:'Livre, aventureira e otimista. Ama quem respeita sua liberdade.',aff:'Minha liberdade é sagrada. Cada passo em direção ao que me faz bem é o caminho certo.',cG:['Áries','Leão','Aquário'],cB:['Libra','Gêmeos'],cH:['Virgem','Peixes'],compatDetail:{'Áries':'Combinação explosiva. Dois aventureiros que se entendem.','Leão':'Parceria radiante. Ambos vivem com intensidade.','Aquário':'Conexão de liberdade mútua. Ambos respeitam o espaço um do outro.','Libra':'Boa química, mas o Libra precisa de mais equilíbrio do que você quer oferecer.','Gêmeos':'Aventura e estímulo, mas nenhum ancora — pode ser superficial.','Virgem':'O Virgem precisa de certezas; você ama o imprevisível.','Peixes':'O Peixes precisa de profundidade emocional que você nem sempre tem.'},
+    day:function(d){return['Ótimo dia para expandir horizontes — explore algo completamente novo.','Sua filosofia de vida inspira as pessoas ao seu redor hoje.','Dia favorável para planejar viagens, aventuras ou novos estudos.','Bom momento para falar suas verdades com leveza e sem rodeios.','Cuidado com impulsividade — pense nas consequências antes de agir.','Seu otimismo é contagiante. Compartilhe a sua leveza com quem precisa.','Dia de aprendizado — absorva conhecimento novo em qualquer área.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Sua autenticidade e liberdade são seus maiores atrativos.',neg:'💼 Negócios: Semana para expandir e pensar grande.',ami:'👥 Amizade: Aventuras compartilhadas criam memórias eternas.',via:'✈️ Viagem: Uma das melhores semanas do ano para viajar.',ger:'✨ Semana de expansão total. Sonhe grande e comece a agir.'},{rel:'💕 Amor: Seja honesta sobre o que realmente quer da relação.',neg:'💼 Negócios: Evite prometer o que não vai cumprir.',ami:'👥 Amizade: Presença real vale mais que promessas.',via:'✈️ Viagem: Melhor para planejar do que executar.',ger:'🌙 Semana de consolidação. Finalize o que deixou pela metade.'},{rel:'💕 Amor: Surpresas e espontaneidade criam atração.',neg:'💼 Negócios: Novas oportunidades aparecem inesperadamente.',ami:'👥 Amizade: Reencontros inesperados trazem alegria.',via:'✈️ Viagem: Perfeita para viagens de última hora.',ger:'⚡ Semana de sorte. Abra-se para o inesperado.'}];return ws[w%ws.length];}
+  },
+  capricornio:{em:'♑',name:'Capricórnio',dates:'22/12–19/01',desc:'Determinada, responsável e construída para durar. Força está na disciplina silenciosa.',aff:'Minha determinação me leva exatamente onde preciso chegar. Confio no meu processo.',cG:['Touro','Virgem','Escorpião'],cB:['Peixes','Câncer'],cH:['Áries','Libra'],compatDetail:{'Touro':'Um dos melhores matches. Ambos constroem com cuidado e valorizam o real.','Virgem':'Parceria extraordinária. Compartilham disciplina e lealdade.','Escorpião':'Conexão poderosa de pessoas que jogam para ganhar.','Peixes':'O Peixes suaviza a sua seriedade. Pode ser transformador.','Câncer':'Opostos que se equilibram. O Câncer traz calor para sua estrutura.','Áries':'Ritmos muito diferentes. O Áries é impulsivo onde você é cuidadosa.','Libra':'A indecisão do Libra choca com sua necessidade de clareza.'},
+    day:function(d){return['Ótimo dia para focar em objetivos de longo prazo com clareza.','Sua disciplina hoje te coloca à frente de quem está improvisando.','Dia favorável para negócios, contratos e decisões práticas.','Bom momento para revisar e ajustar seus planos e estratégias.','Cuidado com rigidez excessiva — às vezes flexibilidade é a maior força.','Sua responsabilidade inspira confiança em quem está perto.','Dia de colheita — o que você plantou com dedicação dá frutos.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Demonstre afeto de forma concreta — ações falam mais.',neg:'💼 Negócios: Semana excelente para fechar acordos.',ami:'👥 Amizade: Seja o porto seguro que você é.',via:'✈️ Viagem: Ideal para viagens de trabalho ou planejadas.',ger:'✨ Semana de resultados. O que construiu começa a se mostrar.'},{rel:'💕 Amor: Permita-se ser vulnerável — não é fraqueza, é conexão.',neg:'💼 Negócios: Revise contratos antes de finalizar.',ami:'👥 Amizade: Esteja presente sem cobrar reciprocidade.',via:'✈️ Viagem: Melhor para descanso em lugares calmos.',ger:'🌙 Semana de revisão. Ajuste o que não está funcionando.'},{rel:'💕 Amor: Sua estabilidade e confiança são irresistíveis.',neg:'💼 Negócios: Projetos de longo prazo ganham impulso.',ami:'👥 Amizade: Conexões duradouras se solidificam.',via:'✈️ Viagem: Excelente para viagens culturais.',ger:'⚡ Semana de consolidação. Tudo construído com dedicação dá retorno.'}];return ws[w%ws.length];}
+  },
+  aquario:{em:'♒',name:'Aquário',dates:'20/01–18/02',desc:'Única, visionária e pensa diferente. Força está em enxergar o que ainda não existe.',aff:'Minha originalidade é minha maior força. Não preciso ser compreendida por todos.',cG:['Gêmeos','Libra','Sagitário'],cB:['Áries','Leão'],cH:['Touro','Escorpião'],compatDetail:{'Gêmeos':'Conexão mental fascinante. Ambos são originais e precisam de liberdade.','Libra':'Vínculo elegante baseado em ideais e respeito mútuo.','Sagitário':'Liberdade mútua e visão de futuro compatíveis.','Áries':'Atração intensa, mas você precisa de mais espaço do que o Áries dá.','Leão':'Opostos fascinantes. A tensão pode ser boa em doses certas.','Touro':'O Touro precisa de segurança; você precisa de liberdade.','Escorpião':'A intensidade do Escorpião pode sufocar sua necessidade de leveza.'},
+    day:function(d){return['Ótimo dia para ideias inovadoras e pensar completamente fora da caixa.','Sua visão de futuro inspira as pessoas ao redor — compartilhe.','Dia favorável para conexões com pessoas interessantes e diferentes.','Bom momento para causas coletivas e projetos com propósito.','Cuidado com distanciamento emocional — esteja presente de verdade.','Sua originalidade abre portas que a convenção fecha. Seja você.','Dia de revoluções internas. Mude o que precisa sem medo.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Sua originalidade é o maior atrativo — seja você mesma.',neg:'💼 Negócios: Inovação e tecnologia favorecem seus projetos.',ami:'👥 Amizade: Conecte pessoas diferentes — você catalisa comunidades.',via:'✈️ Viagem: Perfeita para destinos inusitados e experiências únicas.',ger:'✨ Semana de originalidade. O que te diferencia é o que te faz especial.'},{rel:'💕 Amor: Mergulhe um pouco mais — profundidade também é bonita.',neg:'💼 Negócios: Evite dispersar energia em projetos demais.',ami:'👥 Amizade: Priorize quem realmente te entende.',via:'✈️ Viagem: Melhor para ficar e criar do que para sair.',ger:'🌙 Semana de foco. Escolha uma direção e siga nela.'},{rel:'💕 Amor: Surpreenda com algo completamente inesperado.',neg:'💼 Negócios: Novas parcerias surgem naturalmente.',ami:'👥 Amizade: Reencontro com alguém que te inspirou.',via:'✈️ Viagem: Ideal para aventuras culturais.',ger:'⚡ Semana de descobertas. O universo te apresenta possibilidades novas.'}];return ws[w%ws.length];}
+  },
+  peixes:{em:'♓',name:'Peixes',dates:'19/02–20/03',desc:'Empática, intuitiva e conectada a algo maior. Força está em sentir o que os outros não articulam.',aff:'Minha sensibilidade é sabedoria. Cuido da minha energia e escolho o que merece minha magia.',cG:['Câncer','Escorpião','Capricórnio'],cB:['Touro','Virgem'],cH:['Gêmeos','Sagitário'],compatDetail:{'Câncer':'Conexão emocional rara e profunda. Ambos entendem o amor de verdade.','Escorpião':'Ligação quase mística. A profundidade do Escorpião te encanta.','Capricórnio':'Equilíbrio entre sonho e realidade. O Capricórnio ancora seu mundo.','Touro':'O Touro oferece estabilidade. Relação nutritiva com paciência.','Virgem':'Opostos que se completam — criatividade e praticidade.','Gêmeos':'O Gêmeos vive na superfície; você precisa de profundidade.','Sagitário':'O Sagitário pode parecer frio para o seu coração.'},
+    day:function(d){return['Ótimo dia para criatividade e expressão artística do que está sentindo.','Sua empatia é um presente hoje — use com sabedoria, sem se perder.','Dia favorável para meditação, intuição e conexão com o que é maior.','Bom momento para cuidar com carinho de quem você ama.','Cuidado com absorver as dores alheias como suas — proteja sua energia.','Sua intuição é mais precisa do que você imagina. Confie nela hoje.','Dia de sonhos ativos — visualize o que você deseja com detalhes.'][d%7];},
+    week:function(w){var ws=[{rel:'💕 Amor: Sua conexão emocional profunda é o que mais encanta.',neg:'💼 Negócios: Criatividade e intuição guiam as melhores decisões.',ami:'👥 Amizade: Atos de generosidade criam vínculos eternos.',via:'✈️ Viagem: Ótima para destinos perto da água ou natureza.',ger:'✨ Semana de magia. O que você manifesta com intenção acontece.'},{rel:'💕 Amor: Coloque limites sem perder sua doçura — é possível.',neg:'💼 Negócios: Cuidado com idealizar antes de fechar acordos.',ami:'👥 Amizade: Proteja sua energia de quem drena sem devolver.',via:'✈️ Viagem: Melhor para retiros e cura interior.',ger:'🌙 Semana de proteção energética. Cuide do que é seu.'},{rel:'💕 Amor: Amor verdadeiro te encontra quando você é genuinamente você.',neg:'💼 Negócios: Parcerias criativas e artísticas são favorecidas.',ami:'👥 Amizade: Reconecte com quem perdeu por falta de tempo.',via:'✈️ Viagem: Excelente para viagens espirituais ou artísticas.',ger:'⚡ Semana de florescimento. Sua sensibilidade é seu maior poder.'}];return ws[w%ws.length];}
+  },
 };
 
-/* ═══ MENSAGENS ═══════════════════════════════════════ */
 const MSGS=[
   {id:1,cat:'reconquista',sit:'Após silêncio longo',msg:'Não vou fingir que não pensei em você. Mas aprendi que algumas coisas a gente sente e guarda.',tip:'Demonstra sentimento sem implorar. O controle emocional é o que seduz.',when:'Use após pelo menos 7 dias de silêncio completo.'},
   {id:2,cat:'reconquista',sit:'Depois de uma briga',msg:'Não estou bem desde aquilo. Não pra cobrar — só pra ser honesta com você.',tip:'Honestidade sem agressividade gera culpa saudável nele.',when:'2-3 dias após a briga, nunca no calor do momento.'},
@@ -1334,6 +1407,12 @@ function startApp(){
     renderFavs();
     buildDeck();
 
+    // Fill signo home tile
+    var sig=SIGNOS[(prof&&prof.signo)||'libra']||SIGNOS['libra'];
+    el=document.getElementById('homeSignoIc');if(el)el.textContent=sig.em;
+    var wk=sig.week(Math.floor(dNum()/7));
+    el=document.getElementById('homeSignoSub');if(el)el.textContent=wk.rel;
+
     // Check tarot today
     var ct=LS('mi_carta_today');
     if(ct&&ct.date===new Date().toDateString()){
@@ -1373,8 +1452,47 @@ function setMood(k,em,lbl,btn){
   var el;
   el=document.getElementById('wcSub');if(el)el.textContent=lbl;
   el=document.getElementById('wcAv');if(el)el.textContent=em;
-  var tips={triste:'Tudo bem sentir. Sua dor hoje é sua força amanhã.',ansiosa:'Ansiedade é energia mal direcionada. Cuide de você agora.',bem:'Aproveite esse estado! É o melhor momento para agir.',forte:'Você está no seu melhor. É hora de agir com confiança.'};
-  var tt=document.getElementById('tipTxt');if(tt&&tips[k])tt.textContent=tips[k];
+  var d=dNum();
+  var tips={
+    triste:[
+      'Chorar não é fraqueza — é o corpo processando o que a mente ainda não consegue. Deixa sair.',
+      'Dias difíceis também passam. Você não precisa resolver tudo hoje.',
+      'Quando estiver triste, evite tomar decisões ou mandar mensagens. Primeiro cuide de você.',
+      'Sua dor de hoje é prova de que você sentiu algo real. Isso tem valor.',
+      'Não force a felicidade. Permita-se sentir, e depois dê um passo pequeno.',
+      'Dias tristes são partes da jornada — não o destino. Você está passando por isso, não parando nele.',
+      'Às vezes o melhor que você pode fazer num dia difícil é apenas sobreviver a ele. E está ótimo.',
+    ],
+    ansiosa:[
+      'Respira fundo. A maioria das piores coisas que imaginamos nunca acontece.',
+      'Ansiedade é energia mal direcionada. Mova seu corpo — academia, caminhada, qualquer coisa.',
+      'Quando sentir o aperto, escreva o que está pensando. Tirar da cabeça ajuda a ver com clareza.',
+      'Você não consegue controlar o que ele faz. Mas consegue controlar o que você faz.',
+      'A ansiedade sobre relacionamentos quase sempre vem de focar no outro. Foque em você.',
+      'Antes de mandar aquela mensagem ansiosa, espere 2 horas. Se ainda quiser, revise.',
+      'Respira pelo nariz em 4 segundos, segura 4, solta pela boca em 4. Repete 3 vezes.',
+    ],
+    bem:[
+      'Ótimo dia para agir. Energia positiva atrai respostas positivas — use isso.',
+      'Quando você está bem, sua presença naturalmente magnetiza. Apareça hoje.',
+      'Dia de bem é dia de cuidar da aparência, sair, ser vista. Não desperdice.',
+      'Esse estado de leveza é o que você quer transmitir sempre. Observe como você está sendo — guarde isso.',
+      'Aproveite para tomar aquela decisão que vinha adiando. Com a cabeça boa, tudo fica mais claro.',
+      'Você está irradiando. É o dia perfeito para mandar aquela mensagem que estava com medo.',
+      'Guarde como você está se sentindo agora. Nos dias difíceis, lembre que você é capaz de se sentir assim.',
+    ],
+    forte:[
+      'Sua segurança de hoje é o que ele vai sentir mesmo sem você dizer nada. Use isso.',
+      'Mulher com vida própria é irresistível. Viva hoje como se não precisasse de ninguém — porque não precisa.',
+      'Força não é dureza. É saber o que você quer e não negociar isso.',
+      'Dias assim são para agir. Dê o passo que vinha adiando por medo.',
+      'Quando você está no seu poder, as pessoas percebem. Apareça. Seja vista.',
+      'Use essa energia para se investir — academia, visual, projeto. Energia alta é combustível.',
+      'Nada mais atraente que uma mulher que não precisa de validação. Você está sendo ela agora.',
+    ]
+  };
+  var arr=tips[k]||tips['bem'];
+  var tt=document.getElementById('tipTxt');if(tt)tt.textContent=arr[d%arr.length];
 }
 function cpDm(){if(curDmMsg)cp(curDmMsg.msg);}
 function updDmFav(){
@@ -1527,8 +1645,11 @@ function renderDots(){
   }).join('');
   var pct=Math.round((done/7)*100);
   document.getElementById('progFill').style.width=pct+'%';
-  document.getElementById('progPct').textContent=pct+'%';
-  document.getElementById('planTitle').textContent='Dia '+(Math.min(done,6)+1)+' — '+PLANO[Math.min(done,6)].t;
+  // Update new plano-destaque IDs
+  var el;
+  el=document.getElementById('pdPct');if(el)el.textContent=pct+'%';
+  el=document.getElementById('pdTitle');if(el)el.textContent='Dia '+(Math.min(done,6)+1)+' — '+PLANO[Math.min(done,6)].t;
+  el=document.getElementById('pdSub');if(el)el.textContent=PLANO[Math.min(done,6)].s;
 }
 function renderPlano(){
   var done=days.filter(Boolean).length;
@@ -1772,6 +1893,7 @@ function renderMenu(){
   var em=getEm();
   var done=days.filter(Boolean).length;
   var todayTip=sig.day(dNum());
+  var weekData=sig.week(Math.floor(dNum()/7));
 
   var html='<div class="menu-hero">'
     +'<div class="mh-row"><div class="mh-av">'+em+'</div><div>'
@@ -1787,16 +1909,28 @@ function renderMenu(){
     +'<div class="ms"><span class="ms-n">'+done+'</span><span class="ms-l">📅 Plano</span></div>'
     +'</div>';
 
-  // Signo
+  // Signo — completo com dia, semana e compatibilidade detalhada
   html+='<div class="signo-card">'
     +'<div class="sc-row"><span class="sc-em">'+sig.em+'</span><div><div class="sc-name">'+sig.name+'</div><div class="sc-dates">'+sig.dates+'</div></div></div>'
     +'<p class="sc-desc">'+sig.desc+'</p>'
-    +'<div class="sc-today"><div class="sct-l">Hoje para '+sig.name+'</div><div class="sct-t">'+todayTip+'</div></div>'
-    +'<div class="sc-compat-l">Compatibilidades</div>'
-    +'<div class="compat-chips">'
-    +sig.cG.map(function(s){return'<span class="compat c-great">💚 '+s+'</span>';}).join('')
-    +sig.cB.map(function(s){return'<span class="compat c-good">🤍 '+s+'</span>';}).join('')
-    +sig.cH.map(function(s){return'<span class="compat c-hard">⚡ '+s+'</span>';}).join('')
+    // Dica de hoje
+    +'<div class="sc-today"><div class="sct-l">✨ Hoje para '+sig.name+'</div><div class="sct-t">'+todayTip+'</div></div>'
+    // Semana completa
+    +'<div class="sc-week">'
+    +'<div class="sct-l" style="margin-bottom:8px;">📅 Esta semana</div>'
+    +'<div class="sc-week-grid">'
+    +'<div class="swg-item">'+weekData.rel+'</div>'
+    +'<div class="swg-item">'+weekData.neg+'</div>'
+    +'<div class="swg-item">'+weekData.ami+'</div>'
+    +'<div class="swg-item">'+weekData.via+'</div>'
+    +'<div class="swg-item swg-ger">'+weekData.ger+'</div>'
+    +'</div></div>'
+    // Compatibilidade com descrições
+    +'<div class="sc-compat-l">💕 Compatibilidade amorosa</div>'
+    +'<div class="compat-detail">'
+    +sig.cG.map(function(s){var det=sig.compatDetail&&sig.compatDetail[s]?sig.compatDetail[s]:'Boa compatibilidade.';return'<div class="cd-item cd-great"><span class="cd-sign">💚 '+s+'</span><span class="cd-desc">'+det+'</span></div>';}).join('')
+    +sig.cB.map(function(s){var det=sig.compatDetail&&sig.compatDetail[s]?sig.compatDetail[s]:'Compatibilidade moderada.';return'<div class="cd-item cd-good"><span class="cd-sign">🤍 '+s+'</span><span class="cd-desc">'+det+'</span></div>';}).join('')
+    +sig.cH.map(function(s){var det=sig.compatDetail&&sig.compatDetail[s]?sig.compatDetail[s]:'Requer trabalho dos dois lados.';return'<div class="cd-item cd-hard"><span class="cd-sign">⚡ '+s+'</span><span class="cd-desc">'+det+'</span></div>';}).join('')
     +'</div>'
     +'<div class="sc-aff">"'+sig.aff+'"</div>'
     +'</div>';
